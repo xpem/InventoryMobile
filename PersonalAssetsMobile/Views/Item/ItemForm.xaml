@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PersonalAssetsMobile.Views.Item.ItemForm"
+             xmlns:Icons="clr-namespace:PersonalAssetsMobile.Resources.Fonts.Icons"
+             xmlns:viewmodels="clr-namespace:PersonalAssetsMobile.ViewModels.Item"
+             x:DataType="viewmodels:ItemFormVM" 
+             xmlns:components = "clr-namespace:PersonalAssetsMobile.Components"
+             Style="{StaticResource ContentPage}"
+             Title="Item">
+    <ScrollView VerticalOptions="StartAndExpand">
+        <StackLayout Style="{StaticResource StackLayoutPrimary}" >
+            <Frame Style="{StaticResource FramePrimary}" IsEnabled="{Binding IsNotBusy}">
+                <VerticalStackLayout>
+                    <components:BorderedEntry Text="Nome do item" LabelText="Nome"/>                    
+                    <Grid ColumnDefinitions="5*,5*" HorizontalOptions="FillAndExpand" Margin="5">
+                        <VerticalStackLayout Margin="0,0,5,0">
+                            <Label Text="Data" Style="{StaticResource LblHEntry}" />
+                            <Border Style="{StaticResource EntryBorders}">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="5" />
+                                </Border.StrokeShape>
+                                <DatePicker />
+                            </Border>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1">
+                            <components:BorderedCurrencyEntry Text="0" LabelText="Valor" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

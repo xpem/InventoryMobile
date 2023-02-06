@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PersonalAssetsMobile.Views.SignIn"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False"
+             xmlns:Icons="clr-namespace:PersonalAssetsMobile.Resources.Fonts.Icons"
+             xmlns:vm="clr-namespace:PersonalAssetsMobile.ViewModels"
+             x:DataType="vm:SignInVM"
+             Title="Personal Assets"
+             Style="{StaticResource ContentPage}"
+             xmlns:components = "clr-namespace:PersonalAssetsMobile.Components"
+             >
+    <ContentPage.Resources>
+        <Style x:Key="Icon" TargetType="Label">
+            <Setter Property="TextColor" Value="White"></Setter>
+            <Setter Property="HorizontalOptions" Value="Center"></Setter>
+            <Setter Property="FontSize" Value="70"></Setter>
+            <Setter Property="FontFamily" Value="Icons"></Setter>
+            <Setter Property="Padding" Value="0,0,0,10"></Setter>
+        </Style>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <ScrollView HorizontalOptions="CenterAndExpand">
+            <StackLayout Style="{ StaticResource StackLayoutPrimary}">
+                <Frame Style="{StaticResource FramePrimary}" IsEnabled="{Binding IsNotBusy}">
+                    <VerticalStackLayout>
+                        <Label Text="{x:Static Icons:Icons.ClipboardList}" Style="{StaticResource Icon}" />
+
+                        <components:BorderedEntry Text="{Binding Email}" LabelText="Email"/>
+                        <components:BorderedEntry Text="{Binding Password}" LabelText="Senha" IsPassword="True"/>
+
+                        <Button Text="Acessar" Margin="0,10,0,20" FontSize="20" ContentLayout="Left,10" 
+                                Style="{StaticResource ButtonPrimary}"
+                                Command="{Binding SignInCommand}"
+                                >
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="Icons" Color="#fff" Glyph="{x:Static Icons:Icons.SignInAlt}" Size="15"/>
+                            </Button.ImageSource>
+                        </Button>
+                        <HorizontalStackLayout>
+                            <Label Text="Não tem conta?" FontFamily="OpenSansRegular" TextColor="{StaticResource Gray100}" Margin="0,0,5,0" />
+                            <Label Text="Criar Conta" HorizontalOptions="Start" FontFamily="OpenSansRegular" TextColor="#DDFFE7" TextDecorations="Underline" >
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SignUpCommand}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Margin="0,10,0,0">
+                            <Label Text="Esqueceu sua senha?" FontFamily="OpenSansRegular" TextColor="{StaticResource Gray100}" Margin="0,0,5,0" />
+                            <Label Text="Atualizar senha" HorizontalOptions="Start" FontFamily="OpenSansRegular" TextColor="#DDFFE7" TextDecorations="Underline" >
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding UpdatePasswordCommand}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </HorizontalStackLayout>
+                        <Label Text="@Emanuel Martins" VerticalOptions="End" HorizontalOptions="End"  FontFamily="OpenSansRegular" TextColor="{StaticResource Gray100}" FontSize="10" FontAttributes="Italic" Margin="0,20,0,0"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PersonalAssetsMobile.Components.BorderedCurrencyEntry"
+             x:Name="this"    
+             >
+    <ContentView.Content>
+        <VerticalStackLayout>
+            <Label Text="{Binding Source={x:Reference this},Path= LabelText}" Style="{StaticResource LblHEntry}" />
+            <Border Style="{StaticResource EntryBorders}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="5" />
+                </Border.StrokeShape>
+                <Entry
+                    x:Name="EntryCurrency"
+                    Style="{StaticResource Entry}" 
+                    Keyboard="Numeric"
+                    Text="{Binding Source={x:Reference this},Path=Text}"
+                    TextChanged="EntryCurrency_TextChanged"
+                    />
+            </Border>
+        </VerticalStackLayout>
+    </ContentView.Content>
+</ContentView>

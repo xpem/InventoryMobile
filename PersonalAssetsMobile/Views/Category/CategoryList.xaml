@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PersonalAssetsMobile.Views.CategoryList"
+             xmlns:vm="clr-namespace:PersonalAssetsMobile.ViewModels"     
+             xmlns:model="clr-namespace:PersonalAssetsMobile.Models" 
+             x:DataType="vm:CategoryListVM"
+             Style="{StaticResource ContentPage}"
+             Title="Categorias">
+    <FlexLayout>
+        <ListView HasUnevenRows="True" ItemsSource="{Binding Categories}" VerticalOptions="Start">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:Category">
+                    <ViewCell>
+                        <Frame CornerRadius="10" Background="{StaticResource Gray100}" Padding="0" Margin="5,0,5,5">
+                            <Grid ColumnDefinitions="40,*"  RowDefinitions="*" BackgroundColor="{StaticResource Gray100}">
+                                <Ellipse Fill="{Binding Color}" HeightRequest="30" WidthRequest="30"></Ellipse>
+                                <FlexLayout Grid.Column="1" Margin="5" HeightRequest="40" VerticalOptions="Center" HorizontalOptions="Start" >
+                                    <Label
+                                        Text="{Binding Name}" 
+                                        TextColor="{StaticResource Black}"
+                                        FontSize="15"
+                                        FontAttributes="Bold"
+                                        VerticalOptions="Center"
+                                        />
+                                </FlexLayout>
+                            </Grid>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Footer>
+                <Grid Padding="6" IsVisible="{Binding IsBusy}">
+                    <Grid.Triggers>
+                        <Trigger TargetType="Grid" Property="IsVisible" Value="False">
+                            <Setter Property="HeightRequest" Value="0" />
+                        </Trigger>
+                    </Grid.Triggers>
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" 
+                                       Color="#2196F3" VerticalOptions="Center" 
+                                       HorizontalOptions="Center"/>
+                </Grid>
+            </ListView.Footer>
+        </ListView>
+    </FlexLayout>
+</ContentPage>

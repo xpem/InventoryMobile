@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PersonalAssetsMobile.Views.Main"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Style="{StaticResource ContentPage}"
+             xmlns:vm="clr-namespace:PersonalAssetsMobile.ViewModels"     
+             xmlns:model="clr-namespace:PersonalAssetsMobile.Models"    
+             xmlns:Icons="clr-namespace:PersonalAssetsMobile.Resources.Fonts.Icons"
+             x:DataType="vm:MainVM"
+             x:Name="This"
+             Title="Personal Assets">
+    <!--<ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding OnAppearingCommand}"></toolkit:EventToCommandBehavior>
+    </ContentPage.Behaviors>-->
+    <ContentPage.Resources>
+        <Style TargetType="Frame">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="LightSkyBlue" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+    <StackLayout Orientation="Vertical">
+        <!--start-->
+        <ScrollView Orientation="Horizontal">
+            <StackLayout
+                BindableLayout.ItemsSource="{Binding ItemsStatus, Mode=TwoWay}" 
+                Orientation="Horizontal"
+                >
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate  x:DataType="model:ItemStatus">
+                        <Button Text="{Binding Name}" Clicked="Button_Clicked"/>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </StackLayout>
+        </ScrollView>
+        <!--end-->
+        <!--<CollectionView ItemsSource="{Binding ItemsStatus}"
+                        VerticalOptions="Start" 
+                        Margin="10"  >
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="2"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:ItemStatus">
+
+                    --><!--<Border BackgroundColor="Transparent" Stroke="blue" Padding="10" StrokeShape="RoundRectangle 10">-->
+                    <!--<Label Text="{Binding Name}" TextColor="White" FontSize="15" FontAttributes="Bold"></Label>-->
+                    <!--</Border>--><!--
+                    </Button>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>-->
+
+        <ListView HasUnevenRows="True"
+                  CachingStrategy="RecycleElement"
+                  ItemsSource="{Binding Items}" 
+                  SelectedItem="{Binding ItemUI}"                   
+                  SeparatorVisibility="None"
+                  IsGroupingEnabled="False" VerticalOptions="Start" RowHeight="65">
+            <!--<ListView.GroupHeaderTemplate>-->
+            <!--<DataTemplate x:DataType="model:ItemGroup">
+                    <ViewCell>
+                        -->
+            <!--<StackLayout HorizontalOptions="Start" Margin="10,10,0,0">-->
+            <!--
+                            <Label 
+                            Text="{Binding GroupingParameter}"
+                            HorizontalOptions="Center" 
+                            FontSize="15"
+                            FontAttributes="Italic"
+                                TextColor="White"
+                                Margin="0,0,0,5"
+                                VerticalOptions="Start"
+                            />
+                        -->
+            <!--</StackLayout>-->
+            <!--
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.GroupHeaderTemplate>-->
+            <ListView.ItemTemplate >
+                <DataTemplate x:DataType="model:ItemUI">
+                    <ViewCell>
+                        <Frame CornerRadius="10" Background="{StaticResource Gray100}" Padding="0" Margin="5,0,0,5" VerticalOptions="Start">
+                            <Grid RowDefinitions="5,auto" VerticalOptions="FillAndExpand" Margin="0,0,5,5">
+                                <Rectangle HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="{Binding CategoryColor}"></Rectangle>
+                                <Grid ColumnDefinitions="50,auto" Grid.Row="2" Margin="5,10,10,5" VerticalOptions="FillAndExpand">
+                                    <VerticalStackLayout VerticalOptions="Center">
+                                        <Label    
+                                            Text="{Binding SubCategoryIcon}" 
+                                            TextColor="{StaticResource TitleBarBackGroudColor}"
+                                            FontFamily="Icons"
+                                            FontSize="20"
+                                            HorizontalOptions="Center" VerticalOptions="Center" Padding="4"/>
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Grid.Column="2"  VerticalOptions="Center" Margin="10,0,0,0">
+                                        <Label
+                                            Text="{Binding Name}" 
+                                            TextColor="{StaticResource Black}"
+                                            FontSize="15"
+                                            FontAttributes="Bold"
+                                            />
+                                        <Label
+                                            Text="{Binding Category}"
+                                            TextColor="{StaticResource Black}"
+                                            FontSize="12"
+                                            FontAttributes="Italic"
+                                            />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Grid>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Footer>
+                <Grid Padding="6" IsVisible="{Binding IsBusy}">
+                    <Grid.Triggers>
+                        <Trigger TargetType="Grid" Property="IsVisible" Value="False">
+                            <Setter Property="HeightRequest" Value="0" />
+                        </Trigger>
+                    </Grid.Triggers>
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" 
+                                       Color="#2196F3" VerticalOptions="Center" 
+                                       HorizontalOptions="Center"/>
+                </Grid>
+            </ListView.Footer>
+        </ListView>
+
+        <!--<CollectionView 
+            ItemsSource="{Binding Items}"	
+            IsGrouped="true"
+            >
+            <CollectionView.Header>
+                <StackLayout>
+                    <ActivityIndicator IsRunning="True" IsVisible="{Binding IsBusy}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"></ActivityIndicator>
+                </StackLayout>
+            </CollectionView.Header>
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate x:DataType="model:ItemGroup">
+                    <Grid BackgroundColor="Transparent">
+                        <Label 
+                            Text="{Binding OrderParameter}"
+                            HorizontalOptions="Center" 
+                            FontSize="15"
+                            FontAttributes="Italic"
+                            />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:Item">
+                    <Frame CornerRadius="10" Background="{StaticResource Gray100}" Padding="0" Margin="5,0,5,5">
+                        <Grid RowDefinitions="5,*">
+                            <VerticalStackLayout Grid.Row="2" Margin="5">
+                                <Label
+                                    Text="{Binding Name}" 
+                                    TextColor="{StaticResource Black}"
+                                    FontSize="15"
+                                    FontAttributes="Bold"
+                                    />
+                                <Label
+                                    Text="{Binding Category}"
+                                    TextColor="{StaticResource Black}"
+                                    FontSize="12"
+                                    FontAttributes="Italic"
+                                    />
+                            </VerticalStackLayout>
+                            <Rectangle Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="{Binding CategoryColor}"></Rectangle>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>-->
+    </StackLayout>
+</ContentPage>
