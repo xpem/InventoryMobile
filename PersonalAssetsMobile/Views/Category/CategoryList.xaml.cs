@@ -1,6 +1,4 @@
-using PersonalAssetsMobile.Models;
 using PersonalAssetsMobile.ViewModels;
-using System.Collections.ObjectModel;
 
 namespace PersonalAssetsMobile.Views;
 

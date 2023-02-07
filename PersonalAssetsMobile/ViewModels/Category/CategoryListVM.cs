@@ -1,4 +1,4 @@
-﻿using PersonalAssetsMobile.Models;
+﻿using PersonalAssetsMobile.UIModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,16 +11,16 @@ namespace PersonalAssetsMobile.ViewModels
 
     public class CategoryListVM : ViewModelBase
     {
-        public ObservableCollection<Category> Categories { get; } = new();
+        public ObservableCollection<UICategory> Categories { get; } = new();
 
         public CategoryListVM()
         {
-            List<Category> listCategories = new()
+            List<UICategory> listCategories = new()
             {
-                new Category{Name="Casa", Color = Color.FromArgb("#E2808A")},
-                new Category{Name="Carro", Color = Color.FromArgb("#F1CCD7")},
-                new Category{Name="Moto", Color = Color.FromArgb("#2E765E")},
-                new Category{Name="Vestimenta", Color = Color.FromArgb("#638C80")},
+                new UICategory{Name="Casa", Color = Color.FromArgb("#E2808A")},
+                new UICategory{Name="Carro", Color = Color.FromArgb("#F1CCD7")},
+                new UICategory{Name="Moto", Color = Color.FromArgb("#2E765E")},
+                new UICategory{Name="Vestimenta", Color = Color.FromArgb("#638C80")},
             };
 
             foreach (var i in listCategories)

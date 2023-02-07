@@ -3,14 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PersonalAssetsMobile.Views.CategoryList"
              xmlns:vm="clr-namespace:PersonalAssetsMobile.ViewModels"     
-             xmlns:model="clr-namespace:PersonalAssetsMobile.Models" 
+             xmlns:model="clr-namespace:PersonalAssetsMobile.UIModels" 
              x:DataType="vm:CategoryListVM"
              Style="{StaticResource ContentPage}"
              Title="Categorias">
     <FlexLayout>
         <ListView HasUnevenRows="True" ItemsSource="{Binding Categories}" VerticalOptions="Start">
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="model:Category">
+                <DataTemplate x:DataType="model:UICategory">
                     <ViewCell>
                         <Frame CornerRadius="10" Background="{StaticResource Gray100}" Padding="0" Margin="5,0,5,5">
                             <Grid ColumnDefinitions="40,*"  RowDefinitions="*" BackgroundColor="{StaticResource Gray100}">
