@@ -35,7 +35,6 @@ namespace PersonalAssetsMobile.UIModels
             }
         }
 
-
         Color backgoundColor;
 
         public Color BackgoundColor

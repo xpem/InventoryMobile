@@ -48,7 +48,7 @@
     public class ItemsStatusList
     {
         public static List<UIItemStatus> itemsStatus { get; } = new List<UIItemStatus>() {
-            new UIItemStatus() { Id = 1, Name = "Em Uso",BackgoundColor =Color.FromArgb("#919191") },
+            new UIItemStatus() { Id = 1, Name = "Em uso",BackgoundColor =Color.FromArgb("#29A0B1") },
               new UIItemStatus() { Id = 2, Name = "Emprestado",BackgoundColor=Color.FromArgb("#919191") },
                 new UIItemStatus() { Id = 3, Name = "Revendido", BackgoundColor = Color.FromArgb("#919191") },
                   new UIItemStatus() { Id = 4, Name = "Guardado" , BackgoundColor = Color.FromArgb("#919191")},

@@ -12,21 +12,67 @@
         <StackLayout Style="{StaticResource StackLayoutPrimary}" >
             <Frame Style="{StaticResource FramePrimary}" IsEnabled="{Binding IsNotBusy}">
                 <VerticalStackLayout>
-                    <components:BorderedEntry Text="Nome do item" LabelText="Nome"/>                    
-                    <Grid ColumnDefinitions="5*,5*" HorizontalOptions="FillAndExpand" Margin="5">
+                    <components:BorderedEntry Text="Nome do item" LabelText="Nome"/>
+                    <components:BorderedEntry Text="Descrição técnica do item" LabelText="Descrição técnica"/>
+                    <Grid ColumnDefinitions="5*,5*" HorizontalOptions="FillAndExpand" Margin="0">
                         <VerticalStackLayout Margin="0,0,5,0">
+                            <Picker     
+                                Title="Situação" 
+                                ItemsSource="{Binding ItemsStatusObsList}"
+                                ItemDisplayBinding="{Binding Name}"
+                                HorizontalOptions="StartAndExpand"    
+                                />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1">
+                            <Label Text="Categoria" Style="{StaticResource LblHEntry}" FontAttributes="Bold" />
+                            <Button Text="Eletrônicos"
+                                    FontSize="14" 
+                                    ContentLayout="Right,20"                                 
+                                    BackgroundColor="Transparent"
+                                    TextColor="{StaticResource White}"
+                                    FontFamily="OpenSansSemibold"         
+                                    Margin="0,7,0,0"
+                                    >
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="Icons" Color="#fff" Glyph="{x:Static Icons:Icons.AngleRight}" Size="14"/>
+                                </Button.ImageSource>
+                            </Button>
+                        </VerticalStackLayout>
+                    </Grid>
+
+
+                    <Label Text="Aquisição" Style="{StaticResource LblHEntry}" FontAttributes="Bold" FontSize="15" Margin="0,10,0,0"/>
+                    <BoxView HeightRequest="1" Color="{StaticResource Gray200}" Margin="0,0,0,5" />
+
+                    <Grid ColumnDefinitions="5*,5*" RowDefinitions="*,*" HorizontalOptions="FillAndExpand" Margin="0">
+                        <VerticalStackLayout >
+                            <Picker
+                                Title="Tipo" 
+                                ItemsSource="{Binding AcquisitionTypeList}"
+                                ItemDisplayBinding="{Binding Name}"
+                                HorizontalOptions="StartAndExpand"   
+                                />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1">
                             <Label Text="Data" Style="{StaticResource LblHEntry}" />
                             <Border Style="{StaticResource EntryBorders}">
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="5" />
                                 </Border.StrokeShape>
-                                <DatePicker />
+                                <StackLayout>
+                                    <DatePicker Format="dd/MM/yyyy" />
+                                    <!--<BoxView HeightRequest="1" Color="#fff" Margin="0,0,0,5" />-->
+                                </StackLayout>
                             </Border>
                         </VerticalStackLayout>
-                        <VerticalStackLayout Grid.Column="1">
-                            <components:BorderedCurrencyEntry Text="0" LabelText="Valor" />
+                        <VerticalStackLayout Grid.Row="1">
+                            <components:BorderedCurrencyEntry Text="1,22" LabelText="Valor" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Grid.Row="1">
+                            <components:BorderedEntry Text="Nome da Loja" LabelText="Loja"/>
                         </VerticalStackLayout>
                     </Grid>
+
                 </VerticalStackLayout>
             </Frame>
         </StackLayout>

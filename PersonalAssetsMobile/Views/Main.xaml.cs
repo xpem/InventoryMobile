@@ -18,9 +18,9 @@ public partial class Main : ContentPage
         vm.ItemStatusSelectdCommand.Execute(view.BindingContext);
     }
 
-    private void BtnCategorySelected_Clicked(object sender, EventArgs e)
-    {
-        var view = sender as View;
-        vm.CategorySelectedCommand.Execute(view.BindingContext);
-    }
+    //private void BtnCategorySelected_Clicked(object sender, EventArgs e)
+    //{
+    //    var view = sender as View;
+    //    vm.CategorySelectedCommand.Execute(view.BindingContext);
+    //}
 }
