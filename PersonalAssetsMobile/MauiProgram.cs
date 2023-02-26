@@ -1,9 +1,12 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using PersonalAssetsMobile.ViewModels;
+using PersonalAssetsMobile.ViewModels.Category;
 using PersonalAssetsMobile.ViewModels.Item;
 using PersonalAssetsMobile.Views;
+using PersonalAssetsMobile.Views.Category;
 using PersonalAssetsMobile.Views.Item;
+using Services.Category;
 
 namespace PersonalAssetsMobile;
 
@@ -28,18 +31,36 @@ public static class MauiProgram
 
         #region Dependency injections
 
+        #region front
+
         builder.Services.AddTransient<SignIn>();
         builder.Services.AddTransient<SignInVM>();
+
         builder.Services.AddTransient<SignUp>();
         builder.Services.AddTransient<SignUpVM>();
+
         builder.Services.AddTransient<UpdatePassword>();
         builder.Services.AddTransient<UpdatePasswordVM>();
+
         builder.Services.AddTransient<Main>();
         builder.Services.AddTransient<MainVM>();
+
         builder.Services.AddTransient<CategoryList>();
         builder.Services.AddTransient<CategoryListVM>();
-        builder.Services.AddTransient<ItemForm>();
-        builder.Services.AddTransient<ItemFormVM>();
+
+        builder.Services.AddTransient<CategoryEdit>();
+        builder.Services.AddTransient<CategoryEditVM>();
+
+        builder.Services.AddTransient<ItemEdit>();
+        builder.Services.AddTransient<ItemEditVM>();
+
+        #endregion
+
+        #region services
+
+        builder.Services.AddScoped<ICategoryServices, CategoryServices>();
+
+        #endregion
 
         #endregion
 

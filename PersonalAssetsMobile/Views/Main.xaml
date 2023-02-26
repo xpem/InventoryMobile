@@ -19,7 +19,7 @@
                 Orientation="Horizontal"
                 >
                     <BindableLayout.ItemTemplate>
-                        <DataTemplate  x:DataType="model:UIItemStatus">
+                        <DataTemplate  x:DataType="model:UIItemStatus" >
                             <Button x:Name="BtnItemStatusSelected" Text="{Binding Name}" Clicked="BtnItemStatusSelected_Clicked" BackgroundColor="{Binding BackgoundColor}" Margin="10,5,0,0"/>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
@@ -28,11 +28,15 @@
         </StackLayout>
         <StackLayout Padding="10">
             <ListView x:Name="ItemsListView"
-            HasUnevenRows="True"
-                  ItemsSource="{Binding Items}" 
-                  SelectedItem="{Binding ItemUI}"                   
-                  SeparatorVisibility="None"
-                  IsGroupingEnabled="False" VerticalOptions="Start" RowHeight="65">
+                      HasUnevenRows="True"
+                      ItemsSource="{Binding Items}" 
+                      SelectedItem="{Binding ItemUI}"                   
+                      SeparatorVisibility="None"
+                      IsGroupingEnabled="False"
+                      VerticalOptions="Start" 
+                      RowHeight="65"
+                      CachingStrategy="RecycleElement"
+                      >
                 <ListView.ItemTemplate >
                     <DataTemplate x:DataType="model:UIItem">
                         <ViewCell>

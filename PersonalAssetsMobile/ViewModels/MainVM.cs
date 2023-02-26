@@ -40,7 +40,7 @@ namespace PersonalAssetsMobile.ViewModels
 
                     if (itemUI is not null)
                     {
-                        Shell.Current.GoToAsync($"{nameof(ItemForm)}?Key={itemUI.Id}", true);
+                        Shell.Current.GoToAsync($"{nameof(ItemEdit)}?Key={itemUI.Id}", true);
                     }
                     else
                     {

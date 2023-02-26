@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PersonalAssetsMobile.ViewModels.Item
+namespace Models
 {
-    class ItemVisVM
+    public class ModelBase
     {
+        public int Id { get; set; }
     }
 }

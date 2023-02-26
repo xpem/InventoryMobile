@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PersonalAssetsMobile.Views.Item.ItemForm"
+             x:Class="PersonalAssetsMobile.Views.Item.ItemEdit"
              xmlns:Icons="clr-namespace:PersonalAssetsMobile.Resources.Fonts.Icons"
              xmlns:viewmodels="clr-namespace:PersonalAssetsMobile.ViewModels.Item"
-             x:DataType="viewmodels:ItemFormVM" 
+             x:DataType="viewmodels:ItemEditVM" 
              xmlns:components = "clr-namespace:PersonalAssetsMobile.Components"
              Style="{StaticResource ContentPage}"
              Title="Item">
@@ -71,8 +71,28 @@
                         <VerticalStackLayout Grid.Column="1" Grid.Row="1">
                             <components:BorderedEntry Text="Nome da Loja" LabelText="Loja"/>
                         </VerticalStackLayout>
+
                     </Grid>
 
+                    <Label Text="Comentários" Style="{StaticResource LblHEntry}" />
+                    <Border Style="{StaticResource EntryBorders}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="5" />
+                        </Border.StrokeShape>
+                        <Editor
+            Style="{StaticResource Entry}" 
+            Text="Texto de exemplo de comentário com informações adicionais sobre o item"
+            Keyboard="Chat" MaxLength="200"
+            />
+                    </Border>
+
+                    <Button Text="Cadastrar" Margin="0,10,0,20" FontSize="20" ContentLayout="Left,10" 
+                                Style="{StaticResource ButtonPrimary}"
+                                >
+                        <Button.ImageSource>
+                            <FontImageSource FontFamily="Icons" Color="#fff" Glyph="{x:Static Icons:Icons.Plus}" Size="15"/>
+                        </Button.ImageSource>
+                    </Button>
                 </VerticalStackLayout>
             </Frame>
         </StackLayout>

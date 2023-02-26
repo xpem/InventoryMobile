@@ -413,12 +413,6 @@
         <Setter Property="VerticalOptions" Value="FillAndExpand"></Setter>
     </Style>
 
-    <Style x:Key="StackLayoutPrimary" TargetType="StackLayout">
-        <Setter Property="VerticalOptions" Value="Center"></Setter>
-        <Setter Property="HorizontalOptions" Value="FillAndExpand"></Setter>
-        <Setter Property="MaximumWidthRequest" Value="600"></Setter>
-    </Style>
-
     <Style x:Key="EntryBorders" TargetType="Border">
         <Setter Property="HorizontalOptions" Value="FillAndExpand"></Setter>
     </Style>
@@ -444,8 +438,8 @@
     </Style>
 
     <Style TargetType="Entry" x:Key="Entry">
-        <Setter Property="TextColor" Value="{StaticResource White}" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource Black}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource White}" />
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="14" />
         <Setter Property="PlaceholderColor" Value="{StaticResource Gray200}" />
@@ -490,8 +484,8 @@
     </Style>
 
     <Style TargetType="DatePicker">
-        <Setter Property="TextColor" Value="{StaticResource White}" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource Black}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource White}" />
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="MinimumHeightRequest" Value="44"/>

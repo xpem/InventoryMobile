@@ -2,12 +2,17 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PersonalAssetsMobile.Views.CategoryList"
-             xmlns:vm="clr-namespace:PersonalAssetsMobile.ViewModels"     
+             xmlns:vm="clr-namespace:PersonalAssetsMobile.ViewModels.Category"     
+                 xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:model="clr-namespace:PersonalAssetsMobile.UIModels" 
              x:DataType="vm:CategoryListVM"
+             xmlns:Icons="clr-namespace:PersonalAssetsMobile.Resources.Fonts.Icons"
              Style="{StaticResource ContentPage}"
              Title="Categorias">
-    <FlexLayout>
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding OnAppearingCommand}" />
+    </ContentPage.Behaviors>
+    <Grid RowDefinitions="*" Margin="10">
         <ListView HasUnevenRows="True" ItemsSource="{Binding Categories}" VerticalOptions="Start">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="model:UICategory">
@@ -42,5 +47,21 @@
                 </Grid>
             </ListView.Footer>
         </ListView>
-    </FlexLayout>
+        <Button BackgroundColor="{StaticResource Success}"
+                VerticalOptions="End"
+                HorizontalOptions="End"
+                CornerRadius="20"
+                HeightRequest="40"
+                ContentLayout="Top,0"
+                Command="{Binding CategoryEditCommand}"
+                >
+            <Button.ImageSource>
+                <FontImageSource 
+                                FontFamily="Icons"
+                                Color="#EDEDED" 
+                                Glyph="{x:Static Icons:Icons.Plus}"
+                                Size="20" />
+            </Button.ImageSource>
+        </Button>
+    </Grid>
 </ContentPage>

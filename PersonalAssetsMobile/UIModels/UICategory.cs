@@ -35,6 +35,10 @@ namespace PersonalAssetsMobile.UIModels
             }
         }
 
+
+        /// <summary>
+        /// define a cor de fundo do obj da listagem na main page.
+        /// </summary>
         Color backgoundColor;
 
         public Color BackgoundColor

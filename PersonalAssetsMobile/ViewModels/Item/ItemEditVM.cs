@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PersonalAssetsMobile.ViewModels.Item
 {
-    public class ItemFormVM : ViewModelBase
+    public class ItemEditVM : ViewModelBase
     {
         public ObservableCollection<UIItemStatus> ItemsStatusObsList { get; set; }
 
@@ -30,7 +30,7 @@ namespace PersonalAssetsMobile.ViewModels.Item
         }
 
 
-        public ItemFormVM()
+        public ItemEditVM()
         {
 
             ItemsStatusObsList = new ObservableCollection<UIItemStatus>();

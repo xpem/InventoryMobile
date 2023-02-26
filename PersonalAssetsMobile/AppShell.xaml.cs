@@ -1,4 +1,5 @@
 ﻿using PersonalAssetsMobile.Views;
+using PersonalAssetsMobile.Views.Category;
 using PersonalAssetsMobile.Views.Item;
 
 namespace PersonalAssetsMobile;
@@ -17,6 +18,9 @@ public partial class AppShell : Shell
 
         Routing.RegisterRoute(nameof(CategoryList), typeof(CategoryList));
 
-        Routing.RegisterRoute(nameof(ItemForm), typeof(ItemForm));
+        Routing.RegisterRoute(nameof(CategoryEdit),typeof(CategoryEdit));
+
+        Routing.RegisterRoute(nameof(ItemEdit), typeof(ItemEdit));
+
     }
 }

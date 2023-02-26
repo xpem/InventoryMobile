@@ -1,33 +1,35 @@
 ﻿using PersonalAssetsMobile.UIModels;
+using PersonalAssetsMobile.Views.Category;
+using Services.Category;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
-namespace PersonalAssetsMobile.ViewModels
+namespace PersonalAssetsMobile.ViewModels.Category
 {
-
     public class CategoryListVM : ViewModelBase
     {
         public ObservableCollection<UICategory> Categories { get; } = new();
 
-        public CategoryListVM()
-        {
-            List<UICategory> listCategories = new()
-            {
-                new UICategory{Name="Casa", Color = Color.FromArgb("#E2808A")},
-                new UICategory{Name="Carro", Color = Color.FromArgb("#F1CCD7")},
-                new UICategory{Name="Moto", Color = Color.FromArgb("#2E765E")},
-                new UICategory{Name="Vestimenta", Color = Color.FromArgb("#638C80")},
-            };
+        public ICommand CategoryEditCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(CategoryEdit)}"));
 
-            foreach (var i in listCategories)
-            {
-                Categories.Add(i);
-            }
+        readonly ICategoryServices categoryServices;
+
+        public CategoryListVM(ICategoryServices _categoryServices)
+        {
+            categoryServices = _categoryServices;
         }
 
+        public ICommand OnAppearingCommand => new Command(async (e) =>
+        {
+            foreach (var i in await categoryServices.GetCategoriesAsync())
+            {
+                Categories.Add(new UICategory() { Id = i.Id, Name = i.Name, Color = Color.FromArgb(i.Color) });
+            }
+        });
     }
 }

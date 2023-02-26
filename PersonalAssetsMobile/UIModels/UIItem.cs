@@ -58,13 +58,13 @@
 
         public int StatusId { get; set; }
 
-        public string Comment { get; set; }
 
         public int AcquisitionTypeId { get; set; }
 
         public int CategoryId { get; set; }
 
         public int SubCategoryId { get; set; }
+        public string Comment { get; set; }
 
     }
 

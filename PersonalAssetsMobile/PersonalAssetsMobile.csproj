@@ -58,6 +58,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Services\Services.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Views\Item\ItemEdit.xaml.cs">
+	    <DependentUpon>ItemEdit.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\SignIn.xaml.cs">
 	    <DependentUpon>SignIn.xaml</DependentUpon>
 	  </Compile>
@@ -73,13 +80,13 @@
 	  <MauiXaml Update="Components\FlyoutHeader.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Category\CategoryEdit.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Category\CategoryList.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Item\ItemForm.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Item\ItemVis.xaml">
+	  <MauiXaml Update="Views\Item\ItemEdit.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Main.xaml">

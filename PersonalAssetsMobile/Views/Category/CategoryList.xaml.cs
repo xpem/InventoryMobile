@@ -1,16 +1,13 @@
-using PersonalAssetsMobile.ViewModels;
+using PersonalAssetsMobile.ViewModels.Category;
 
 namespace PersonalAssetsMobile.Views;
 
 public partial class CategoryList : ContentPage
 {
-
-
-
     public CategoryList(CategoryListVM categoryListVM)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
 
-		BindingContext= categoryListVM;
+        BindingContext = categoryListVM;
     }
 }

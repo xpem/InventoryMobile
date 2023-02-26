@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersonalAssetsMobile", "PersonalAssetsMobile.csproj", "{D738F816-05E5-458C-9D89-723A6FB6CC6B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "..\Models\Models.csproj", "{C1B40CE8-8DD6-4636-94F1-15E92D12C118}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "..\Services\Services.csproj", "{97C7F225-D8C2-4802-BE9B-4B83B3A2F23D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +21,14 @@ Global
 		{D738F816-05E5-458C-9D89-723A6FB6CC6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D738F816-05E5-458C-9D89-723A6FB6CC6B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D738F816-05E5-458C-9D89-723A6FB6CC6B}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C1B40CE8-8DD6-4636-94F1-15E92D12C118}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1B40CE8-8DD6-4636-94F1-15E92D12C118}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1B40CE8-8DD6-4636-94F1-15E92D12C118}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1B40CE8-8DD6-4636-94F1-15E92D12C118}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97C7F225-D8C2-4802-BE9B-4B83B3A2F23D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97C7F225-D8C2-4802-BE9B-4B83B3A2F23D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97C7F225-D8C2-4802-BE9B-4B83B3A2F23D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97C7F225-D8C2-4802-BE9B-4B83B3A2F23D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

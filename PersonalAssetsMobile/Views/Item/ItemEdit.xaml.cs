@@ -2,12 +2,12 @@ using PersonalAssetsMobile.ViewModels.Item;
 
 namespace PersonalAssetsMobile.Views.Item;
 
-public partial class ItemForm : ContentPage
+public partial class ItemEdit : ContentPage
 {
-    public ItemForm(ItemFormVM itemFormVM)
+    public ItemEdit(ItemEditVM itemEditVM)
     {
         InitializeComponent();
 
-        BindingContext = itemFormVM;
+        BindingContext = itemEditVM;
     }
 }
