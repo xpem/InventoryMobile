@@ -80,6 +80,9 @@
 	  <MauiXaml Update="Components\FlyoutHeader.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Category\CategoryDisplay.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Category\CategoryEdit.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

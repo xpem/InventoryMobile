@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PersonalAssetsMobile.UIModels
 {
-    public class UICategory : BindableObject
+    public class CategoryUI : BindableObject
     {
         int id;
 
@@ -58,12 +58,12 @@ namespace PersonalAssetsMobile.UIModels
 
     public class CategoryList
     {
-        public static List<UICategory> List { get; } = new()
+        public static List<CategoryUI> List { get; } = new()
     {
-        new UICategory { Id = 1, Name = "Casa", Color = Color.FromArgb("#EF7C8E"),BackgoundColor=Color.FromArgb("#919191") },
-        new UICategory { Id = 2, Name = "Carro", Color = Color.FromArgb("#EF7C8E"),BackgoundColor=Color.FromArgb("#919191") },
-        new UICategory { Id = 3, Name = "Moto", Color = Color.FromArgb("#EF7C8E"),BackgoundColor=Color.FromArgb("#919191") },
-        new UICategory { Id = 4, Name = "Vestimenta", Color = Color.FromArgb("#EF7C8E"),BackgoundColor=Color.FromArgb("#919191") },
+        new CategoryUI { Id = 1, Name = "Casa", Color = Color.FromArgb("#EF7C8E"),BackgoundColor=Color.FromArgb("#919191") },
+        new CategoryUI { Id = 2, Name = "Carro", Color = Color.FromArgb("#EF7C8E"),BackgoundColor=Color.FromArgb("#919191") },
+        new CategoryUI { Id = 3, Name = "Moto", Color = Color.FromArgb("#EF7C8E"),BackgoundColor=Color.FromArgb("#919191") },
+        new CategoryUI { Id = 4, Name = "Vestimenta", Color = Color.FromArgb("#EF7C8E"),BackgoundColor=Color.FromArgb("#919191") },
     };
     }
 

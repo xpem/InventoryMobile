@@ -20,6 +20,8 @@ public partial class AppShell : Shell
 
         Routing.RegisterRoute(nameof(CategoryEdit),typeof(CategoryEdit));
 
+        Routing.RegisterRoute(nameof(CategoryDisplay), typeof(CategoryDisplay));
+
         Routing.RegisterRoute(nameof(ItemEdit), typeof(ItemEdit));
 
     }

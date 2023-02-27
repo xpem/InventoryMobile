@@ -51,6 +51,9 @@ public static class MauiProgram
         builder.Services.AddTransient<CategoryEdit>();
         builder.Services.AddTransient<CategoryEditVM>();
 
+        builder.Services.AddTransient<CategoryDisplay>();
+        builder.Services.AddTransient<CategoryDisplayVM>();
+
         builder.Services.AddTransient<ItemEdit>();
         builder.Services.AddTransient<ItemEditVM>();
 

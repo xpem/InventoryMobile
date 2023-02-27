@@ -13,7 +13,7 @@ namespace PersonalAssetsMobile.ViewModels.Category
 {
     public class CategoryListVM : ViewModelBase
     {
-        public ObservableCollection<UICategory> Categories { get; } = new();
+        public ObservableCollection<CategoryUI> Categories { get; set; } = new();
 
         public ICommand CategoryEditCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(CategoryEdit)}"));
 
@@ -26,10 +26,11 @@ namespace PersonalAssetsMobile.ViewModels.Category
 
         public ICommand OnAppearingCommand => new Command(async (e) =>
         {
-            foreach (var i in await categoryServices.GetCategoriesAsync())
-            {
-                Categories.Add(new UICategory() { Id = i.Id, Name = i.Name, Color = Color.FromArgb(i.Color) });
-            }
+            if (Categories.Count is 0)
+                foreach (var i in await categoryServices.GetCategoriesAsync())
+                {
+                    Categories.Add(new CategoryUI() { Id = i.Id, Name = i.Name, Color = Color.FromArgb(i.Color) });
+                }
         });
     }
 }
