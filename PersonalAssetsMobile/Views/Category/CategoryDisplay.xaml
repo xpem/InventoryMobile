@@ -2,8 +2,109 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PersonalAssetsMobile.Views.Category.CategoryDisplay"
-             Title="CategoryDisplay">
-    <VerticalStackLayout>
-        <Ellipse Fill="{Binding Color}" HeightRequest="30" WidthRequest="30"></Ellipse>
-    </VerticalStackLayout>
+             xmlns:vm="clr-namespace:PersonalAssetsMobile.ViewModels.Category"  
+             x:DataType="vm:CategoryDisplayVM"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:Icons="clr-namespace:PersonalAssetsMobile.Resources.Fonts.Icons"
+             xmlns:model="clr-namespace:PersonalAssetsMobile.UIModels" 
+             Style="{StaticResource ContentPage}"
+             Title="Categorias">
+    <ContentPage.Resources>
+        <Style x:Key="BtnIcon" TargetType="Button">
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="HeightRequest" Value="40"/>
+            <Setter Property="WidthRequest" Value="40"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="TextColor" Value="{StaticResource White}"/>
+            <Setter Property="FontFamily" Value="Icons"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource SecondaryBackground}"/>
+        </Style>
+        <Style x:Key="BtnIconOption" TargetType="Button">
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="HeightRequest" Value="40"/>
+            <Setter Property="WidthRequest" Value="40"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontFamily" Value="Icons"/>
+        </Style>
+    </ContentPage.Resources>
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding OnAppearingCommand}" />
+    </ContentPage.Behaviors>
+    <ScrollView HorizontalOptions="Start">
+        <StackLayout HorizontalOptions="FillAndExpand">
+            <Frame Style="{StaticResource FramePrimary}" IsEnabled="{Binding IsNotBusy}">
+                <StackLayout Orientation="Vertical">
+                    <Grid ColumnDefinitions="40,auto,*" RowDefinitions="auto" HorizontalOptions="FillAndExpand" >
+                        <Ellipse Fill="{Binding CategoryColor}" HeightRequest="40" WidthRequest="40" />
+                        <Label Text="{Binding Name}" TextColor="{StaticResource White}" FontSize="20"
+                            FontAttributes="Bold" VerticalOptions="Center"  Grid.Column="1" Margin="10,0,0,0" />
+                        <HorizontalStackLayout  Grid.Column="2" HorizontalOptions="End">
+                            <Button Style="{StaticResource BtnIconOption}" HorizontalOptions="End" Margin="0,0,10,0"
+                                    Text="{x:Static Icons:Icons.Pen}" BackgroundColor="{StaticResource Warning}" TextColor="{StaticResource Black}"
+                                    Command="{Binding CategoryEditCommand}" IsVisible="{Binding SystemDefault}" />
+                            <Button Style="{StaticResource BtnIconOption}" HorizontalOptions="End" Margin="0,0,10,0" 
+                                    Text="{x:Static Icons:Icons.Trash}"  TextColor="{StaticResource White}" BackgroundColor="{StaticResource Danger}" IsVisible="{Binding SystemDefault}" />
+                        </HorizontalStackLayout>
+                    </Grid>
+                    <Label Text="Sub Categorias" Style="{StaticResource LblHEntry}" Margin="0,15,0,0" FontSize="15"/>
+                    <Grid RowDefinitions="*" Margin="10" VerticalOptions="FillAndExpand">
+                        <ListView HasUnevenRows="True" ItemsSource="{Binding SubCategoryObsCol}" VerticalOptions="FillAndExpand" 
+                  CachingStrategy="RecycleElement" SelectionMode="None"  Margin="0,5,0,0">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="model:UISubCategory">
+                                    <ViewCell>
+                                        <Frame CornerRadius="10" Background="{StaticResource Gray100}" Padding="0" Margin="5,0,5,5">
+                                            <Grid ColumnDefinitions="40,auto,*" RowDefinitions="auto" HorizontalOptions="FillAndExpand"  ColumnSpacing="5" Padding="10,0,10,0" >
+                                                <Button Style="{StaticResource BtnIcon}" Text="{Binding Icon}" />
+                                                <Label Grid.Column="1"
+                                                            Text="{Binding Name}" 
+                                                            TextColor="{StaticResource Black}"
+                                                            FontSize="15"
+                                                            FontAttributes="Bold"
+                                                            VerticalOptions="Center"
+                                                            />
+                                                <HorizontalStackLayout  Grid.Column="2" HorizontalOptions="End">
+                                                    <Button Style="{StaticResource BtnIconOption}" HorizontalOptions="End" Margin="0,0,10,0"
+                                    Text="{x:Static Icons:Icons.Pen}" BackgroundColor="{StaticResource Warning}" TextColor="{StaticResource Black}"
+                                                            Command="{Binding SubCategoryEditCommand}" CommandParameter="{Binding Id}" IsVisible="{Binding SystemDefault}"
+                                  />
+                                                    <Button Style="{StaticResource BtnIconOption}" HorizontalOptions="End" Margin="0,0,10,0" 
+                                    Text="{x:Static Icons:Icons.Trash}"  TextColor="{StaticResource White}" BackgroundColor="{StaticResource Danger}"  IsVisible="{Binding SystemDefault}"/>
+                                                </HorizontalStackLayout>
+                                            </Grid>
+                                        </Frame>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.Footer>
+                                <Grid Padding="6" IsVisible="{Binding IsBusy}">
+                                    <Grid.Triggers>
+                                        <Trigger TargetType="Grid" Property="IsVisible" Value="False">
+                                            <Setter Property="HeightRequest" Value="0" />
+                                        </Trigger>
+                                    </Grid.Triggers>
+                                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" 
+                                       Color="#2196F3" VerticalOptions="Center" 
+                                       HorizontalOptions="Center"/>
+                                </Grid>
+                            </ListView.Footer>
+                        </ListView>
+                        <Button BackgroundColor="{StaticResource Success}"
+                VerticalOptions="End"
+                HorizontalOptions="End"
+                CornerRadius="20"
+                HeightRequest="40"
+                ContentLayout="Top,0"
+                             FontFamily="Icons"
+                                TextColor="#EDEDED"
+                                Text="{x:Static Icons:Icons.Plus}"
+                                FontSize="20"
+                Command="{Binding SubCategoryEditCommand}"
+                />
+                    </Grid>
+                    <!--<Button Text="teste" Command="{Binding SubCategoryEditCommand}"></Button>-->
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

@@ -1,11 +1,17 @@
-﻿namespace PersonalAssetsMobile;
+﻿using Services;
+using Services.User;
+
+namespace PersonalAssetsMobile;
 
 public partial class App : Application
 {
 	public App()
 	{
-		InitializeComponent();
+        BuildDbService.BuildSQLiteDb();
 
-		MainPage = new AppShell();
+        InitializeComponent();
+
+        if (UserService.GetUserLocalDb() is null)        
+            MainPage = new AppShell();
 	}
 }

@@ -8,24 +8,33 @@
              x:DataType="vm:CategoryEditVM"
              Style="{StaticResource ContentPage}"
              Title="Categoria">
+    <ContentPage.Resources>
+        <Style x:Key="BtnDefineColor" TargetType="Button">
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="HeightRequest" Value="40"/>
+            <Setter Property="WidthRequest" Value="40"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+    </ContentPage.Resources>
     <ScrollView HorizontalOptions="Start">
         <StackLayout>
             <Frame Style="{StaticResource FramePrimary}" IsEnabled="{Binding IsNotBusy}">
                 <VerticalStackLayout VerticalOptions="FillAndExpand">
-                    <components:BorderedEntry Text="Casa" LabelText="Nome" Grid.Column="1"/>
+                    <components:BorderedEntry Text="{Binding Name}" LabelText="Nome" Grid.Column="1"/>
                     <Label Text="Cor" Style="{StaticResource LblHEntry}" Margin="0,10,0,0" />
-                    <Button BackgroundColor="{Binding CategoryColor}" CornerRadius="20" HeightRequest="40" WidthRequest="40" HorizontalOptions="Start" Command="{Binding ShowColorPickerCommand}" IsVisible="{Binding ButtonColorVisible}"/>
+                    <Button BackgroundColor="{Binding CategoryColor}" CornerRadius="20" HeightRequest="40" WidthRequest="40"
+                            HorizontalOptions="Start" Command="{Binding ShowColorPickerCommand}" IsVisible="{Binding ButtonColorVisible}"/>
                     <FlexLayout Wrap="Wrap" JustifyContent="Start" FlowDirection="LeftToRight" IsVisible="{Binding ColorPickerVisible}">
-                        <Button BackgroundColor="#C0392B" CornerRadius="20" HeightRequest="40" WidthRequest="40" Margin="5" Command="{Binding DefineColorCommand}" CommandParameter="#C0392B" />
-                        <Button BackgroundColor="#E74C3C" CornerRadius="20" HeightRequest="40" WidthRequest="40" Margin="5" Command="{Binding DefineColorCommand}" CommandParameter="#E74C3C" />
-                        <Button BackgroundColor="#c39bd3" CornerRadius="20" HeightRequest="40" WidthRequest="40" Margin="5" Command="{Binding DefineColorCommand}" CommandParameter="#9B59B6" />
-                        <Button BackgroundColor="#a3e4d7" CornerRadius="20" HeightRequest="40" WidthRequest="40" Margin="5" Command="{Binding DefineColorCommand}" CommandParameter="#A569BD" />
-                        <Button BackgroundColor="#F1C40F" CornerRadius="20" HeightRequest="40" WidthRequest="40" Margin="5" Command="{Binding DefineColorCommand}" CommandParameter="#F1C40F" />
-                        <Button BackgroundColor="#F39C12" CornerRadius="20" HeightRequest="40" WidthRequest="40" Margin="5" Command="{Binding DefineColorCommand}" CommandParameter="#F39C12" />
-                        <Button BackgroundColor="#E67E22" CornerRadius="20" HeightRequest="40" WidthRequest="40" Margin="5" Command="{Binding DefineColorCommand}" CommandParameter="#E67E22" />
-                        <Button BackgroundColor="#D35400" CornerRadius="20" HeightRequest="40" WidthRequest="40" Margin="5" Command="{Binding DefineColorCommand}" CommandParameter="#D35400" />
-                        <Button BackgroundColor="#ECF0F1" CornerRadius="20" HeightRequest="40" WidthRequest="40" Margin="5" Command="{Binding DefineColorCommand}" CommandParameter="#ECF0F1" />
-                        <Button BackgroundColor="#BDC3C7" CornerRadius="20" HeightRequest="40" WidthRequest="40" Margin="5" Command="{Binding DefineColorCommand}" CommandParameter="#BDC3C7" />
+                        <Button BackgroundColor="#2F9300" Style="{StaticResource BtnDefineColor}" Command="{Binding DefineColorCommand}" CommandParameter="#2F9300" />
+                        <Button BackgroundColor="#0C5532" Style="{StaticResource BtnDefineColor}" Command="{Binding DefineColorCommand}" CommandParameter="#0C5532" />
+                        <Button BackgroundColor="#0E0C55" Style="{StaticResource BtnDefineColor}" Command="{Binding DefineColorCommand}" CommandParameter="#0E0C55" />
+                        <Button BackgroundColor="#BB0000" Style="{StaticResource BtnDefineColor}" Command="{Binding DefineColorCommand}" CommandParameter="#BB0000" />
+                        <Button BackgroundColor="#416986" Style="{StaticResource BtnDefineColor}" Command="{Binding DefineColorCommand}" CommandParameter="#416986" />
+                        <Button BackgroundColor="#864141" Style="{StaticResource BtnDefineColor}" Command="{Binding DefineColorCommand}" CommandParameter="#864141" />
+                        <Button BackgroundColor="#4700BB" Style="{StaticResource BtnDefineColor}" Command="{Binding DefineColorCommand}" CommandParameter="#4700BB" />
+                        <Button BackgroundColor="#B700BB" Style="{StaticResource BtnDefineColor}" Command="{Binding DefineColorCommand}" CommandParameter="#B700BB" />
+                        <Button BackgroundColor="#006CBB" Style="{StaticResource BtnDefineColor}" Command="{Binding DefineColorCommand}" CommandParameter="#006CBB" />
+                        <Button BackgroundColor="#864183" Style="{StaticResource BtnDefineColor}" Command="{Binding DefineColorCommand}" CommandParameter="#864183" />
                     </FlexLayout>
                     <Button Text="Cadastrar" Margin="0,10,0,20" FontSize="20" ContentLayout="Left,10" Style="{StaticResource ButtonPrimary}" >
                         <Button.ImageSource>

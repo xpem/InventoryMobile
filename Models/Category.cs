@@ -8,6 +8,6 @@ namespace Models
 
         public string? Color { get; set; }
 
-        public bool Padrao { get; set; }
+        public bool SystemDefault { get; set; }
     }
 }

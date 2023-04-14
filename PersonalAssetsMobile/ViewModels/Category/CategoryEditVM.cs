@@ -1,9 +1,13 @@
-﻿using System.Windows.Input;
+﻿using PersonalAssetsMobile.Views.Category.SubCategory;
+using Services.Category;
+using System.Windows.Input;
 
 namespace PersonalAssetsMobile.ViewModels.Category
 {
-    public class CategoryEditVM : ViewModelBase
+    public class CategoryEditVM : ViewModelBase, IQueryAttributable
     {
+        int Id;
+
         Color categoryColor;
 
         public Color CategoryColor
@@ -15,6 +19,21 @@ namespace PersonalAssetsMobile.ViewModels.Category
                     categoryColor = value;
 
                     OnPropertyChanged(nameof(CategoryColor));
+                }
+            }
+        }
+
+        string name;
+
+        public string Name
+        {
+            get => name; set
+            {
+                if (name != value)
+                {
+                    name = value;
+
+                    OnPropertyChanged(nameof(Name));
                 }
             }
         }
@@ -60,19 +79,42 @@ namespace PersonalAssetsMobile.ViewModels.Category
             ButtonColorVisible = false;
         }
 
-        public void DefineColor(Color color) {
+        public void DefineColor(Color color)
+        {
             CategoryColor = color;
             ColorPickerVisible = false;
             ButtonColorVisible = true;
         }
 
+        ICategoryServices categoryServices;
 
-        public CategoryEditVM()
+        public CategoryEditVM(ICategoryServices _categoryServices)
+        {
+            categoryServices = _categoryServices;
+        }
+
+        public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
             ColorPickerVisible = false;
             ButtonColorVisible = true;
 
-            categoryColor = Color.FromArgb("#a3e4d7");
+            if (query.Count > 0)
+            {
+                Id = Convert.ToInt32(query["Id"]);
+
+                Models.Category category = await categoryServices.GetCategoryAsync(Id);
+
+                CategoryColor = Color.FromArgb(category.Color);
+
+                Name = category.Name;
+            }
+            else
+            {
+                CategoryColor = Color.FromArgb("#a3e4d7");
+
+                Id = 0;
+                Name = "";
+            }
         }
     }
 }

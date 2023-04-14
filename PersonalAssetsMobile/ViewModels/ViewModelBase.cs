@@ -6,7 +6,7 @@
 
         public bool IsBusy
         {
-            get => isBusy; set { if (isBusy != value) { isBusy = value; OnPropertyChanged(); } }
+            get => isBusy; set { if (isBusy != value) { isBusy = value; OnPropertyChanged(nameof(IsBusy)); } }
         }
 
         public bool IsNotBusy => !isBusy;

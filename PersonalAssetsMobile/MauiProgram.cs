@@ -2,11 +2,15 @@
 using Microsoft.Extensions.Logging;
 using PersonalAssetsMobile.ViewModels;
 using PersonalAssetsMobile.ViewModels.Category;
+using PersonalAssetsMobile.ViewModels.Category.SubCategory;
 using PersonalAssetsMobile.ViewModels.Item;
 using PersonalAssetsMobile.Views;
 using PersonalAssetsMobile.Views.Category;
+using PersonalAssetsMobile.Views.Category.SubCategory;
 using PersonalAssetsMobile.Views.Item;
 using Services.Category;
+using Services.Category.SubCategory;
+using Services.User;
 
 namespace PersonalAssetsMobile;
 
@@ -54,6 +58,9 @@ public static class MauiProgram
         builder.Services.AddTransient<CategoryDisplay>();
         builder.Services.AddTransient<CategoryDisplayVM>();
 
+        builder.Services.AddTransient<SubCategoryEdit>();
+        builder.Services.AddTransient<SubCategoryEditVM>();
+
         builder.Services.AddTransient<ItemEdit>();
         builder.Services.AddTransient<ItemEditVM>();
 
@@ -62,6 +69,9 @@ public static class MauiProgram
         #region services
 
         builder.Services.AddScoped<ICategoryServices, CategoryServices>();
+        builder.Services.AddScoped<ISubCategoryServices, SubCategoryServices>();
+
+        //builder.Services.AddScoped<IUserService, UserService>();
 
         #endregion
 

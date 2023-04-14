@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PersonalAssetsMobile.Views.Category.SubCategory.SubCategoryEdit"
+             Style="{StaticResource ContentPage}"
+             xmlns:viewmodels="clr-namespace:PersonalAssetsMobile.ViewModels.Category.SubCategory"
+             xmlns:components = "clr-namespace:PersonalAssetsMobile.Components"
+             x:DataType="viewmodels:SubCategoryEditVM"           
+             xmlns:Icons="clr-namespace:PersonalAssetsMobile.Resources.Fonts.Icons"
+             Title="Sub Categoria" >
+    <ContentPage.Resources>
+        <Style x:Key="BtnIcon" TargetType="Button">
+            <Setter Property="CornerRadius" Value="25"/>
+            <Setter Property="HeightRequest" Value="50"/>
+            <Setter Property="WidthRequest" Value="50"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="TextColor" Value="{StaticResource White}"/>
+            <Setter Property="FontFamily" Value="Icons"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource SecondaryBackground}"/>
+        </Style>
+    </ContentPage.Resources>
+    <ScrollView HorizontalOptions="Start">
+        <StackLayout>
+            <Frame Style="{StaticResource FramePrimary}" IsEnabled="{Binding IsNotBusy}">
+                <StackLayout Orientation="Vertical">
+                    <Label Text="Categoria" Style="{StaticResource LblHEntry}" />
+                    <Label Text="{Binding CategoryName}" FontSize="20"  FontAttributes="Bold" VerticalOptions="Center" Margin="10,0,0,0"/>
+                    <components:BorderedEntry Text="{Binding Name}" LabelText="Nome" />
+                    <Label Text="Ícone" Style="{StaticResource LblHEntry}" Margin="0,10,0,0" />
+                    <!--<StackLayout IsVisible="{Binding ButtonIconVisible}">-->
+                    <Button Style="{StaticResource BtnIcon}" x:Name="BtnIcon"
+                            HorizontalOptions="Start" Text="{Binding Icon}" IsVisible="{Binding ButtonIconVisible}"
+                            Command="{Binding ShowIconPickerCommand}" />
+                    <StackLayout Orientation="Vertical" HorizontalOptions="StartAndExpand">
+                        <FlexLayout Wrap="Wrap" JustifyContent="Start" FlowDirection="LeftToRight" IsVisible="{Binding IconPickerVisible}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconA"
+                            HorizontalOptions="Start" Text="{x:Static Icons:Icons.Couch}"
+                            Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.Couch}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconB"
+                            HorizontalOptions="Start" Text="{x:Static Icons:Icons.Computer}"
+                            Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.Computer}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconC"
+                            HorizontalOptions="Start" Text="{x:Static Icons:Icons.kitchenSet}"
+                                    Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.kitchenSet}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconD"
+                                HorizontalOptions="Start" Text="{x:Static Icons:Icons.Tv}"
+                                Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.Tv}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconE"
+                                HorizontalOptions="Start" Text="{x:Static Icons:Icons.Blender}"
+                                Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.Blender}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconF"
+                                HorizontalOptions="Start" Text="{x:Static Icons:Icons.Tag}"
+                                Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.Tag}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconG"
+                                HorizontalOptions="Start" Text="{x:Static Icons:Icons.Home}"
+                                Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.Home}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconH"
+                                HorizontalOptions="Start" Text="{x:Static Icons:Icons.Mobile}"
+                                Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.Mobile}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconI"
+                                HorizontalOptions="Start" Text="{x:Static Icons:Icons.Book}"
+                                Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.Book}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconJ"
+                                HorizontalOptions="Start" Text="{x:Static Icons:Icons.BasketballBall}"
+                                Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.BasketballBall}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconL"
+                                HorizontalOptions="Start" Text="{x:Static Icons:Icons.Gamepad}"
+                                Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.Gamepad}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconM"
+                                HorizontalOptions="Start" Text="{x:Static Icons:Icons.Car}"
+                                Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.Car}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconN"
+                                HorizontalOptions="Start" Text="{x:Static Icons:Icons.Motorcycle}"
+                                Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.Motorcycle}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconO"
+                                HorizontalOptions="Start" Text="{x:Static Icons:Icons.Wrench}"
+                                Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.Wrench}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconP"
+                                HorizontalOptions="Start" Text="{x:Static Icons:Icons.Screwdriver}"
+                                Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.Screwdriver}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconQ"
+                                HorizontalOptions="Start" Text="{x:Static Icons:Icons.Box}"
+                                Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.Box}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconR"
+                                HorizontalOptions="Start" Text="{x:Static Icons:Icons.Tshirt}"
+                                Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.Tshirt}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconS"
+                                HorizontalOptions="Start" Text="{x:Static Icons:Icons.Plug}"
+                                Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.Plug}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconT"
+                                HorizontalOptions="Start" Text="{x:Static Icons:Icons.Cube}"
+                                Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.Cube}" />
+                            <Button Style="{StaticResource BtnIcon}" x:Name="BtnLstIconU"
+                                HorizontalOptions="Start" Text="{x:Static Icons:Icons.ShoePrints}"
+                                Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.ShoePrints}" />
+                        </FlexLayout>
+                    </StackLayout>
+                    <Button Text="Cadastrar" Margin="0,10,0,20" FontSize="20" ContentLayout="Left,10" Style="{StaticResource ButtonPrimary}" >
+                        <Button.ImageSource>
+                            <FontImageSource FontFamily="Icons" Color="#fff" Glyph="{x:Static Icons:Icons.Plus}" Size="15"/>
+                        </Button.ImageSource>
+                    </Button>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

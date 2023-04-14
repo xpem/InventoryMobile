@@ -3,11 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PersonalAssetsMobile.Views.CategoryList"
              xmlns:vm="clr-namespace:PersonalAssetsMobile.ViewModels.Category"     
-                 xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:model="clr-namespace:PersonalAssetsMobile.UIModels" 
              x:DataType="vm:CategoryListVM"
              xmlns:Icons="clr-namespace:PersonalAssetsMobile.Resources.Fonts.Icons"
-             Style="{StaticResource ContentPage}"
+             Style="{StaticResource ContentPage}"             
              Title="Categorias">
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding OnAppearingCommand}" />
@@ -54,7 +54,7 @@
                 CornerRadius="20"
                 HeightRequest="40"
                 ContentLayout="Top,0"
-                Command="{Binding CategoryEditCommand}"
+                Command="{Binding CategoryAddCommand}"
                 >
             <Button.ImageSource>
                 <FontImageSource 

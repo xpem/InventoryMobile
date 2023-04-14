@@ -214,6 +214,7 @@
         public const string Compass = "\uf14e";
         public const string CompressArrowsAlt = "\uf78c";
         public const string Compress = "\uf066";
+        public const string Computer = "\ue4e5";
         public const string ConciergeBell = "\uf562";
         public const string CookieBite = "\uf564";
         public const string Cookie = "\uf563";
@@ -472,6 +473,7 @@
         public const string KissWinkHeart = "\uf598";
         public const string Kiss = "\uf596";
         public const string KiwiBird = "\uf535";
+        public const string kitchenSet = "\ue51a";
         public const string Landmark = "\uf66f";
         public const string Language = "\uf1ab";
         public const string LaptopCode = "\uf5fc";

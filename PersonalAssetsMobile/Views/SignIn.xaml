@@ -29,7 +29,8 @@
                         <components:BorderedEntry Text="{Binding Email}" LabelText="Email"/>
                         <components:BorderedEntry Text="{Binding Password}" LabelText="Senha" IsPassword="True"/>
 
-                        <Button Text="Acessar" Margin="0,10,0,20" FontSize="20" ContentLayout="Left,10" 
+                        <Button Text="{Binding BtnSignInText}" Margin="0,10,0,20" FontSize="20" ContentLayout="Left,10" 
+                                IsEnabled="{Binding BtnSignInEnabled}"
                                 Style="{StaticResource ButtonPrimary}"
                                 Command="{Binding SignInCommand}"
                                 >

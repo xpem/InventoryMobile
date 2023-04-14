@@ -17,18 +17,17 @@
         <ShellContent ContentTemplate="{DataTemplate local:Main}" />
     </ShellItem>
 
-    <FlyoutItem Title="Home" Icon="{x:Static Icons:Icons.ClipboardList}">
+    <FlyoutItem Title="Home" Icon="{x:Static Icons:Icons.ListAlt}">
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate local:Main}" />
         </Tab>
     </FlyoutItem>
     
-    <FlyoutItem Title="Categorias" Icon="{x:Static Icons:Icons.Tag}">
+    <FlyoutItem Title="Categorias" Icon="{x:Static Icons:Icons.Tags}">
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate local:CategoryList}" />
         </Tab>
     </FlyoutItem>
-
 
     <Shell.FlyoutHeader>
         <Components:FlyoutHeader Email="emailteste@emailteste.com"/>
