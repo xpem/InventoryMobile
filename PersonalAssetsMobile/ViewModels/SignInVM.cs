@@ -1,4 +1,5 @@
-﻿using PersonalAssetsMobile.Views;
+﻿using Models;
+using PersonalAssetsMobile.Views;
 using Plugin.Connectivity;
 using Services.User;
 using System;
@@ -44,17 +45,35 @@ namespace PersonalAssetsMobile.ViewModels
                             btnSignInText = "Acessando...";
                             BtnSignInEnabled = false;
 
+                            (bool success, ErrorType? error) = await UserService.SignIn(email, password);
+
+                            if (success)
+                                await Shell.Current.GoToAsync($"//{nameof(Main)}");
+                            else if (!success && error is not null)
+                            {
+                                if (error == ErrorType.WrongEmailOrPassword)
+                                    await Application.Current.MainPage.DisplayAlert("Aviso", "Email/senha incorretos", null, "Ok");
+                                else
+                                    await Application.Current.MainPage.DisplayAlert("Erro", "Ocorreu um erro ao tentar logar", null, "Ok");
+                            }
+                            else
+                                await Application.Current.MainPage.DisplayAlert("Erro", "Ocorreu um erro ao tentar logar", null, "Ok");
+
                             BtnSignInEnabled = true;
                             btnSignInText = "Acessar";
                             IsBusy = false;
                         }
                     }
+                    else
+                        await Application.Current.MainPage.DisplayAlert("Aviso", "É necessário ter acesso a internet para efetuar o primeiro acesso.", null, "Ok");
                 }
+                else
+                    await Application.Current.MainPage.DisplayAlert("Aviso", "Insira seu email e senha.", null, "Ok");
             }
-            catch { throw; }
-
-
-            await Shell.Current.GoToAsync($"//{nameof(Main)}");
+            catch
+            {
+                throw;
+            }
 
             IsBusy = false;
         });

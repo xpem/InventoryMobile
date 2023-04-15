@@ -18,20 +18,15 @@ namespace ApiRepos
             {
                 using (var httpClient = new HttpClient())
                 {
-                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userToken);
-
-                    //httpClient.DefaultRequestHeaders.Add("authorization", "bearer " + userToken);
+                    httpClient.DefaultRequestHeaders.Add("authorization", "bearer " + userToken);
                     HttpResponseMessage response = await httpClient.GetAsync(uri);
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string result = await response.Content.ReadAsStringAsync();
-                        JsonNode? obj = JsonNode.Parse(result);
+                    JsonNode? obj = JsonNode.Parse(await response.Content.ReadAsStringAsync());
 
-                        if (obj != null)
-                            return new Response() { Success = true, Content = obj };
-                        else throw new Exception(result);
-                    }
+                    if (obj != null)
+                        return new Response() { Success = response.IsSuccessStatusCode, Content = obj };
+                    else throw new Exception("Erro na consulta: ErrorCode: " + response.StatusCode);
+
                 }
                 throw new Exception("O servidor está indisponível");
             }
@@ -49,23 +44,17 @@ namespace ApiRepos
                 //{
                 StringContent data = new(jsonContent, Encoding.UTF8, "application/json");
 
-                using (var httpClient = new HttpClient())
-                {
-                    HttpResponseMessage response = await httpClient.PostAsync(uri, data);
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string result = await response.Content.ReadAsStringAsync();
-                        JsonNode? obj = JsonNode.Parse(result);
+                using var httpClient = new HttpClient();
+                HttpResponseMessage response = await httpClient.PostAsync(uri, data);
 
-                        if (obj != null)
-                            return new Response() { Success = true, Content = obj };
-                        else throw new Exception(result);
-                    }
-                }
+                JsonNode? obj = JsonNode.Parse(await response.Content.ReadAsStringAsync());
 
-                throw new Exception("O servidor está indisponível");
+                if (obj is not null)
+                    return new Response() { Success = response.IsSuccessStatusCode, Content = obj };
+                else throw new Exception("Erro na consulta: ErrorCode: " + response.StatusCode);
             }
+
             catch { throw; }
 
         }

@@ -49,15 +49,23 @@ namespace ApiRepos.User
 
                 Response resp = await HttpClientFunctions.PostAsync(ApiKeys.ApiBookshelfUri + "/user/session", json);
 
-                if (resp is not null && resp.Success && resp.Content is not null && resp.Content["token"]?.GetValue<string>() is not null)
-                    return (true, resp.Content["token"]?.GetValue<string>());
+                if (resp is not null && resp.Content is not null)
+                {
+                    if (resp.Success && resp.Content["token"]?.GetValue<string>() is not null)
+                        return (true, resp.Content["token"]?.GetValue<string>());
+                    else if (!resp.Success && resp.Content["error"]?.GetValue<string>() is not null)
+                        return (false, resp.Content["error"]?.GetValue<string>());
+                }
 
                 return (false, null);
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public static async Task<Models.User?> GetUser(string email, string password)
+        public static async Task<Models.User> GetUser(string email, string password)
         {
             try
             {
@@ -67,17 +75,15 @@ namespace ApiRepos.User
 
                 if (success && userTokenRes != null)
                 {
-                    Response resp = await HttpClientFunctions.GetAsync(ApiKeys.ApiUri + "/user", userTokenRes);
+                    Response resp = await HttpClientFunctions.GetAsync(ApiKeys.ApiBookshelfUri + "/user", userTokenRes);
 
-                    if (resp.Success)
-                    {
-                        if (resp.Content != null)
-                        {
-                            user = new() { Id = resp.Content["id"]?.GetValue<int>().ToString(), Name = resp.Content["name"]?.GetValue<string>(), Email = resp.Content["email"]?.GetValue<string>(), Token = userTokenRes, Password = password };
-                        }
-                    }
+                    if (resp.Success && resp.Content != null)
+                        user = new() { Id = resp.Content["id"]?.GetValue<int>().ToString(), Name = resp.Content["name"]?.GetValue<string>(), Email = resp.Content["email"]?.GetValue<string>(), Token = userTokenRes, Password = password };
                 }
-                else user.Error = ErrorType.WrongEmailOrPassword; ;
+                //maybe use a errorcodes instead a message?
+                else if (!success && userTokenRes is not null && userTokenRes == "User/Password incorrect")
+                    user.Error = ErrorType.WrongEmailOrPassword;
+                else throw new Exception("Erro não mapeado");
 
                 return user;
             }

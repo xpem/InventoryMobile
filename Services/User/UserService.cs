@@ -1,5 +1,6 @@
 ﻿using ApiRepos.User;
 using LocalDBRepos.User;
+using Models;
 
 namespace Services.User
 {
@@ -15,22 +16,22 @@ namespace Services.User
 
         public static Models.User? GetUserLocalDb() => UserRepos.GetUser();
 
-        //public static async Task<bool> SignIn(string email, string password)
-        //{
-        //    email = email.ToLower();
+        public static async Task<(bool,ErrorType?)> SignIn(string email, string password)
+        {
+            email = email.ToLower();
 
-        //    try
-        //    {
-        //        Models.User? user = await UserApiRepos.GetUser(email, password);
+            try
+            {
+                Models.User user = await UserApiRepos.GetUser(email, password);
 
-        //        if (user == null)
-        //        {
-        //        }
-        //        else return false;
-
-
-        //    }
-        //    catch (Exception ex) { throw ex; }
-        //}
+                if (user.Error is null)
+                {
+                    UserRepos.InsertUser(user);
+                    return (true, null);
+                }
+                else return (false, user.Error);
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }

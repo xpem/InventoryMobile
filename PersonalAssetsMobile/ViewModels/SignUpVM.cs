@@ -48,7 +48,7 @@ namespace PersonalAssetsMobile.ViewModels
                 {
                     if (user.Error != null)
                     {
-                        if (user.Error == ErrorType.Email_Exists)
+                        if (user.Error == ErrorType.EmailExists)
                             await Application.Current.MainPage.DisplayAlert("Aviso", "Email já cadastrado!", null, "Ok");
                         else
                             await Application.Current.MainPage.DisplayAlert("Erro", "Não foi possível cadastrar o usuário!", null, "Ok");
