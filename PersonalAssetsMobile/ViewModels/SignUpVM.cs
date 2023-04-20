@@ -1,31 +1,22 @@
-﻿using Models;
+﻿using PersonalAssetsMobile.Services;
 using PersonalAssetsMobile.Utils;
 using Plugin.Connectivity;
-using Services.User;
 using System.Windows.Input;
 
 namespace PersonalAssetsMobile.ViewModels
 {
     public class SignUpVM : ViewModelBase
     {
-
-        string name;
+        string name, email, password, confirmPassword;
+        bool btnIsEnabled = true;
 
         public string Name { get => name; set { if (name != value) { name = value; OnPropertyChanged(nameof(Name)); } } }
 
-        string email;
-
         public string Email { get => email; set { if (email != value) { email = value; OnPropertyChanged(nameof(Email)); } } }
-
-        string password;
 
         public string Password { get => password; set { if (password != value) { password = value; OnPropertyChanged(nameof(Password)); } } }
 
-        string confirmPassword;
-
         public string ConfirmPassword { get => confirmPassword; set { if (confirmPassword != value) { confirmPassword = value; OnPropertyChanged(nameof(ConfirmPassword)); } } }
-
-        bool btnIsEnabled = true;
 
         public bool BtnIsEnabled { get => btnIsEnabled; set { if (btnIsEnabled != value) { btnIsEnabled = value; OnPropertyChanged(nameof(BtnIsEnabled)); } } }
 
@@ -42,25 +33,17 @@ namespace PersonalAssetsMobile.ViewModels
                 btnIsEnabled = false;
 
                 //
-                User user = await UserService.AddUser(name, email, password);
+                (bool success, string message) = await UserService.AddUser(name, email, password);
 
-                if (user != null)
+                if (success)
                 {
-                    if (user.Error != null)
-                    {
-                        if (user.Error == ErrorType.EmailExists)
-                            await Application.Current.MainPage.DisplayAlert("Aviso", "Email já cadastrado!", null, "Ok");
-                        else
-                            await Application.Current.MainPage.DisplayAlert("Erro", "Não foi possível cadastrar o usuário!", null, "Ok");
-                    }
-                    else
-                    {
-                        bool res = await Application.Current.MainPage.DisplayAlert("Aviso", "Usuário cadastrado!", null, "Ok");
+                    bool res = await Application.Current.MainPage.DisplayAlert("Aviso", "Usuário cadastrado!", null, "Ok");
 
-                        if (!res)
-                            await Shell.Current.GoToAsync("..");
-                    }
+                    if (!res)
+                        await Shell.Current.GoToAsync("..");
                 }
+                else
+                    await Application.Current.MainPage.DisplayAlert("Aviso", message, null, "Ok");
             }
         });
 

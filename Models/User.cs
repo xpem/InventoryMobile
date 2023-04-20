@@ -8,17 +8,17 @@
 
         public string? Email { get; set; }
 
-        public string? Password { get; set; }
+        //public string? Password { get; set; }
 
         public string? Token { get; set; }
 
-        public ErrorType? Error { get; set; }
+        //public ErrorType? Error { get; set; }
 
         public DateTime LastUpdate { get; set; }
     }
 
-    public enum ErrorType
-    {
-        WrongEmailOrPassword, UnknownEmailAddress, EmailExists, UnavailableServer
-    }
+    //public enum ErrorType
+    //{
+    //    WrongEmailOrPassword, UnknownEmailAddress, EmailExists, UnavailableServer
+    //}
 }

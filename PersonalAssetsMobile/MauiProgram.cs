@@ -10,7 +10,6 @@ using PersonalAssetsMobile.Views.Category.SubCategory;
 using PersonalAssetsMobile.Views.Item;
 using Services.Category;
 using Services.Category.SubCategory;
-using Services.User;
 
 namespace PersonalAssetsMobile;
 
@@ -36,6 +35,9 @@ public static class MauiProgram
         #region Dependency injections
 
         #region front
+
+        builder.Services.AddTransient<AppShell>();
+        builder.Services.AddTransient<AppShellVM>();
 
         builder.Services.AddTransient<SignIn>();
         builder.Services.AddTransient<SignInVM>();
@@ -66,14 +68,13 @@ public static class MauiProgram
 
         #endregion
 
-        #region services
+        #region BLL
 
         builder.Services.AddScoped<ICategoryServices, CategoryServices>();
         builder.Services.AddScoped<ISubCategoryServices, SubCategoryServices>();
 
-        //builder.Services.AddScoped<IUserService, UserService>();
-
         #endregion
+
 
         #endregion
 

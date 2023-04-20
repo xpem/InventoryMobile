@@ -1,6 +1,5 @@
 ﻿using PersonalAssetsMobile.Views;
 using Services;
-using Services.User;
 
 namespace PersonalAssetsMobile;
 
@@ -12,9 +11,14 @@ public partial class App : Application
 
         InitializeComponent();
 
-        MainPage = new AppShell();
+        MainPage = new AppShell(new ViewModels.AppShellVM());
+    }
 
-        if (UserService.GetUserLocalDb() is not null)
-            Shell.Current.GoToAsync($"//{nameof(Main)}");
+    protected override async void OnStart()
+    {
+        if (!string.IsNullOrEmpty(Preferences.Default.Get("ID", string.Empty)))
+            await Shell.Current.GoToAsync($"//{nameof(Main)}");
+
+        base.OnStart();
     }
 }

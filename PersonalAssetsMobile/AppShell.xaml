@@ -6,8 +6,10 @@
     xmlns:local="clr-namespace:PersonalAssetsMobile.Views"
     xmlns:Icons="clr-namespace:PersonalAssetsMobile.Resources.Fonts.Icons"
     xmlns:Components="clr-namespace:PersonalAssetsMobile.Components"
+    xmlns:vm="clr-namespace:PersonalAssetsMobile.ViewModels"
     FlyoutBackgroundColor="#29A0B1"
-   >
+    >
+    <!--x:DataType="vm:AppShellVM"-->
 
     <ShellItem Route="SignIn" FlyoutItemIsVisible="False">
         <ShellContent ContentTemplate="{DataTemplate local:SignIn}" Shell.FlyoutBehavior="Disabled"></ShellContent>
@@ -22,7 +24,7 @@
             <ShellContent ContentTemplate="{DataTemplate local:Main}" />
         </Tab>
     </FlyoutItem>
-    
+
     <FlyoutItem Title="Categorias" Icon="{x:Static Icons:Icons.Tags}">
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate local:CategoryList}" />
@@ -53,11 +55,15 @@
             </Grid>
         </DataTemplate>
     </Shell.ItemTemplate>
-    
+
     <Shell.FlyoutFooterTemplate>
         <DataTemplate>
             <StackLayout>
-                <Button Text="Sair" Margin="0,10,0,10" ContentLayout="Left,10" Style="{StaticResource ButtonPrimary}" BackgroundColor="{StaticResource Danger}" FontSize="15">
+                <Button x:Name="BtnSignOut" Text="Sair" Margin="0,10,0,10" 
+                        ContentLayout="Left,10" Style="{StaticResource ButtonPrimary}"
+                        BackgroundColor="{StaticResource Danger}" FontSize="15"
+                        Command="{Binding SignOutCommand}"
+                        >
                     <Button.ImageSource>
                         <FontImageSource FontFamily="Icons" Color="#fff" Glyph="{x:Static Icons:Icons.SignOutAlt}" Size="12"/>
                     </Button.ImageSource>

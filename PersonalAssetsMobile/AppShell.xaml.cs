@@ -1,4 +1,5 @@
-﻿using PersonalAssetsMobile.Views;
+﻿using PersonalAssetsMobile.ViewModels;
+using PersonalAssetsMobile.Views;
 using PersonalAssetsMobile.Views.Category;
 using PersonalAssetsMobile.Views.Category.SubCategory;
 using PersonalAssetsMobile.Views.Item;
@@ -7,7 +8,7 @@ namespace PersonalAssetsMobile;
 
 public partial class AppShell : Shell
 {
-    public AppShell()
+    public AppShell(AppShellVM appShellVM)
     {
         InitializeComponent();
 
@@ -19,7 +20,7 @@ public partial class AppShell : Shell
 
         Routing.RegisterRoute(nameof(CategoryList), typeof(CategoryList));
 
-        Routing.RegisterRoute(nameof(CategoryEdit),typeof(CategoryEdit));
+        Routing.RegisterRoute(nameof(CategoryEdit), typeof(CategoryEdit));
 
         Routing.RegisterRoute(nameof(CategoryDisplay), typeof(CategoryDisplay));
 
@@ -27,5 +28,6 @@ public partial class AppShell : Shell
 
         Routing.RegisterRoute(nameof(ItemEdit), typeof(ItemEdit));
 
+        BindingContext = appShellVM;
     }
 }

@@ -84,10 +84,10 @@ namespace PersonalAssetsMobile.ViewModels.Category
 
             CategoryColor = Color.FromArgb(category.Color);
             Name = category.Name;
-            SystemDefault = !category.SystemDefault;
+            SystemDefault = category.SystemDefault == 1;
             SubCategoryObsCol = new();
 
-            List<Models.SubCategory> subCategoryList = await subCategoryServices.GetSubCategoriesAsync(Id);
+            List<Models.SubCategory> subCategoryList = new();//await subCategoryServices.GetSubCategoriesAsync(Id);
 
             foreach (var subCategory in subCategoryList)
             {

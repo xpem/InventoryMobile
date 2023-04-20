@@ -1,5 +1,5 @@
-﻿using PersonalAssetsMobile.Utils;
-using Services.User;
+﻿using PersonalAssetsMobile.Services;
+using PersonalAssetsMobile.Utils;
 using System.Windows.Input;
 
 namespace PersonalAssetsMobile.ViewModels
@@ -7,10 +7,9 @@ namespace PersonalAssetsMobile.ViewModels
     public class UpdatePasswordVM : ViewModelBase
     {
         string email;
+        string btnSendEmailText = "Enviar Email";
 
         public string Email { get => email; set { if (email != value) { email = value; OnPropertyChanged(nameof(Email)); } } }
-
-        string btnSendEmailText = "Enviar Email";
 
         public string BtnSendEmailText { get => btnSendEmailText; set { if (btnSendEmailText != value) { btnSendEmailText = value; OnPropertyChanged(nameof(BtnSendEmailText)); } } }
 
@@ -37,8 +36,8 @@ namespace PersonalAssetsMobile.ViewModels
             }
             else
             {
-                //desenvolver mecanismo de update de email.
-                _ = await UserService.RecoverPassword(Email);
+                //condicionar mensagem de sucesso
+                string message = await UserService.RecoverPassword(Email);
 
                 await Application.Current.MainPage.DisplayAlert("Aviso", "Email de alteração de senha enviado!", null, "Ok");
 

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ApiDAL;
+using Models;
+using System.Text.Json;
 
 namespace Services.Category.SubCategory
 {
@@ -20,10 +18,20 @@ namespace Services.Category.SubCategory
              new Models.SubCategory(){ Id=9,CategoryId=3,Name="Peças externas",SystemDefault=true,Icon="\uf1b9"}
         };
 
-        public Task<List<Models.SubCategory>> GetSubCategoriesAsync(int categoryId)
+        string userToken;
+
+        public SubCategoryServices(string _userToken)
         {
-            return Task.FromResult(SubCategoryList.Where(s => s.CategoryId == categoryId).ToList());
+            userToken = _userToken;
         }
+
+        //public async Task<BLLResponse> GetSubCategoriesAsync() { 
+            
+        //  var apiResponse =  await SubCategoryApiDAL.GetSubCategories(userToken);
+
+
+        //    // WeatherForecast? weatherForecast =             JsonSerializer.Deserialize<WeatherForecast>(jsonString);
+        //}
 
         public Task<Models.SubCategory> GetSubCategoryAsync(int id)
         {

@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersonalAssetsMobile", "Per
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "..\Models\Models.csproj", "{C1B40CE8-8DD6-4636-94F1-15E92D12C118}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "..\Services\Services.csproj", "{97C7F225-D8C2-4802-BE9B-4B83B3A2F23D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL", "..\Services\BLL.csproj", "{97C7F225-D8C2-4802-BE9B-4B83B3A2F23D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalDBRepos", "..\Repositories\LocalDBRepos.csproj", "{9ADAD177-40C4-43D0-B769-023B82386C36}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiRepos", "..\ApiServices\ApiRepos.csproj", "{3C48F84B-1859-4A36-9352-872C6BF53C51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiDAL", "..\ApiServices\ApiDAL.csproj", "{3C48F84B-1859-4A36-9352-872C6BF53C51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

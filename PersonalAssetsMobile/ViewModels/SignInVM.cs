@@ -1,12 +1,6 @@
-﻿using Models;
+﻿using PersonalAssetsMobile.Services;
 using PersonalAssetsMobile.Views;
 using Plugin.Connectivity;
-using Services.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace PersonalAssetsMobile.ViewModels
@@ -25,6 +19,12 @@ namespace PersonalAssetsMobile.ViewModels
         public string BtnSignInText { get => btnSignInText; set { if (btnSignInText != value) { btnSignInText = value; OnPropertyChanged(nameof(BtnSignInText)); } } }
 
         public bool BtnSignInEnabled { get => btnSignInEnabled; set { if (btnSignInEnabled != value) { btnSignInEnabled = value; OnPropertyChanged(nameof(BtnSignInEnabled)); } } }
+
+
+        public SignInVM()
+        {
+            Email = Password = "";
+        }
 
         public ICommand SignUpCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(SignUp)}"));
 
@@ -45,19 +45,12 @@ namespace PersonalAssetsMobile.ViewModels
                             btnSignInText = "Acessando...";
                             BtnSignInEnabled = false;
 
-                            (bool success, ErrorType? error) = await UserService.SignIn(email, password);
+                            string message = await UserService.SignIn(email, password);
 
-                            if (success)
+                            if (message is null)
                                 await Shell.Current.GoToAsync($"//{nameof(Main)}");
-                            else if (!success && error is not null)
-                            {
-                                if (error == ErrorType.WrongEmailOrPassword)
-                                    await Application.Current.MainPage.DisplayAlert("Aviso", "Email/senha incorretos", null, "Ok");
-                                else
-                                    await Application.Current.MainPage.DisplayAlert("Erro", "Ocorreu um erro ao tentar logar", null, "Ok");
-                            }
                             else
-                                await Application.Current.MainPage.DisplayAlert("Erro", "Ocorreu um erro ao tentar logar", null, "Ok");
+                                await Application.Current.MainPage.DisplayAlert("Aviso", message, null, "Ok");
 
                             BtnSignInEnabled = true;
                             btnSignInText = "Acessar";
@@ -70,9 +63,9 @@ namespace PersonalAssetsMobile.ViewModels
                 else
                     await Application.Current.MainPage.DisplayAlert("Aviso", "Insira seu email e senha.", null, "Ok");
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
 
             IsBusy = false;

@@ -162,6 +162,7 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
         {
             IconPickerVisible = false;
             ButtonIconVisible = true;
+            
             if (query.TryGetValue("CategoryId", out object _categoryId))
                 CategoryId = Convert.ToInt32(_categoryId);
             else if (query.TryGetValue("Id", out object _id))

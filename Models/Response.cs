@@ -6,8 +6,8 @@ namespace Models
     {
         public bool Success { get; set; }
 
-        public JsonNode? Content { get; set; }
+        public string? Content { get; set; }
 
-        public string? ErrorMessage { get; set; }
+        public System.Net.HttpStatusCode HttpStatusCode { get; set; }
     }
 }

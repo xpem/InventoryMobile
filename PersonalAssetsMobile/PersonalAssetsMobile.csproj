@@ -53,14 +53,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui" Version="5.0.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="5.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Xam.Plugin.Connectivity" Version="3.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Models\Models.csproj" />
-	  <ProjectReference Include="..\Services\Services.csproj" />
+	  <ProjectReference Include="..\Services\BLL.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -109,6 +109,10 @@
 	  <MauiXaml Update="Views\UpdatePassword.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Services\User\" />
 	</ItemGroup>
 
 </Project>
