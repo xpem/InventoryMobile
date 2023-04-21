@@ -38,8 +38,8 @@ namespace PersonalAssetsMobile.Services
 
                 return null;
             }
-            else if (resp.Error is not null && resp.Error == ErrorTypes.WrongEmailOrPassword)
-                return "Email/Senha incorretos";
+            else if (resp.ErrorMessage is not null)
+                return resp.ErrorMessage;
 
             return "Ocorreu um erro na tentativa de acesso";
         }

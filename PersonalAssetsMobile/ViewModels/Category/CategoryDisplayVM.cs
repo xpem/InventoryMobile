@@ -1,4 +1,6 @@
-﻿using PersonalAssetsMobile.UIModels;
+﻿using BLL;
+using PersonalAssetsMobile.Services;
+using PersonalAssetsMobile.UIModels;
 using PersonalAssetsMobile.Views.Category;
 using PersonalAssetsMobile.Views.Category.SubCategory;
 using Services.Category;
@@ -63,16 +65,6 @@ namespace PersonalAssetsMobile.ViewModels.Category
 
         public ICommand SubCategoryEditCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(SubCategoryEdit)}?CategoryId={Id}", true));
 
-        readonly ICategoryServices categoryServices;
-        readonly ISubCategoryServices subCategoryServices;
-
-        public CategoryDisplayVM(ICategoryServices _categoryServices, ISubCategoryServices _subCategoryServices)
-        {
-            categoryServices = _categoryServices;
-            subCategoryServices = _subCategoryServices;
-        }
-
-
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
             Id = Convert.ToInt32(query["Id"]);
@@ -80,7 +72,7 @@ namespace PersonalAssetsMobile.ViewModels.Category
 
         public ICommand OnAppearingCommand => new Command(async (e) =>
         {
-            Models.Category category = await categoryServices.GetCategoryAsync(Id);
+            Models.Category category = await CategoryService.GetCategoryById(Id);
 
             CategoryColor = Color.FromArgb(category.Color);
             Name = category.Name;

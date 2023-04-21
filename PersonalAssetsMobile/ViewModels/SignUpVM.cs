@@ -49,6 +49,8 @@ namespace PersonalAssetsMobile.ViewModels
 
         private bool VerifyFileds()
         {
+            //usar contracts??
+
             bool validInformation = true;
 
             if (string.IsNullOrEmpty(Name))

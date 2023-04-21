@@ -2,12 +2,13 @@
 using ApiRepos;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Models.Responses;
 
 namespace ApiDAL
 {
     public static class UserApiDAl
     {
-        public static async Task<Response> AddUser(string name, string email, string password)
+        public static async Task<ApiResponse> AddUser(string name, string email, string password)
         {
             try
             {
@@ -18,13 +19,13 @@ namespace ApiDAL
             catch (Exception ex) { throw ex; }
         }
 
-        public static async Task<Response> RecoverPassword(string email)
+        public static async Task<ApiResponse> RecoverPassword(string email)
         {
             string json = JsonSerializer.Serialize(new { email });
             return await HttpClientFunctions.PostAsync(ApiKeys.ApiBookshelfUri + "/user/recoverpassword", json);
         }
 
-        public static async Task<Response> GetUserToken(string email, string password)
+        public static async Task<ApiResponse> GetUserToken(string email, string password)
         {
             try
             {
@@ -37,7 +38,7 @@ namespace ApiDAL
             }
         }
 
-        public static async Task<Response> GetUser(string token)
+        public static async Task<ApiResponse> GetUser(string token)
         {
             try
             {

@@ -1,5 +1,6 @@
 ﻿using ApiDAL;
 using Models;
+using Models.Responses;
 using System.Text.Json.Nodes;
 
 namespace BLL
@@ -53,7 +54,7 @@ namespace BLL
             {
                 email = email.ToLower();
 
-                Response resp = await UserApiDAl.GetUserToken(email, password);
+                var resp = await UserApiDAl.GetUserToken(email, password);
 
                 if (resp is not null && resp.Content is not null)
                 {
@@ -84,7 +85,7 @@ namespace BLL
 
                 if (success && userTokenRes != null)
                 {
-                    Response resp = await UserApiDAl.GetUser(userTokenRes);
+                    var resp = await UserApiDAl.GetUser(userTokenRes);
 
                     if (resp.Success && resp.Content != null)
                     {

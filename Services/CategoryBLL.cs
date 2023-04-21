@@ -1,30 +1,22 @@
 ﻿using ApiDAL;
 using Models;
-using System.Text.Json;
 
 namespace BLL
 {
     public class CategoryBLL
     {
-        public static async Task<BLLResponse> GetCategory(string token)
+        public static async Task<BLLResponse> GetCategories(string token)
         {
             var resp = await CategoryApiDAL.GetCategories(token);
 
-            try
-            {
-                if (resp is not null && resp.Content is not null)
-                {
-                    var list = JsonSerializer.Deserialize<List<Models.Category>>(resp.Content);
+            return ApiResponseHandler.Handler<List<Models.Category>>(resp);
+        }
 
-                    return new BLLResponse() { Success = true, Content = list };
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+        public static async Task<BLLResponse> GetCategoryById(string token, string id)
+        {
+            var resp = await CategoryApiDAL.GetCategoryById(token, id);
 
-            return new BLLResponse() { Success = false, Error = ErrorTypes.Unknown };
+            return ApiResponseHandler.Handler<Models.Category>(resp);
         }
     }
 }

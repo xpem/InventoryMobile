@@ -1,4 +1,3 @@
-using Models;
 using PersonalAssetsMobile.UIModels;
 using PersonalAssetsMobile.ViewModels.Category;
 using PersonalAssetsMobile.Views.Category;
@@ -17,6 +16,8 @@ public partial class CategoryList : ContentPage
     private void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
     {
         var TappedItem = e.Item as CategoryUI;
+
         Shell.Current.GoToAsync($"{nameof(CategoryDisplay)}?Id={TappedItem.Id}", true);
+
     }
 }

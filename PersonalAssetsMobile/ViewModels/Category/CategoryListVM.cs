@@ -17,7 +17,7 @@ namespace PersonalAssetsMobile.ViewModels.Category
         {
             Categories = new();
 
-            (bool success, List<Models.Category> list, string message) = await CategoryService.GetCategories();
+            List<Models.Category> list = await CategoryService.GetCategories();
 
             foreach (var i in list)
             {

@@ -5,16 +5,29 @@ namespace PersonalAssetsMobile.Services
 {
     public static class CategoryService
     {
-        public static async Task<(bool, List<Category>, string)> GetCategories()
+        public static async Task<List<Category>> GetCategories()
         {
             var token = await SecureStorage.Default.GetAsync("TOKEN");
 
-            var resp = await CategoryBLL.GetCategory(token);
+            var resp = await CategoryBLL.GetCategories(token);
 
             if (resp is not null && resp.Success)
-                return (true, resp.Content as List<Category>, null);
+                return resp.Content as List<Category>;
 
-            return (false, null, "Ocorreu um Erro não identificado");
+            return null;
+        }
+
+        public static async Task<Category> GetCategoryById(int id)
+        {
+            var token = await SecureStorage.Default.GetAsync("TOKEN");
+
+            var resp = await CategoryBLL.GetCategoryById(token, id.ToString());
+
+            if (resp.Success)
+                return resp.Content as Category;
+
+            return null;
+            //return (false, null, resp.ErrorMessage);
         }
     }
 }

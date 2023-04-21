@@ -1,4 +1,5 @@
-﻿using PersonalAssetsMobile.Views.Category.SubCategory;
+﻿using PersonalAssetsMobile.Services;
+using PersonalAssetsMobile.Views.Category.SubCategory;
 using Services.Category;
 using System.Windows.Input;
 
@@ -71,13 +72,12 @@ namespace PersonalAssetsMobile.ViewModels.Category
 
         public ICommand ShowColorPickerCommand => new Command(() => ShowColorPicker());
 
-        public ICommand DefineColorCommand => new Command((e) => DefineColor(Color.FromArgb(e as string)));
-
         public void ShowColorPicker()
         {
             ColorPickerVisible = true;
             ButtonColorVisible = false;
         }
+        public ICommand DefineColorCommand => new Command((e) => DefineColor(Color.FromArgb(e as string)));
 
         public void DefineColor(Color color)
         {
@@ -86,12 +86,6 @@ namespace PersonalAssetsMobile.ViewModels.Category
             ButtonColorVisible = true;
         }
 
-        ICategoryServices categoryServices;
-
-        public CategoryEditVM(ICategoryServices _categoryServices)
-        {
-            categoryServices = _categoryServices;
-        }
 
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
@@ -101,8 +95,7 @@ namespace PersonalAssetsMobile.ViewModels.Category
             if (query.Count > 0)
             {
                 Id = Convert.ToInt32(query["Id"]);
-
-                Models.Category category = await categoryServices.GetCategoryAsync(Id);
+                Models.Category category = await CategoryService.GetCategoryById(Id);
 
                 CategoryColor = Color.FromArgb(category.Color);
 
