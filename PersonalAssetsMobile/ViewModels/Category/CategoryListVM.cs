@@ -1,7 +1,6 @@
 ﻿using PersonalAssetsMobile.Services;
 using PersonalAssetsMobile.UIModels;
 using PersonalAssetsMobile.Views.Category;
-using Services.Category;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 

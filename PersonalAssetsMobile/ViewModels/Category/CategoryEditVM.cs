@@ -1,6 +1,5 @@
-﻿using PersonalAssetsMobile.Services;
-using PersonalAssetsMobile.Views.Category.SubCategory;
-using Services.Category;
+﻿using Models;
+using PersonalAssetsMobile.Services;
 using System.Windows.Input;
 
 namespace PersonalAssetsMobile.ViewModels.Category
@@ -39,7 +38,7 @@ namespace PersonalAssetsMobile.ViewModels.Category
             }
         }
 
-        bool colorPickerVisible;
+        bool colorPickerVisible, buttonColorVisible, btnInsertIsEnabled = true;
 
         public bool ColorPickerVisible
         {
@@ -53,8 +52,6 @@ namespace PersonalAssetsMobile.ViewModels.Category
                 }
             }
         }
-
-        bool buttonColorVisible;
 
         public bool ButtonColorVisible
         {
@@ -70,6 +67,8 @@ namespace PersonalAssetsMobile.ViewModels.Category
             }
         }
 
+        public bool BtnInsertIsEnabled { get => btnInsertIsEnabled; set { if (value != btnInsertIsEnabled) { btnInsertIsEnabled = value; OnPropertyChanged(); } } }
+
         public ICommand ShowColorPickerCommand => new Command(() => ShowColorPicker());
 
         public void ShowColorPicker()
@@ -77,6 +76,7 @@ namespace PersonalAssetsMobile.ViewModels.Category
             ColorPickerVisible = true;
             ButtonColorVisible = false;
         }
+
         public ICommand DefineColorCommand => new Command((e) => DefineColor(Color.FromArgb(e as string)));
 
         public void DefineColor(Color color)
@@ -85,7 +85,6 @@ namespace PersonalAssetsMobile.ViewModels.Category
             ColorPickerVisible = false;
             ButtonColorVisible = true;
         }
-
 
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
@@ -108,6 +107,55 @@ namespace PersonalAssetsMobile.ViewModels.Category
                 Id = 0;
                 Name = "";
             }
+        }
+
+        public ICommand InsertCommand => new Command(async (e) => { await InsertCategory(); });
+
+        public async Task InsertCategory()
+        {
+            try
+            {
+                if (await VerifyFields())
+                {
+                    BtnInsertIsEnabled = false;
+
+                    Models.Category category = new()
+                    {
+                        Name = Name,
+                        Color = CategoryColor.ToArgbHex(),
+                    };
+
+                    string mensagem = "";
+
+                    if (Id > 0)
+                    {
+
+                    }
+                    else
+                        (_, mensagem) = await CategoryService.AddCategory(category);
+
+                    bool resposta = await Application.Current.MainPage.DisplayAlert("Aviso", mensagem, null, "Ok");
+
+                    if (!resposta)
+                        await Shell.Current.GoToAsync("..");
+                }
+
+                BtnInsertIsEnabled = true;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        private async Task<bool> VerifyFields()
+        {
+            bool valid = true;
+
+            if (string.IsNullOrEmpty(Name))
+            {
+                valid = false;
+                _ = Application.Current.MainPage.DisplayAlert("Aviso", "Digite um Nome válido", null, "Ok");
+            }
+
+            return valid;
         }
     }
 }

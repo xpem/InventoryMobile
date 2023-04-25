@@ -8,8 +8,6 @@ using PersonalAssetsMobile.Views;
 using PersonalAssetsMobile.Views.Category;
 using PersonalAssetsMobile.Views.Category.SubCategory;
 using PersonalAssetsMobile.Views.Item;
-using Services.Category;
-using Services.Category.SubCategory;
 
 namespace PersonalAssetsMobile;
 
@@ -67,13 +65,6 @@ public static class MauiProgram
         builder.Services.AddTransient<ItemEditVM>();
 
         #endregion
-
-        #region BLL
-
-        builder.Services.AddScoped<ISubCategoryServices, SubCategoryServices>();
-
-        #endregion
-
 
         #endregion
 

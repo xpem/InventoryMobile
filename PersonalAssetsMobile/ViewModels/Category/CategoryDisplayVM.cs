@@ -3,8 +3,6 @@ using PersonalAssetsMobile.Services;
 using PersonalAssetsMobile.UIModels;
 using PersonalAssetsMobile.Views.Category;
 using PersonalAssetsMobile.Views.Category.SubCategory;
-using Services.Category;
-using Services.Category.SubCategory;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -54,7 +52,7 @@ namespace PersonalAssetsMobile.ViewModels.Category
                 {
                     systemDefault = value;
 
-                    OnPropertyChanged(nameof(Name));
+                    OnPropertyChanged(nameof(SystemDefault));
                 }
             }
         }
@@ -76,7 +74,7 @@ namespace PersonalAssetsMobile.ViewModels.Category
 
             CategoryColor = Color.FromArgb(category.Color);
             Name = category.Name;
-            SystemDefault = category.SystemDefault == 1;
+            SystemDefault = category.SystemDefault != 1;
             SubCategoryObsCol = new();
 
             List<Models.SubCategory> subCategoryList = new();//await subCategoryServices.GetSubCategoriesAsync(Id);

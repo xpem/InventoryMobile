@@ -8,7 +8,7 @@ namespace Models
 
         public string? Color { get; set; }
 
-        public int SystemDefault { get; set; }
+        public int? SystemDefault { get; set; }
 
     }
 }

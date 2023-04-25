@@ -29,5 +29,18 @@ namespace PersonalAssetsMobile.Services
             return null;
             //return (false, null, resp.ErrorMessage);
         }
+
+        public static async Task<(bool, string)> AddCategory(Category category)
+        {
+            var token = await SecureStorage.Default.GetAsync("TOKEN");
+
+            var resp = await CategoryBLL.AddCategory(token, category);
+
+            if (resp.Success)
+            {
+                return (true, "Categoria Adicionada!");
+            }
+            else return (false, "Ocorreu um erro ao tentar adicionar a categoria");
+        }
     }
 }

@@ -80,5 +80,6 @@ namespace PersonalAssetsMobile.ViewModels
 
             return validInformation;
         }
+
     }
 }

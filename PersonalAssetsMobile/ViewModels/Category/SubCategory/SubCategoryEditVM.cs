@@ -1,7 +1,5 @@
 ﻿using PersonalAssetsMobile.Resources.Fonts.Icons;
 using PersonalAssetsMobile.Services;
-using Services.Category;
-using Services.Category.SubCategory;
 using System.Windows.Input;
 
 namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
@@ -9,8 +7,7 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
     public class SubCategoryEditVM : ViewModelBase, IQueryAttributable
     {
         int CategoryId, Id;
-        readonly ISubCategoryServices subCategoryServices;
-
+        
         //Color categoryColor;
 
         //public Color CategoryColor
@@ -152,11 +149,6 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
             ButtonIconVisible = true;
         }
 
-        public SubCategoryEditVM(ISubCategoryServices _subCategoryServices)
-        {
-            subCategoryServices = _subCategoryServices;
-        }
-
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
             IconPickerVisible = false;
@@ -169,7 +161,7 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
 
             if (Id != 0)
             {
-                Models.SubCategory subcategory = await subCategoryServices.GetSubCategoryAsync(Id);
+                Models.SubCategory subcategory = null;// await subsca.GetSubCategoryAsync(Id);
 
                 Name = subcategory.Name;
                 CategoryId = subcategory.CategoryId;

@@ -1,16 +1,11 @@
 ﻿using PersonalAssetsMobile.Views.Category.SubCategory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace PersonalAssetsMobile.UIModels
 {
-   public class UISubCategory
+    public class UISubCategory
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public string Name { get; set; }
 
