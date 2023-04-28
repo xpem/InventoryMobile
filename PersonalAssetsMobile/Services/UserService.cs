@@ -32,9 +32,9 @@ namespace PersonalAssetsMobile.Services
 
             if (resp.Success)
             {
-                User user = resp.Content as User;
+                User? user = resp.Content as User?;
 
-                await SaveUserInformation(user, password);
+                await SaveUserInformation(user.Value, password);
 
                 return null;
             }

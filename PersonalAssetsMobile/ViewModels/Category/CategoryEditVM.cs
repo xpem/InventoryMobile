@@ -1,4 +1,4 @@
-﻿using Models;
+﻿using PersonalAssetsMobile.Resources.Fonts.Icons;
 using PersonalAssetsMobile.Services;
 using System.Windows.Input;
 
@@ -23,7 +23,7 @@ namespace PersonalAssetsMobile.ViewModels.Category
             }
         }
 
-        string name;
+        string name, btnInsertText, btnInsertIcon;
 
         public string Name
         {
@@ -37,6 +37,10 @@ namespace PersonalAssetsMobile.ViewModels.Category
                 }
             }
         }
+
+        public string BtnInsertText { get => btnInsertText; set { if (value != btnInsertText) { btnInsertText = value; OnPropertyChanged(nameof(BtnInsertText)); } } }
+
+        public string BtnInsertIcon { get => btnInsertIcon; set { if (value != btnInsertIcon) { btnInsertIcon = value; OnPropertyChanged(nameof(BtnInsertIcon)); } } }
 
         bool colorPickerVisible, buttonColorVisible, btnInsertIsEnabled = true;
 
@@ -67,7 +71,7 @@ namespace PersonalAssetsMobile.ViewModels.Category
             }
         }
 
-        public bool BtnInsertIsEnabled { get => btnInsertIsEnabled; set { if (value != btnInsertIsEnabled) { btnInsertIsEnabled = value; OnPropertyChanged(); } } }
+        public bool BtnInsertIsEnabled { get => btnInsertIsEnabled; set { if (value != btnInsertIsEnabled) { btnInsertIsEnabled = value; OnPropertyChanged(nameof(BtnInsertIsEnabled)); } } }
 
         public ICommand ShowColorPickerCommand => new Command(() => ShowColorPicker());
 
@@ -86,6 +90,13 @@ namespace PersonalAssetsMobile.ViewModels.Category
             ButtonColorVisible = true;
         }
 
+        readonly ICategoryService categoryService;
+
+        public CategoryEditVM(ICategoryService _categoryService)
+        {
+            categoryService = _categoryService;
+        }
+
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
             ColorPickerVisible = false;
@@ -94,11 +105,14 @@ namespace PersonalAssetsMobile.ViewModels.Category
             if (query.Count > 0)
             {
                 Id = Convert.ToInt32(query["Id"]);
-                Models.Category category = await CategoryService.GetCategoryById(Id);
+                Models.Category category = await categoryService.GetCategoryById(Id);
 
                 CategoryColor = Color.FromArgb(category.Color);
 
                 Name = category.Name;
+
+                BtnInsertIcon = Icons.Pen;
+                BtnInsertText = "Atualizar";
             }
             else
             {
@@ -106,6 +120,8 @@ namespace PersonalAssetsMobile.ViewModels.Category
 
                 Id = 0;
                 Name = "";
+                BtnInsertIcon = Icons.Plus;
+                BtnInsertText = "Cadastrar";
             }
         }
 
@@ -129,10 +145,12 @@ namespace PersonalAssetsMobile.ViewModels.Category
 
                     if (Id > 0)
                     {
+                        category.Id = Id;
 
+                        (_, mensagem) = await categoryService.AltCategory(category);
                     }
                     else
-                        (_, mensagem) = await CategoryService.AddCategory(category);
+                        (_, mensagem) = await categoryService.AddCategory(category);
 
                     bool resposta = await Application.Current.MainPage.DisplayAlert("Aviso", mensagem, null, "Ok");
 

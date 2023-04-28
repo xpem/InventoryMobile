@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using PersonalAssetsMobile.Services;
 using PersonalAssetsMobile.ViewModels;
 using PersonalAssetsMobile.ViewModels.Category;
 using PersonalAssetsMobile.ViewModels.Category.SubCategory;
@@ -65,6 +66,13 @@ public static class MauiProgram
         builder.Services.AddTransient<ItemEditVM>();
 
         #endregion
+
+        #region services
+
+        builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+        #endregion
+
 
         #endregion
 

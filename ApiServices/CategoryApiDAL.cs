@@ -7,6 +7,7 @@ namespace ApiDAL
 {
     public static class CategoryApiDAL
     {
+
         public static async Task<ApiResponse> GetCategories(string userToken) =>
             await HttpClientFunctions.GetAsync(ApiKeys.ApiUri + "/category", userToken);
 
@@ -20,6 +21,17 @@ namespace ApiDAL
                 string json = JsonSerializer.Serialize(new { category.Name, category.Color });
 
                 return await HttpClientFunctions.PostAsync(ApiKeys.ApiUri + "/category", json, userToken);
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public static async Task<ApiResponse> AltCategory(string userToken, Category category)
+        {
+            try
+            {
+                string json = JsonSerializer.Serialize(new { category.Name, category.Color });
+
+                return await HttpClientFunctions.PutAsync(ApiKeys.ApiUri + "/category/"+ category.Id, json, userToken);
             }
             catch (Exception ex) { throw ex; }
         }

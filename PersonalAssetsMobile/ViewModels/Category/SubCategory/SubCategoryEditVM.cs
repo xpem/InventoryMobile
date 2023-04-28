@@ -6,6 +6,14 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
 {
     public class SubCategoryEditVM : ViewModelBase, IQueryAttributable
     {
+
+        readonly ICategoryService categoryService;
+
+        public SubCategoryEditVM(ICategoryService _categoryService)
+        {
+            categoryService = _categoryService;
+        }
+
         int CategoryId, Id;
         
         //Color categoryColor;
@@ -178,8 +186,7 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
 
             Icon ??= Icons.Tag;
 
-
-            Models.Category category = await CategoryService.GetCategoryById(CategoryId); //CategoryColor = Color.FromArgb(category.Color);
+            Models.Category category = await categoryService.GetCategoryById(CategoryId); //CategoryColor = Color.FromArgb(category.Color);
 
             CategoryName = category.Name;
 

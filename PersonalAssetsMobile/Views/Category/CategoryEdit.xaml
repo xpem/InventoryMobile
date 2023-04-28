@@ -36,14 +36,14 @@
                         <Button BackgroundColor="#006CBB" Style="{StaticResource BtnDefineColor}" Command="{Binding DefineColorCommand}" CommandParameter="#006CBB" />
                         <Button BackgroundColor="#864183" Style="{StaticResource BtnDefineColor}" Command="{Binding DefineColorCommand}" CommandParameter="#864183" />
                     </FlexLayout>
-                    <Button Text="Cadastrar" Margin="0,10,0,20" 
-                            FontSize="20" ContentLayout="Left,10"
+                    <Button Text="{Binding BtnInsertText}" Margin="0,10,0,20" 
+                            FontSize="20" ContentLayout="Left,10"                            
                             Style="{StaticResource ButtonPrimary}"
                             IsEnabled="{Binding BtnInsertIsEnabled}"
                             Command="{Binding InsertCommand}" 
                             >
                         <Button.ImageSource>
-                            <FontImageSource FontFamily="Icons" Color="#fff" Glyph="{x:Static Icons:Icons.Plus}" Size="15"/>
+                            <FontImageSource FontFamily="Icons" Color="#fff" Glyph="{Binding BtnInsertIcon}" Size="15"/>
                         </Button.ImageSource>
                     </Button>
                 </VerticalStackLayout>

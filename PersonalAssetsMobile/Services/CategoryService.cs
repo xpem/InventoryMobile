@@ -3,13 +3,12 @@ using Models;
 
 namespace PersonalAssetsMobile.Services
 {
-    public static class CategoryService
+    public class CategoryService : ServiceBase, ICategoryService
     {
-        public static async Task<List<Category>> GetCategories()
-        {
-            var token = await SecureStorage.Default.GetAsync("TOKEN");
 
-            var resp = await CategoryBLL.GetCategories(token);
+        public async Task<List<Category>> GetCategories()
+        {
+            var resp = await CategoryBLL.GetCategories(Token);
 
             if (resp is not null && resp.Success)
                 return resp.Content as List<Category>;
@@ -17,30 +16,36 @@ namespace PersonalAssetsMobile.Services
             return null;
         }
 
-        public static async Task<Category> GetCategoryById(int id)
+        public async Task<Category> GetCategoryById(int id)
         {
-            var token = await SecureStorage.Default.GetAsync("TOKEN");
-
-            var resp = await CategoryBLL.GetCategoryById(token, id.ToString());
+            var resp = await CategoryBLL.GetCategoryById(Token, id.ToString());
 
             if (resp.Success)
                 return resp.Content as Category;
 
             return null;
-            //return (false, null, resp.ErrorMessage);
         }
 
-        public static async Task<(bool, string)> AddCategory(Category category)
+        public async Task<(bool, string)> AddCategory(Category category)
         {
-            var token = await SecureStorage.Default.GetAsync("TOKEN");
-
-            var resp = await CategoryBLL.AddCategory(token, category);
+            var resp = await CategoryBLL.AddCategory(Token, category);
 
             if (resp.Success)
             {
                 return (true, "Categoria Adicionada!");
             }
             else return (false, "Ocorreu um erro ao tentar adicionar a categoria");
+        }
+
+        public async Task<(bool, string)> AltCategory(Category category)
+        {
+            var resp = await CategoryBLL.AltCategory(Token, category);
+
+            if (resp.Success)
+            {
+                return (true, "Categoria Atualizada!");
+            }
+            else return (false, "Ocorreu um erro ao tentar atualizar a categoria");
         }
     }
 }

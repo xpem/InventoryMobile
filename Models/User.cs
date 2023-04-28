@@ -1,6 +1,6 @@
 ﻿namespace Models
 {
-    public class User
+    public struct User
     {
         public string? Id { get; set; }
 

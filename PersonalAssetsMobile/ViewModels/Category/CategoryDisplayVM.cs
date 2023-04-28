@@ -68,9 +68,17 @@ namespace PersonalAssetsMobile.ViewModels.Category
             Id = Convert.ToInt32(query["Id"]);
         }
 
+
+        readonly ICategoryService categoryService;
+
+        public CategoryDisplayVM(ICategoryService _categoryService)
+        {
+            categoryService = _categoryService;
+        }
+
         public ICommand OnAppearingCommand => new Command(async (e) =>
         {
-            Models.Category category = await CategoryService.GetCategoryById(Id);
+            Models.Category category = await categoryService.GetCategoryById(Id);
 
             CategoryColor = Color.FromArgb(category.Color);
             Name = category.Name;

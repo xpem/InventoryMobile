@@ -12,11 +12,18 @@ namespace PersonalAssetsMobile.ViewModels.Category
 
         public ICommand CategoryAddCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(CategoryEdit)}"));
 
+        readonly ICategoryService categoryService;
+
+        public CategoryListVM(ICategoryService _categoryService)
+        {
+            categoryService = _categoryService;
+        }
+
         public ICommand OnAppearingCommand => new Command(async (e) =>
         {
             Categories = new();
 
-            List<Models.Category> list = await CategoryService.GetCategories();
+            List<Models.Category> list = await categoryService.GetCategories();
 
             foreach (var i in list)
             {
