@@ -12,15 +12,20 @@ namespace BLL
             {
                 if (apiResponse is not null)
                 {
-                    if (!apiResponse.Success && apiResponse.Error != null)
-                        return new BLLResponse() { Success = false, Error = apiResponse.Error };
+                    if (!apiResponse.Success)
+                    {
+                        if (apiResponse.Error != null)
+                            return new BLLResponse() { Success = false, Error = apiResponse.Error };
+                        else if (apiResponse.Content != null)
+                            return new BLLResponse() { Success = false, Content = apiResponse.Content };
+                    }
 
                     if (apiResponse.Content is not null)
                         return new BLLResponse() { Success = true, Content = JsonDeserialize<TModel>(apiResponse.Content) };
 
                     throw new Exception("apiResponse.Content nulo");
                 }
-                
+
                 throw new Exception("apiResponse nulo");
             }
             catch (Exception ex)

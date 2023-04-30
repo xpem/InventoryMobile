@@ -70,5 +70,25 @@ namespace ApiRepos
                 throw ex;
             }
         }
+
+        public static async Task<ApiResponse> DeleteAsync(string uri, string? userToken = null)
+        {
+            try
+            {
+                using var httpClient = new HttpClient();
+                if (userToken is not null)
+                    httpClient.DefaultRequestHeaders.Add("authorization", "bearer " + userToken);
+
+                HttpResponseMessage? httpResponse = await httpClient.DeleteAsync(uri);
+                return new ApiResponse() { Success = httpResponse.IsSuccessStatusCode, Content = await httpResponse.Content.ReadAsStringAsync() };
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException is not null && ex.InnerException.Message == "Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente.")
+                    return new ApiResponse() { Success = false, Content = null, Error = ErrorTypes.ServerUnavaliable };
+
+                throw ex;
+            }
+        }
     }
 }

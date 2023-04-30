@@ -35,5 +35,14 @@ namespace ApiDAL
             }
             catch (Exception ex) { throw ex; }
         }
+
+        public static async Task<ApiResponse> DelCategory(string userToken, int id)
+        {
+            try
+            {
+                return await HttpClientFunctions.DeleteAsync(ApiKeys.ApiUri + "/category/" + id, userToken);
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }

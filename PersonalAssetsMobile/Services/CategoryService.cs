@@ -47,5 +47,14 @@ namespace PersonalAssetsMobile.Services
             }
             else return (false, "Ocorreu um erro ao tentar atualizar a categoria");
         }
+
+        public async Task<(bool, string)> DelCategory(int id)
+        {
+            var resp = await CategoryBLL.DelCategory(Token, id);
+
+            if (resp.Success)
+                return (true, "Categoria Excluída!");
+            else return (false, "Ocorreu um erro ao tentar excluir a categoria");
+        }
     }
 }

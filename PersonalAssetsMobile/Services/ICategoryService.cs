@@ -11,5 +11,7 @@ namespace PersonalAssetsMobile.Services
         Task<(bool, string)> AddCategory(Category category);
 
         Task<(bool, string)> AltCategory(Category category);
+
+        Task<(bool, string)> DelCategory(int id);
     }
 }

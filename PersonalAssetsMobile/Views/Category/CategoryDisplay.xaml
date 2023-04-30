@@ -39,11 +39,22 @@
                         <Label Text="{Binding Name}" TextColor="{StaticResource White}" FontSize="20"
                             FontAttributes="Bold" VerticalOptions="Center"  Grid.Column="1" Margin="10,0,0,0" />
                         <HorizontalStackLayout  Grid.Column="2" HorizontalOptions="End">
-                            <Button Style="{StaticResource BtnIconOption}" HorizontalOptions="End" Margin="0,0,10,0"
-                                    Text="{x:Static Icons:Icons.Pen}" BackgroundColor="{StaticResource Warning}" TextColor="{StaticResource Black}"
-                                    Command="{Binding CategoryEditCommand}" IsVisible="{Binding SystemDefault}" />
-                            <Button Style="{StaticResource BtnIconOption}" HorizontalOptions="End" Margin="0,0,10,0" 
-                                    Text="{x:Static Icons:Icons.Trash}"  TextColor="{StaticResource White}" BackgroundColor="{StaticResource Danger}" IsVisible="{Binding SystemDefault}" />
+                            <Button Style="{StaticResource BtnIconOption}" 
+                                    HorizontalOptions="End" Margin="0,0,10,0"
+                                    Text="{x:Static Icons:Icons.Pen}"
+                                    BackgroundColor="{StaticResource Warning}"
+                                    TextColor="{StaticResource Black}"
+                                    Command="{Binding CategoryEditCommand}"
+                                    IsVisible="{Binding SystemDefault}"
+                                    />
+                            <Button Style="{StaticResource BtnIconOption}"
+                                    HorizontalOptions="End" Margin="0,0,10,0" 
+                                    Text="{x:Static Icons:Icons.Trash}"
+                                    TextColor="{StaticResource White}"
+                                    BackgroundColor="{StaticResource Danger}"
+                                    IsVisible="{Binding SystemDefault}"
+                                    Command="{Binding DeleteCategoryCommand}"
+                                    />
                         </HorizontalStackLayout>
                     </Grid>
                     <Label Text="Sub Categorias" Style="{StaticResource LblHEntry}" Margin="0,15,0,0" FontSize="15"/>

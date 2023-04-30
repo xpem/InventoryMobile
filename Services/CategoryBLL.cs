@@ -72,5 +72,15 @@ namespace BLL
 
             return new BLLResponse() { Success = false, Content = null };
         }
+
+        public static async Task<BLLResponse> DelCategory(string token, int id)
+        {
+            var resp = await CategoryApiDAL.DelCategory(token, id);
+
+            if (resp is not null && resp.Content is not null)
+                return new BLLResponse() { Success = resp.Success, Content = resp.Content };
+
+            return new BLLResponse() { Success = false, Content = null };
+        }
     }
 }

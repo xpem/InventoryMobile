@@ -63,11 +63,38 @@ namespace PersonalAssetsMobile.ViewModels.Category
 
         public ICommand SubCategoryEditCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(SubCategoryEdit)}?CategoryId={Id}", true));
 
+        public ICommand DeleteCategoryCommand => new Command(async (e) =>
+        {
+            if (SubCategoryObsCol.Count > 0)
+            {
+                await Application.Current.MainPage.DisplayAlert("Aviso", "Não é possivel excluir uma categoria que tenha subcategorias relacionadas", null, "Ok");
+            }
+            else
+            {
+                if (await Application.Current.MainPage.DisplayAlert("Confirmação", "Deseja excluir esta Categoria?", "Sim", "Cancelar"))
+                {
+                    (var success, var message) = await categoryService.DelCategory(Id);
+
+                    if (success)
+                    {
+                        if (!await Application.Current.MainPage.DisplayAlert("Aviso", "Categoria excluída!", null, "Ok"))
+                            await Shell.Current.GoToAsync("..");
+                    }
+                    else
+                    {
+                        if (message != null)
+                            await Application.Current.MainPage.DisplayAlert("Aviso", message, null, "Ok");
+                        else
+                            throw new Exception("Houve um erro ao tentar excluir A Categoria");
+                    }
+                }
+            }
+        });
+
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
             Id = Convert.ToInt32(query["Id"]);
         }
-
 
         readonly ICategoryService categoryService;
 
@@ -79,6 +106,9 @@ namespace PersonalAssetsMobile.ViewModels.Category
         public ICommand OnAppearingCommand => new Command(async (e) =>
         {
             Models.Category category = await categoryService.GetCategoryById(Id);
+
+            //Category no longer exists in the db
+            if(category == null) await Shell.Current.GoToAsync("..");
 
             CategoryColor = Color.FromArgb(category.Color);
             Name = category.Name;
