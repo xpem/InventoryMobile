@@ -922,4 +922,3 @@
         public const string YinYang = "\uf6ad";
     }
 }
-
