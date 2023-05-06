@@ -27,7 +27,7 @@ namespace BLL
             if (resp is not null && resp.Content is not null)
             {
                 var jResp = JsonNode.Parse(resp.Content);
-                if (jResp is not null)
+                if (resp.Success && jResp is not null)
                 {
                     Models.Category categoryResp = new()
                     {

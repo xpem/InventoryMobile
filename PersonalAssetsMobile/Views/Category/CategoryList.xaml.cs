@@ -15,7 +15,7 @@ public partial class CategoryList : ContentPage
 
     private void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
     {
-        var TappedItem = e.Item as CategoryUI;
+        var TappedItem = e.Item as UICategory;
 
         Shell.Current.GoToAsync($"{nameof(CategoryDisplay)}?Id={TappedItem.Id}", true);
 

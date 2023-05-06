@@ -95,7 +95,7 @@
                                 Command="{Binding DefineIconCommand}" CommandParameter="{x:Static Icons:Icons.ShoePrints}" />
                         </FlexLayout>
                     </StackLayout>
-                    <Button Text="Cadastrar" Margin="0,10,0,20" FontSize="20" ContentLayout="Left,10" Style="{StaticResource ButtonPrimary}" >
+                    <Button Text="Cadastrar" Margin="0,10,0,20" FontSize="20" ContentLayout="Left,10" Style="{StaticResource ButtonPrimary}" Command="{Binding AddCommand}">
                         <Button.ImageSource>
                             <FontImageSource FontFamily="Icons" Color="#fff" Glyph="{x:Static Icons:Icons.Plus}" Size="15"/>
                         </Button.ImageSource>

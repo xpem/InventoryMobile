@@ -1,6 +1,10 @@
-﻿using PersonalAssetsMobile.Resources.Fonts.Icons;
+﻿using Models;
+using PersonalAssetsMobile.Resources.Fonts.Icons;
 using PersonalAssetsMobile.Services;
+using PersonalAssetsMobile.Utils;
+using System.Text;
 using System.Windows.Input;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
 {
@@ -8,14 +12,16 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
     {
 
         readonly ICategoryService categoryService;
+        readonly ISubCategoryService subCategoryService;
 
-        public SubCategoryEditVM(ICategoryService _categoryService)
+        public SubCategoryEditVM(ICategoryService _categoryService, ISubCategoryService subCategoryService)
         {
             categoryService = _categoryService;
+            this.subCategoryService = subCategoryService;
         }
 
         int CategoryId, Id;
-        
+
         //Color categoryColor;
 
         //public Color CategoryColor
@@ -31,7 +37,7 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
         //    }
         //}
 
-        string categoryName;
+        string categoryName, name, icon;
 
         public string CategoryName
         {
@@ -46,8 +52,6 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
             }
         }
 
-        string name;
-
         public string Name
         {
             get => name; set
@@ -60,8 +64,6 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
                 }
             }
         }
-
-        string icon;
 
         public string Icon
         {
@@ -91,7 +93,7 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
             }
         }
 
-        bool buttonIconVisible;
+        bool buttonIconVisible, btnInsertIsEnabled = true;
 
         public bool ButtonIconVisible
         {
@@ -107,7 +109,7 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
             }
         }
 
-        string btnConfirmationIcon;
+        string btnConfirmationIcon, btnConfirmationText;
 
         public string BtnConfirmationIcon
         {
@@ -123,8 +125,6 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
             }
         }
 
-        string btnConfirmationText;
-
         public string BtnConfirmationText
         {
             get => btnConfirmationText;
@@ -139,9 +139,60 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
             }
         }
 
+        public bool BtnInsertIsEnabled { get => btnInsertIsEnabled; set { if (value != btnInsertIsEnabled) { btnInsertIsEnabled = value; OnPropertyChanged(nameof(BtnInsertIsEnabled)); } } }
+
         public ICommand ShowIconPickerCommand => new Command(() => ShowIconPicker());
 
         public ICommand DefineIconCommand => new Command((e) => DefineIcon(e as string));
+
+
+        public ICommand AddCommand => new Command(async (e) => await InsertSubCategory());
+
+        public async Task InsertSubCategory()
+        {
+            try
+            {
+                if (await VerifyFields())
+                {
+                    BtnInsertIsEnabled = false;
+
+                    Models.SubCategory subCategory = new() { Name = Name, IconName = SubCategoryIconsList.GetIconName(icon), CategoryId = CategoryId };
+
+                    string mensagem = "";
+
+                    if (Id > 0)
+                    {
+                        subCategory.Id = Id;
+                    }
+                    else
+                        (_, mensagem) = await subCategoryService.AddSubcategory(subCategory);
+
+                    bool resposta = await Application.Current.MainPage.DisplayAlert("Aviso", mensagem, null, "Ok");
+
+                    if (!resposta)
+                        await Shell.Current.GoToAsync("..");
+
+
+                    BtnInsertIsEnabled = true;
+                }
+
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        private async Task<bool> VerifyFields()
+        {
+            bool valid = true;
+
+            if (string.IsNullOrEmpty(Name))
+            {
+                valid = false;
+                _ = Application.Current.MainPage.DisplayAlert("Aviso", "Digite um Nome válido", null, "Ok");
+            }
+
+            return valid;
+        }
+
 
         public void ShowIconPicker()
         {
@@ -161,7 +212,7 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
         {
             IconPickerVisible = false;
             ButtonIconVisible = true;
-            
+
             if (query.TryGetValue("CategoryId", out object _categoryId))
                 CategoryId = Convert.ToInt32(_categoryId);
             else if (query.TryGetValue("Id", out object _id))
@@ -173,7 +224,7 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
 
                 Name = subcategory.Name;
                 CategoryId = subcategory.CategoryId;
-                Icon = subcategory.Icon;
+                Icon = subcategory.IconName;
 
                 btnConfirmationText = "Alterar";
                 btnConfirmationIcon = Icons.Pen;

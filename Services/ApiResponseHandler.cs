@@ -21,7 +21,10 @@ namespace BLL
                     }
 
                     if (apiResponse.Content is not null)
-                        return new BLLResponse() { Success = true, Content = JsonDeserialize<TModel>(apiResponse.Content) };
+                        return new BLLResponse() { 
+                            Success = true,
+                            Content = string.IsNullOrEmpty(apiResponse.Content) ? null : JsonDeserialize<TModel>(apiResponse.Content)
+                        };
 
                     throw new Exception("apiResponse.Content nulo");
                 }

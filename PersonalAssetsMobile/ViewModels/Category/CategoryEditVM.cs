@@ -156,9 +156,10 @@ namespace PersonalAssetsMobile.ViewModels.Category
 
                     if (!resposta)
                         await Shell.Current.GoToAsync("..");
+              
+                    BtnInsertIsEnabled = true;
                 }
 
-                BtnInsertIsEnabled = true;
             }
             catch (Exception ex) { throw ex; }
         }

@@ -16,7 +16,7 @@
         <ListView HasUnevenRows="True" ItemsSource="{Binding Categories}" VerticalOptions="Start" 
                   CachingStrategy="RecycleElement" SelectionMode="None" ItemTapped="ListView_ItemTapped" >
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="model:CategoryUI">
+                <DataTemplate x:DataType="model:UICategory">
                     <ViewCell>
                         <Frame CornerRadius="10" Background="{StaticResource Gray100}" Padding="0" Margin="5,0,5,5">
                             <Grid ColumnDefinitions="40,*"  RowDefinitions="*" BackgroundColor="{StaticResource Gray100}">

@@ -1,6 +1,6 @@
-﻿using BLL;
+﻿using PersonalAssetsMobile.Resources.Fonts.Icons;
 using PersonalAssetsMobile.Services;
-using PersonalAssetsMobile.UIModels;
+using PersonalAssetsMobile.Utils;
 using PersonalAssetsMobile.Views.Category;
 using PersonalAssetsMobile.Views.Category.SubCategory;
 using System.Collections.ObjectModel;
@@ -97,10 +97,12 @@ namespace PersonalAssetsMobile.ViewModels.Category
         }
 
         readonly ICategoryService categoryService;
+        readonly ISubCategoryService subCategoryService;
 
-        public CategoryDisplayVM(ICategoryService _categoryService)
+        public CategoryDisplayVM(ICategoryService _categoryService, ISubCategoryService _subCategoryService)
         {
             categoryService = _categoryService;
+            subCategoryService = _subCategoryService;
         }
 
         public ICommand OnAppearingCommand => new Command(async (e) =>
@@ -108,19 +110,23 @@ namespace PersonalAssetsMobile.ViewModels.Category
             Models.Category category = await categoryService.GetCategoryById(Id);
 
             //Category no longer exists in the db
-            if(category == null) await Shell.Current.GoToAsync("..");
+            if (category == null) await Shell.Current.GoToAsync("..");
 
             CategoryColor = Color.FromArgb(category.Color);
             Name = category.Name;
             SystemDefault = category.SystemDefault != 1;
             SubCategoryObsCol = new();
 
-            List<Models.SubCategory> subCategoryList = new();//await subCategoryServices.GetSubCategoriesAsync(Id);
+            List<Models.SubCategory> subCategoryList = await subCategoryService.GetSubCategoriesByCategoryId(Id);
 
-            foreach (var subCategory in subCategoryList)
-            {
-                SubCategoryObsCol.Add(new UIModels.UISubCategory() { Id = subCategory.Id, Icon = subCategory.Icon, Name = subCategory.Name, SystemDefault = !subCategory.SystemDefault });
-            }
+            //System.Text.RegularExpressions.Regex.Unescape(@"\" + subCategory.Icon)
+            if (subCategoryList is not null)
+                foreach (var subCategory in subCategoryList)
+                {
+                    SubCategoryObsCol.Add(new UIModels.UISubCategory() { Id = subCategory.Id, Icon = SubCategoryIconsList.GetIconCode(subCategory.IconName), Name = subCategory.Name, SystemDefault = subCategory.SystemDefault != 1 });
+                }
+
+
 
             OnPropertyChanged(nameof(SubCategoryObsCol));
         });

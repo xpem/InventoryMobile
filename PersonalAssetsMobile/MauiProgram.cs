@@ -70,6 +70,7 @@ public static class MauiProgram
         #region services
 
         builder.Services.AddScoped<ICategoryService, CategoryService>();
+        builder.Services.AddScoped<ISubCategoryService, SubCategoryService>();
 
         #endregion
 

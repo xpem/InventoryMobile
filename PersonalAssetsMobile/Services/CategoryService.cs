@@ -5,7 +5,6 @@ namespace PersonalAssetsMobile.Services
 {
     public class CategoryService : ServiceBase, ICategoryService
     {
-
         public async Task<List<Category>> GetCategories()
         {
             var resp = await CategoryBLL.GetCategories(Token);
@@ -31,9 +30,7 @@ namespace PersonalAssetsMobile.Services
             var resp = await CategoryBLL.AddCategory(Token, category);
 
             if (resp.Success)
-            {
                 return (true, "Categoria Adicionada!");
-            }
             else return (false, "Ocorreu um erro ao tentar adicionar a categoria");
         }
 
@@ -42,9 +39,7 @@ namespace PersonalAssetsMobile.Services
             var resp = await CategoryBLL.AltCategory(Token, category);
 
             if (resp.Success)
-            {
                 return (true, "Categoria Atualizada!");
-            }
             else return (false, "Ocorreu um erro ao tentar atualizar a categoria");
         }
 
