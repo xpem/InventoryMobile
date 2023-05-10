@@ -141,18 +141,18 @@ namespace PersonalAssetsMobile.ViewModels.Category
                         Color = CategoryColor.ToArgbHex(),
                     };
 
-                    string mensagem = "";
+                    string message = "";
 
                     if (Id > 0)
                     {
                         category.Id = Id;
 
-                        (_, mensagem) = await categoryService.AltCategory(category);
+                        (_, message) = await categoryService.AltCategory(category);
                     }
                     else
-                        (_, mensagem) = await categoryService.AddCategory(category);
+                        (_, message) = await categoryService.AddCategory(category);
 
-                    bool resposta = await Application.Current.MainPage.DisplayAlert("Aviso", mensagem, null, "Ok");
+                    bool resposta = await Application.Current.MainPage.DisplayAlert("Aviso", message, null, "Ok");
 
                     if (!resposta)
                         await Shell.Current.GoToAsync("..");

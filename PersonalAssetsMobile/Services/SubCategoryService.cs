@@ -15,6 +15,16 @@ namespace PersonalAssetsMobile.Services
             return null;
         }
 
+        public async Task<SubCategory> GetSubCategoryById(int id)
+        {            
+            var resp = await SubCategoryBLL.GetSubCategoryById(Token, id.ToString());
+
+            if (resp.Success)
+                return resp.Content as SubCategory;
+
+            return null;
+        }
+
         public async Task<(bool, string)> AddSubcategory(SubCategory subCategory)
         {
             var resp = await SubCategoryBLL.AddSubCategory(Token, subCategory);
@@ -22,6 +32,15 @@ namespace PersonalAssetsMobile.Services
             if (resp.Success)
                 return (true, "Sub Categoria Adicionada!");
             else return (false, "Ocorreu um erro ao tentar adicionar a sub categoria");
+        }
+
+        public async Task<(bool, string)> AltSubCategory(SubCategory subCategory)
+        {
+            var resp = await SubCategoryBLL.AltSubCategory(Token, subCategory);
+
+            if (resp.Success)
+                return (true, "Sub Categoria Atualizada!");
+            else return (false, "Ocorreu um erro ao tentar atualizar a sub categoria");
         }
     }
 }

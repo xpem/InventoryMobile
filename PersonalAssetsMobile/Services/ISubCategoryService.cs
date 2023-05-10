@@ -1,9 +1,4 @@
 ﻿using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersonalAssetsMobile.Services
 {
@@ -11,6 +6,10 @@ namespace PersonalAssetsMobile.Services
     {
         Task<List<Models.SubCategory>> GetSubCategoriesByCategoryId(int categoryId);
 
+        Task<SubCategory> GetSubCategoryById(int id);
+
         Task<(bool, string)> AddSubcategory(SubCategory subCategory);
+
+        Task<(bool, string)> AltSubCategory(SubCategory subCategory);
     }
 }

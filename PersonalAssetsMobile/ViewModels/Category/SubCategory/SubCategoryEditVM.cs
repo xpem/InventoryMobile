@@ -3,6 +3,8 @@ using PersonalAssetsMobile.Resources.Fonts.Icons;
 using PersonalAssetsMobile.Services;
 using PersonalAssetsMobile.Utils;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Web;
 using System.Windows.Input;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -145,7 +147,6 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
 
         public ICommand DefineIconCommand => new Command((e) => DefineIcon(e as string));
 
-
         public ICommand AddCommand => new Command(async (e) => await InsertSubCategory());
 
         public async Task InsertSubCategory()
@@ -156,18 +157,25 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
                 {
                     BtnInsertIsEnabled = false;
 
-                    Models.SubCategory subCategory = new() { Name = Name, IconName = SubCategoryIconsList.GetIconName(icon), CategoryId = CategoryId };
+                    Models.SubCategory subCategory = new()
+                    {
+                        Name = Name,
+                        IconName = SubCategoryIconsList.GetIconName(icon),
+                        CategoryId = CategoryId
+                    };
 
-                    string mensagem = "";
+                    string message = "";
 
                     if (Id > 0)
                     {
                         subCategory.Id = Id;
+
+                        (_, message) = await subCategoryService.AltSubCategory(subCategory);
                     }
                     else
-                        (_, mensagem) = await subCategoryService.AddSubcategory(subCategory);
+                        (_, message) = await subCategoryService.AddSubcategory(subCategory);
 
-                    bool resposta = await Application.Current.MainPage.DisplayAlert("Aviso", mensagem, null, "Ok");
+                    bool resposta = await Application.Current.MainPage.DisplayAlert("Aviso", message, null, "Ok");
 
                     if (!resposta)
                         await Shell.Current.GoToAsync("..");
@@ -193,7 +201,6 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
             return valid;
         }
 
-
         public void ShowIconPicker()
         {
             IconPickerVisible = true;
@@ -213,17 +220,16 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
             IconPickerVisible = false;
             ButtonIconVisible = true;
 
-            if (query.TryGetValue("CategoryId", out object _categoryId))
-                CategoryId = Convert.ToInt32(_categoryId);
-            else if (query.TryGetValue("Id", out object _id))
+            if (query.TryGetValue("Id", out object _id))
                 Id = Convert.ToInt32(_id);
 
             if (Id != 0)
             {
-                Models.SubCategory subcategory = null;// await subsca.GetSubCategoryAsync(Id);
+                Models.SubCategory subcategory = await subCategoryService.GetSubCategoryById(Id);
 
                 Name = subcategory.Name;
-                CategoryId = subcategory.CategoryId;
+                CategoryId = subcategory.Category.Id;
+                CategoryName = subcategory.Category.Name;
                 Icon = subcategory.IconName;
 
                 btnConfirmationText = "Alterar";
@@ -231,15 +237,20 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
             }
             else
             {
+                if (query.ContainsKey("Category"))
+                {
+                    var category = query["Category"] as Models.Category;
+                    CategoryName = category.Name;
+                    CategoryId = category.Id;
+                }
+
                 btnConfirmationText = "Cadastrar";
                 btnConfirmationIcon = Icons.Plus;
             }
 
             Icon ??= Icons.Tag;
 
-            Models.Category category = await categoryService.GetCategoryById(CategoryId); //CategoryColor = Color.FromArgb(category.Color);
 
-            CategoryName = category.Name;
 
         }
     }

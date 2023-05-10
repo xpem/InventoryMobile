@@ -108,7 +108,7 @@
                                 TextColor="#EDEDED"
                                 Text="{x:Static Icons:Icons.Plus}"
                                 FontSize="20"
-                Command="{Binding SubCategoryEditCommand}"
+                Command="{Binding AddSubCategoryCommand}"
                 />
             </Grid>
             <!--<Button Text="teste" Command="{Binding SubCategoryEditCommand}"></Button>-->

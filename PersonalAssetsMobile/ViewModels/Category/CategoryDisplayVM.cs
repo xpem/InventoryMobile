@@ -61,7 +61,7 @@ namespace PersonalAssetsMobile.ViewModels.Category
 
         public ICommand CategoryEditCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(CategoryEdit)}?Id={Id}", true));
 
-        public ICommand SubCategoryEditCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(SubCategoryEdit)}?CategoryId={Id}", true));
+        public ICommand AddSubCategoryCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(SubCategoryEdit)}?CategoryId={Id}", new Dictionary<string, object> { { "Category", (new Models.Category() { Id = Id, Name = Name }) } }));
 
         public ICommand DeleteCategoryCommand => new Command(async (e) =>
         {
@@ -125,8 +125,6 @@ namespace PersonalAssetsMobile.ViewModels.Category
                 {
                     SubCategoryObsCol.Add(new UIModels.UISubCategory() { Id = subCategory.Id, Icon = SubCategoryIconsList.GetIconCode(subCategory.IconName), Name = subCategory.Name, SystemDefault = subCategory.SystemDefault != 1 });
                 }
-
-
 
             OnPropertyChanged(nameof(SubCategoryObsCol));
         });
