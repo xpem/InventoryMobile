@@ -12,10 +12,10 @@ public partial class Main : ContentPage
         BindingContext = vm = mainVM;
     }
 
-    private void BtnItemStatusSelected_Clicked(object sender, EventArgs e)
+    private void BtnItemSituationSelected_Clicked(object sender, EventArgs e)
     {
         var view = sender as View;
-        vm.ItemStatusSelectdCommand.Execute(view.BindingContext);
+        vm.ItemSituationSelectdCommand.Execute(view.BindingContext);
     }
 
     //private void BtnCategorySelected_Clicked(object sender, EventArgs e)

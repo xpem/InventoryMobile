@@ -1,6 +1,6 @@
-﻿using PersonalAssetsMobile.UIModels;
+﻿using PersonalAssetsMobile.Services.Interfaces;
+using PersonalAssetsMobile.UIModels;
 using PersonalAssetsMobile.Views.Item;
-using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -25,7 +25,7 @@ namespace PersonalAssetsMobile.ViewModels
         //public ObservableCollection<UICategory> Categories { get; set; }
 
 
-        public ObservableCollection<UIItemStatus> ItemsStatus { get; set; }
+        public ObservableCollection<UIItemSituation> ItemsSituationObsList { get; set; }
 
         UIItem itemUI;
 
@@ -51,32 +51,31 @@ namespace PersonalAssetsMobile.ViewModels
             }
         }
 
+        readonly List<UIItemSituation> SelectedUIItemsStatus = new();
 
-        List<UIItemStatus> SelectedUIItemsStatus = new();
-
-        public ICommand ItemStatusSelectdCommand => new Command((e) =>
+        public ICommand ItemSituationSelectdCommand => new Command((e) =>
         {
-            var itemStatus = e as UIItemStatus;
+            var itemSituation = e as UIItemSituation;
 
-            var bgcolor = itemStatus.BackgoundColor;
+            var bgcolor = itemSituation.BackgoundColor;
 
             if (bgcolor.Equals(BgButtonSelectedColor))
             {
                 if (SelectedUIItemsStatus.Count > 1)
                 {
-                    ItemsStatus.Where(x => x.Id == itemStatus.Id).First().BackgoundColor = Color.FromArgb("#919191");
-                    SelectedUIItemsStatus.Remove(itemStatus);
+                    ItemsSituationObsList.Where(x => x.Id == itemSituation.Id).First().BackgoundColor = Color.FromArgb("#919191");
+                    SelectedUIItemsStatus.Remove(itemSituation);
                 }
             }
             else
             {
-                ItemsStatus.Where(x => x.Id == itemStatus.Id).First().BackgoundColor = BgButtonSelectedColor;
-                SelectedUIItemsStatus.Add(itemStatus);
+                ItemsSituationObsList.Where(x => x.Id == itemSituation.Id).First().BackgoundColor = BgButtonSelectedColor;
+                SelectedUIItemsStatus.Add(itemSituation);
             }
 
             FilterItemsList();
 
-            OnPropertyChanged(nameof(ItemsStatus));
+            OnPropertyChanged(nameof(ItemsSituationObsList));
 
         });
 
@@ -95,6 +94,7 @@ namespace PersonalAssetsMobile.ViewModels
 
         //});
 
+        public ICommand ItemAddCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(ItemEdit)}"));
 
         private void FilterItemsList()
         {
@@ -102,38 +102,61 @@ namespace PersonalAssetsMobile.ViewModels
 
             Items = new();
 
-            foreach (var i in ItemList.ListItems.Where(x => SelectedUIItemsStatus.Any(y => y.Id == x.StatusId)))
-            {
-                Items.Add(i);
-            }
+            //foreach (var i in ItemList.ListItems.Where(x => SelectedUIItemsStatus.Any(y => y.Id == x.StatusId)))
+            //{
+            //    Items.Add(i);
+            //}
 
             IsBusy = false;
         }
 
-        public MainVM()
+        readonly IItemSituationService itemSituationService;
+
+        public MainVM(IItemSituationService _itemSituationService)
         {
-            ItemsStatus = new();
-            foreach (var _status in ItemsStatusList.itemsStatus)
-            {
-                ItemsStatus.Add(_status);
-            }
-
-            //Categories = new();
-            //foreach (var _category in CategoryList.List)
+            itemSituationService = _itemSituationService;
+            //ItemsStatus = new();
+            //foreach (var _status in ItemsStatusList.itemsStatus)
             //{
-            //    Categories.Add(_category);
-            //}
-
-            SelectedUIItemsStatus.Add(ItemsStatus.First());
-
-            FilterItemsList();
-
-            //Items = new();
-
-            //foreach (var i in ItemList.ListItems)
-            //{
-            //    Items.Add(i);
+            //    ItemsStatus.Add(_status);
             //}
         }
+
+        public ICommand OnAppearingCommand => new Command(async (e) =>
+        {
+            ItemsSituationObsList = new();
+
+            if (isOn)
+            {
+                List<Models.ItemSituation> itemSituationList = await itemSituationService.GetItemSituation();
+                Color backgoundColor;
+
+                if (itemSituationList is not null && itemSituationList.Count > 0)
+                {                    
+                    for (int i = 0; i < itemSituationList.Count; i++)
+                    {
+                        if (itemSituationList[i].Sequence is 1)
+                            backgoundColor = Color.FromArgb("#29A0B1");
+                        else
+                            backgoundColor = Color.FromArgb("#919191");
+
+                        ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituationList[i].Id, Name = itemSituationList[i].Name, BackgoundColor = backgoundColor });
+                    }
+
+                    SelectedUIItemsStatus.Add(ItemsSituationObsList.First());
+
+                    FilterItemsList();
+
+                    //AcquisitionTypeList = new ObservableCollection<UIAcquisitionType>();
+
+                    //foreach (var _acquisitionType in UIModels.UIAcquisitionTypeList.UIAcquisitionTypes)
+                    //{
+                    //    AcquisitionTypeList.Add(_acquisitionType);
+                    //}
+
+                    OnPropertyChanged(nameof(ItemsSituationObsList));
+                }
+            }
+        });
     }
 }

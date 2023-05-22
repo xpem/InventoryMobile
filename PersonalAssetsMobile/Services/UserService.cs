@@ -31,33 +31,27 @@ namespace PersonalAssetsMobile.Services
             var resp = await UserBLL.GetUser(email, password);
 
             if (resp.Success)
-            {
-                User? user = resp.Content as User?;
-
-                await SaveUserInformation(user.Value, password);
-
                 return null;
-            }
             else if (resp.ErrorMessage is not null)
                 return resp.ErrorMessage;
 
             return "Ocorreu um erro na tentativa de acesso";
         }
 
-        private static async Task SaveUserInformation(User user, string password)
-        {
-            try
-            {
-                //save user information 
-                Preferences.Default.Set("ID", user.Id);
-                Preferences.Default.Set("NAME", user.Name);
-                Preferences.Default.Set("EMAIL", user.Email);
+        //private static async Task SaveUserInformation(User user, string password)
+        //{
+        //    try
+        //    {
+        //        //save user information 
+        //        Preferences.Default.Set("ID", user.Id);
+        //        Preferences.Default.Set("NAME", user.Name);
+        //        Preferences.Default.Set("EMAIL", user.Email);
 
-                //user private information
-                await SecureStorage.Default.SetAsync("TOKEN", user.Token);
-                await SecureStorage.Default.SetAsync("PASSWORD", password);
-            }
-            catch (Exception ex) { throw ex; }
-        }
+        //        //user private information
+        //        await SecureStorage.Default.SetAsync("TOKEN", user.Token);
+        //        await SecureStorage.Default.SetAsync("PASSWORD", password);
+        //    }
+        //    catch (Exception ex) { throw ex; }
+        //}
     }
 }

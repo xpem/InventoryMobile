@@ -40,123 +40,89 @@
         }
     }
 
-    public class Item
-    {
-        public int Id { get; set; }
+    //public class ItemList
+    //{
+        //public static List<UIItem> ListItems { get; } = new()
+        //    {
+        //        new UIItem {
+        //            Id= 1,
+        //            Name = "Mesa Retangular Para Sala De Jantar Casa D 120cm Veneza",
+        //            CategoryAndSubCategory = "Casa>Móveis",
+        //            CategoryColor = Color.FromArgb("#EF7C8E"),
+        //            Status="Em uso",
+        //            SubCategoryIcon="\uf4b8",CategoryId =1 ,StatusId=1},
 
-        public string Name { get; set; }
+        //        new UIItem {
+        //            Id= 2,
+        //            Name = "Fogão Atlas Mônaco Top Glass 4 Bocas Preto - Bivolt",
+        //            CategoryAndSubCategory = "Casa>Eletrodomésticos",
+        //            CategoryColor=Color.FromArgb("#FAE8E0"),
+        //            Status="Em uso",
+        //            SubCategoryIcon= "\uf26c",CategoryId =1,StatusId=1
+        //        },
+        //        new UIItem {
+        //            Id= 3,
+        //            Name = "Purificador de Água Eletrônico Philco PBE05CF Preto Bivolt",
+        //            CategoryAndSubCategory = "Casa>Eletroportáteis",
+        //            CategoryColor=Color.FromArgb("#EF7C8E"),
+        //            Status="Emprestado",
+        //            SubCategoryIcon= "\uf517",CategoryId =1,StatusId=2
+        //        },
+        //        new UIItem {
+        //            Id= 4,
+        //            Name = "Notebook Multilaser PC134",
+        //            CategoryAndSubCategory = "Casa>Computadores",
+        //            CategoryColor=Color.FromArgb("#EF7C8E"),
+        //            Status="Emprestado",
+        //            SubCategoryIcon = "\uf108",CategoryId =1,StatusId=2
+        //        },
 
-        public string TechnicalDescription { get; set; }
+        //        new UIItem {
+        //            Id= 5,
+        //            Name = "Smart TV 50\" Crystal UHD 4K Samsung 50BU8000",
+        //            CategoryAndSubCategory = "Casa>Eletrodomésticos",
+        //            CategoryColor=Color.FromArgb("#76B947"),
+        //            Status="Revendido",
+        //            SubCategoryIcon= "\uf26c",CategoryId =1,StatusId=3
+        //        },
+        //        new UIItem {
+        //            Id= 6,
+        //            Name = "Samsung Smart TV 32\" LH32BETBLGGXZD LED 2 HDMI 1 USB",
+        //            CategoryAndSubCategory = "Casa>Eletrodomésticos",
+        //            CategoryColor = Color.FromArgb("#76B947"), Status="Revendido"
+        //            ,SubCategoryIcon= "\uf26c",CategoryId =1,StatusId=3 },
+        //        new UIItem {
+        //            Id= 7,
+        //            Name = "Smartphone Samsung Galaxy Note 20", CategoryAndSubCategory = "Vestimenta",CategoryId=4
+        //            ,CategoryColor=Color.FromArgb("#B6E2D3"),Status="Em uso",SubCategoryIcon= "\uf10b",StatusId=1 },
+        //        new UIItem {
+        //            Id= 8,
+        //            Name = "Smartphone Samsung Galaxy A52", CategoryAndSubCategory = "Vestimenta",CategoryId=4,
+        //            CategoryColor=Color.FromArgb("#B6E2D3"),Status="Revendido",SubCategoryIcon= "\uf10b" , StatusId = 3},
 
-        public DateTime AcquisitionDate { get; set; }
-
-        public decimal PurchaseValue { get; set; }
-
-        public string PurchaseStore { get; set; }
-
-        public decimal ResaleValue { set; get; }
-
-        public int StatusId { get; set; }
-
-        public int AcquisitionTypeId { get; set; }
-
-        public int CategoryId { get; set; }
-
-        public int SubCategoryId { get; set; }
-
-        public string Comment { get; set; }
-
-    }
-
-
-
-    public class ItemList
-    {
-
-        public static UIItem ItemUnit { get; } = new() { Id= 1,CategoryName="Casa",CategoryColor= Color.FromArgb("#EF7C8E"),CategoryId=1,SubCategoryIcon= "\uf4b8",SubCategoryId=1,SubCategoryName="Móveis" };
-
-
-        public static List<UIItem> ListItems { get; } = new()
-            {
-                new UIItem {
-                    Id= 1,
-                    Name = "Mesa Retangular Para Sala De Jantar Casa D 120cm Veneza",
-                    CategoryAndSubCategory = "Casa>Móveis",
-                    CategoryColor = Color.FromArgb("#EF7C8E"),
-                    Status="Em uso",
-                    SubCategoryIcon="\uf4b8",CategoryId =1 ,StatusId=1},
-
-                new UIItem {
-                    Id= 2,
-                    Name = "Fogão Atlas Mônaco Top Glass 4 Bocas Preto - Bivolt",
-                    CategoryAndSubCategory = "Casa>Eletrodomésticos",
-                    CategoryColor=Color.FromArgb("#FAE8E0"),
-                    Status="Em uso",
-                    SubCategoryIcon= "\uf26c",CategoryId =1,StatusId=1
-                },
-                new UIItem {
-                    Id= 3,
-                    Name = "Purificador de Água Eletrônico Philco PBE05CF Preto Bivolt",
-                    CategoryAndSubCategory = "Casa>Eletroportáteis",
-                    CategoryColor=Color.FromArgb("#EF7C8E"),
-                    Status="Emprestado",
-                    SubCategoryIcon= "\uf517",CategoryId =1,StatusId=2
-                },
-                new UIItem {
-                    Id= 4,
-                    Name = "Notebook Multilaser PC134",
-                    CategoryAndSubCategory = "Casa>Computadores",
-                    CategoryColor=Color.FromArgb("#EF7C8E"),
-                    Status="Emprestado",
-                    SubCategoryIcon = "\uf108",CategoryId =1,StatusId=2
-                },
-
-                new UIItem {
-                    Id= 5,
-                    Name = "Smart TV 50\" Crystal UHD 4K Samsung 50BU8000",
-                    CategoryAndSubCategory = "Casa>Eletrodomésticos",
-                    CategoryColor=Color.FromArgb("#76B947"),
-                    Status="Revendido",
-                    SubCategoryIcon= "\uf26c",CategoryId =1,StatusId=3
-                },
-                new UIItem {
-                    Id= 6,
-                    Name = "Samsung Smart TV 32\" LH32BETBLGGXZD LED 2 HDMI 1 USB",
-                    CategoryAndSubCategory = "Casa>Eletrodomésticos",
-                    CategoryColor = Color.FromArgb("#76B947"), Status="Revendido"
-                    ,SubCategoryIcon= "\uf26c",CategoryId =1,StatusId=3 },
-                new UIItem {
-                    Id= 7,
-                    Name = "Smartphone Samsung Galaxy Note 20", CategoryAndSubCategory = "Vestimenta",CategoryId=4
-                    ,CategoryColor=Color.FromArgb("#B6E2D3"),Status="Em uso",SubCategoryIcon= "\uf10b",StatusId=1 },
-                new UIItem {
-                    Id= 8,
-                    Name = "Smartphone Samsung Galaxy A52", CategoryAndSubCategory = "Vestimenta",CategoryId=4,
-                    CategoryColor=Color.FromArgb("#B6E2D3"),Status="Revendido",SubCategoryIcon= "\uf10b" , StatusId = 3},
-
-                new UIItem {
-                    Id= 9,
-                    Name = "Colchão Casal Molas Ensacadas com Pillow Top Extra Conforto 138x188x38cm - Premium Sleep - bf Colchões",
-                    CategoryAndSubCategory = "Casa>Móveis",CategoryId=1,CategoryColor=Color.FromArgb("#EF7C8E"),Status="Em uso",SubCategoryIcon="\uf02b" , StatusId = 1},
-                new UIItem {
-                    Id= 10,
-                    Name = "Ventilador de Mesa 30cm Mondial VSP-30-B Super Power Preto - 110v",CategoryId=1,
-                    CategoryAndSubCategory = "Casa>Eletroportáteis",CategoryColor=Color.FromArgb("#EF7C8E"),Status="Em uso",SubCategoryIcon="\uf02b",StatusId=1 },
-                new UIItem {
-                    Id= 11,
-                    Name = "Skate Estampado - brink +", CategoryAndSubCategory = "Casa>Esporte",
-                    CategoryColor=Color.FromArgb("#D8A7B1"),
-                    Status="Guardado",
-                    SubCategoryIcon="\uf02b",
-                    CategoryId=1 , StatusId = 4},
-                new UIItem {
-                    Id= 12,
-                    Name = "Bola Futebol Campo Oficial Topper Slick Amarelo",
-                    CategoryAndSubCategory = "Casa>Esporte",CategoryColor=Color.FromArgb("#D8A7B1"),
-                    Status="Emprestado",
-                    SubCategoryIcon="\uf02b",CategoryId=1,StatusId=2 }
-        };
-    }
+        //        new UIItem {
+        //            Id= 9,
+        //            Name = "Colchão Casal Molas Ensacadas com Pillow Top Extra Conforto 138x188x38cm - Premium Sleep - bf Colchões",
+        //            CategoryAndSubCategory = "Casa>Móveis",CategoryId=1,CategoryColor=Color.FromArgb("#EF7C8E"),Status="Em uso",SubCategoryIcon="\uf02b" , StatusId = 1},
+        //        new UIItem {
+        //            Id= 10,
+        //            Name = "Ventilador de Mesa 30cm Mondial VSP-30-B Super Power Preto - 110v",CategoryId=1,
+        //            CategoryAndSubCategory = "Casa>Eletroportáteis",CategoryColor=Color.FromArgb("#EF7C8E"),Status="Em uso",SubCategoryIcon="\uf02b",StatusId=1 },
+        //        new UIItem {
+        //            Id= 11,
+        //            Name = "Skate Estampado - brink +", CategoryAndSubCategory = "Casa>Esporte",
+        //            CategoryColor=Color.FromArgb("#D8A7B1"),
+        //            Status="Guardado",
+        //            SubCategoryIcon="\uf02b",
+        //            CategoryId=1 , StatusId = 4},
+        //        new UIItem {
+        //            Id= 12,
+        //            Name = "Bola Futebol Campo Oficial Topper Slick Amarelo",
+        //            CategoryAndSubCategory = "Casa>Esporte",CategoryColor=Color.FromArgb("#D8A7B1"),
+        //            Status="Emprestado",
+        //            SubCategoryIcon="\uf02b",CategoryId=1,StatusId=2 }
+        //};
+    //}
 }
 
 

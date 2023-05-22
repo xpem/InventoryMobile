@@ -1,34 +1,54 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PersonalAssetsMobile.Views.CategoryList"
-             xmlns:vm="clr-namespace:PersonalAssetsMobile.ViewModels.Category"     
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:model="clr-namespace:PersonalAssetsMobile.UIModels" 
-             x:DataType="vm:CategoryListVM"
-             xmlns:Icons="clr-namespace:PersonalAssetsMobile.Resources.Fonts.Icons"
-             Style="{StaticResource ContentPage}"             
-             Title="Categorias">
+<ContentPage
+    x:Class="PersonalAssetsMobile.Views.CategoryList"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:Icons="clr-namespace:PersonalAssetsMobile.Resources.Fonts.Icons"
+    xmlns:model="clr-namespace:PersonalAssetsMobile.UIModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:PersonalAssetsMobile.ViewModels.Category"
+    Title="Categorias"
+    x:DataType="vm:CategoryListVM"
+    Style="{StaticResource ContentPage}">
     <ContentPage.Behaviors>
-        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding OnAppearingCommand}" />
+        <toolkit:EventToCommandBehavior Command="{Binding OnAppearingCommand}" EventName="Appearing" />
     </ContentPage.Behaviors>
-    <Grid RowDefinitions="*" Margin="10">
-        <ListView HasUnevenRows="True" ItemsSource="{Binding Categories}" VerticalOptions="Start" 
-                  CachingStrategy="RecycleElement" SelectionMode="None" ItemTapped="ListView_ItemTapped" >
+    <Grid Margin="10" RowDefinitions="*">
+        <ListView
+            CachingStrategy="RecycleElement"
+            HasUnevenRows="True"
+            ItemTapped="ListView_ItemTapped"
+            ItemsSource="{Binding Categories}"
+            SelectionMode="None"
+            VerticalOptions="Start">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="model:UICategory">
                     <ViewCell>
-                        <Frame CornerRadius="10" Background="{StaticResource Gray100}" Padding="0" Margin="5,0,5,5">
-                            <Grid ColumnDefinitions="40,*"  RowDefinitions="*" BackgroundColor="{StaticResource Gray100}">
-                                <Ellipse Fill="{Binding Color}" HeightRequest="30" WidthRequest="30"></Ellipse>
-                                <FlexLayout Grid.Column="1" Margin="5" HeightRequest="40" VerticalOptions="Center" HorizontalOptions="Start" >
+                        <Frame
+                            Margin="5,0,5,5"
+                            Padding="0"
+                            Background="{StaticResource Gray100}"
+                            CornerRadius="10">
+                            <Grid
+                                BackgroundColor="{StaticResource Gray100}"
+                                ColumnDefinitions="40,*"
+                                RowDefinitions="*">
+                                <Ellipse
+                                    Fill="{Binding Color}"
+                                    HeightRequest="30"
+                                    WidthRequest="30" />
+                                <FlexLayout
+                                    Grid.Column="1"
+                                    Margin="5"
+                                    HeightRequest="40"
+                                    HorizontalOptions="Start"
+                                    VerticalOptions="Center">
                                     <Label
-                                        Text="{Binding Name}" 
-                                        TextColor="{StaticResource Black}"
-                                        FontSize="15"
                                         FontAttributes="Bold"
-                                        VerticalOptions="Center"
-                                        />
+                                        FontSize="15"
+                                        Text="{Binding Name}"
+                                        TextColor="{StaticResource Black}"
+                                        VerticalOptions="Center" />
                                 </FlexLayout>
                             </Grid>
                         </Frame>
@@ -42,26 +62,29 @@
                             <Setter Property="HeightRequest" Value="0" />
                         </Trigger>
                     </Grid.Triggers>
-                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" 
-                                       Color="#2196F3" VerticalOptions="Center" 
-                                       HorizontalOptions="Center"/>
+                    <ActivityIndicator
+                        HorizontalOptions="Center"
+                        IsRunning="{Binding IsBusy}"
+                        IsVisible="{Binding IsBusy}"
+                        VerticalOptions="Center"
+                        Color="#2196F3" />
                 </Grid>
             </ListView.Footer>
         </ListView>
-        <Button BackgroundColor="{StaticResource Success}"
-                VerticalOptions="End"
-                HorizontalOptions="End"
-                CornerRadius="20"
-                HeightRequest="40"
-                ContentLayout="Top,0"
-                Command="{Binding CategoryAddCommand}"
-                >
+        <Button
+            BackgroundColor="{StaticResource Success}"
+            Command="{Binding CategoryAddCommand}"
+            ContentLayout="Top,0"
+            CornerRadius="20"
+            HeightRequest="40"
+            HorizontalOptions="End"
+            VerticalOptions="End">
             <Button.ImageSource>
-                <FontImageSource 
-                                FontFamily="Icons"
-                                Color="#EDEDED" 
-                                Glyph="{x:Static Icons:Icons.Plus}"
-                                Size="20" />
+                <FontImageSource
+                    FontFamily="Icons"
+                    Glyph="{x:Static Icons:Icons.Plus}"
+                    Size="20"
+                    Color="#EDEDED" />
             </Button.ImageSource>
         </Button>
     </Grid>

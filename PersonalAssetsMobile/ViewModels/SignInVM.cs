@@ -38,7 +38,7 @@ namespace PersonalAssetsMobile.ViewModels
             {
                 if (!string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(Password))
                 {
-                    if (CrossConnectivity.Current.IsConnected)
+                    if (isOn)
                     {
                         if (Password.Length > 3)
                         {
@@ -56,12 +56,14 @@ namespace PersonalAssetsMobile.ViewModels
                             btnSignInText = "Acessar";
                             IsBusy = false;
                         }
+                        else
+                            await Application.Current.MainPage.DisplayAlert("Aviso", "Digite uma senha com mais de 3 dígitos", null, "Continuar");
                     }
                     else
                         await Application.Current.MainPage.DisplayAlert("Aviso", "É necessário ter acesso a internet para efetuar o primeiro acesso.", null, "Ok");
                 }
                 else
-                    await Application.Current.MainPage.DisplayAlert("Aviso", "Insira seu email e senha.", null, "Ok");
+                    await Application.Current.MainPage.DisplayAlert("Aviso", "Insira seu email e senha.", null, "Continuar");
             }
             catch (Exception ex)
             {

@@ -1,5 +1,5 @@
 ﻿using PersonalAssetsMobile.Resources.Fonts.Icons;
-using PersonalAssetsMobile.Services;
+using PersonalAssetsMobile.Services.Interfaces;
 using System.Windows.Input;
 
 namespace PersonalAssetsMobile.ViewModels.Category

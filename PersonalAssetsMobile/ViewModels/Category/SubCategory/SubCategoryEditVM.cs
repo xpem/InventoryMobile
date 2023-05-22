@@ -1,6 +1,6 @@
 ﻿using Models;
 using PersonalAssetsMobile.Resources.Fonts.Icons;
-using PersonalAssetsMobile.Services;
+using PersonalAssetsMobile.Services.Interfaces;
 using PersonalAssetsMobile.Utils;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -12,13 +12,10 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
 {
     public class SubCategoryEditVM : ViewModelBase, IQueryAttributable
     {
-
-        readonly ICategoryService categoryService;
         readonly ISubCategoryService subCategoryService;
 
-        public SubCategoryEditVM(ICategoryService _categoryService, ISubCategoryService subCategoryService)
+        public SubCategoryEditVM(ISubCategoryService subCategoryService)
         {
-            categoryService = _categoryService;
             this.subCategoryService = subCategoryService;
         }
 
@@ -195,7 +192,7 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
             if (string.IsNullOrEmpty(Name))
             {
                 valid = false;
-                _ = Application.Current.MainPage.DisplayAlert("Aviso", "Digite um Nome válido", null, "Ok");
+                _ = await Application.Current.MainPage.DisplayAlert("Aviso", "Digite um Nome válido", null, "Ok");
             }
 
             return valid;
@@ -232,26 +229,23 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
                 CategoryName = subcategory.Category.Name;
                 Icon = subcategory.IconName;
 
-                btnConfirmationText = "Alterar";
-                btnConfirmationIcon = Icons.Pen;
+                BtnConfirmationText = "Alterar";
+                BtnConfirmationIcon = Icons.Pen;
             }
             else
             {
-                if (query.ContainsKey("Category"))
+                if (query.TryGetValue("Category", out object value))
                 {
-                    var category = query["Category"] as Models.Category;
+                    var category = value as Models.Category;
                     CategoryName = category.Name;
                     CategoryId = category.Id;
                 }
 
-                btnConfirmationText = "Cadastrar";
-                btnConfirmationIcon = Icons.Plus;
+                BtnConfirmationText = "Cadastrar";
+                BtnConfirmationIcon = Icons.Plus;
             }
 
             Icon ??= Icons.Tag;
-
-
-
         }
     }
 }

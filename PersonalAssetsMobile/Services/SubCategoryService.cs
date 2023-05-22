@@ -1,13 +1,14 @@
 ﻿using BLL;
 using Models;
+using PersonalAssetsMobile.Services.Interfaces;
 
 namespace PersonalAssetsMobile.Services
 {
-    public class SubCategoryService : ServiceBase, ISubCategoryService
+    public class SubCategoryService : ISubCategoryService
     {
         public async Task<List<Models.SubCategory>> GetSubCategoriesByCategoryId(int categoryId)
         {
-            var resp = await SubCategoryBLL.GetSubCategoriesByCategoryId(Token, categoryId);
+            var resp = await SubCategoryBLL.GetSubCategoriesByCategoryId(categoryId);
 
             if (resp is not null && resp.Success && resp.Content is not null)
                 return resp.Content as List<SubCategory>;
@@ -16,8 +17,8 @@ namespace PersonalAssetsMobile.Services
         }
 
         public async Task<SubCategory> GetSubCategoryById(int id)
-        {            
-            var resp = await SubCategoryBLL.GetSubCategoryById(Token, id.ToString());
+        {
+            var resp = await SubCategoryBLL.GetSubCategoryById(id.ToString());
 
             if (resp.Success)
                 return resp.Content as SubCategory;
@@ -27,7 +28,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<(bool, string)> AddSubcategory(SubCategory subCategory)
         {
-            var resp = await SubCategoryBLL.AddSubCategory(Token, subCategory);
+            var resp = await SubCategoryBLL.AddSubCategory(subCategory);
 
             if (resp.Success)
                 return (true, "Sub Categoria Adicionada!");
@@ -36,11 +37,20 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<(bool, string)> AltSubCategory(SubCategory subCategory)
         {
-            var resp = await SubCategoryBLL.AltSubCategory(Token, subCategory);
+            var resp = await SubCategoryBLL.AltSubCategory(subCategory);
 
             if (resp.Success)
                 return (true, "Sub Categoria Atualizada!");
             else return (false, "Ocorreu um erro ao tentar atualizar a sub categoria");
+        }
+
+        public async Task<(bool, string)> DelSubCategory(int id)
+        {
+            var resp = await SubCategoryBLL.DelSubCategory(id);
+
+            if (resp.Success)
+                return (true, "Sub Categoria Excluída!");
+            else return (false, "Ocorreu um erro ao tentar excluir a sub categoria");
         }
     }
 }

@@ -7,5 +7,7 @@
         public string? Content { get; set; }
 
         public ErrorTypes? Error { get; set; }
+
+        public bool TryRefreshToken { get; set; }
     }
 }

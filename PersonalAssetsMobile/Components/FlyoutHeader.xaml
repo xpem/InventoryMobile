@@ -4,7 +4,15 @@
              x:Class="PersonalAssetsMobile.Components.FlyoutHeader" 
              x:Name="this"
              >
-    <FlexLayout HeightRequest="100" BackgroundColor="{StaticResource TitleBarBackGroudColor}" JustifyContent="Center">
+    <FlexLayout HeightRequest="100" JustifyContent="Center">
+        <FlexLayout.Background>
+            <LinearGradientBrush>
+                <GradientStop Color="{StaticResource TitleBarBackGroudColor}"
+                          Offset="0.1" />
+                <GradientStop Color="Green"
+                          Offset="1.0" />
+            </LinearGradientBrush>
+        </FlexLayout.Background>
         <Label 
             Text="{Binding Source={x:Reference this},Path=Email}"
             VerticalOptions="Center" 

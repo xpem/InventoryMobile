@@ -1,5 +1,4 @@
 ﻿using PersonalAssetsMobile.Views;
-using Services;
 
 namespace PersonalAssetsMobile;
 
@@ -7,8 +6,6 @@ public partial class App : Application
 {
     public App()
     {
-        BuildDbService.BuildSQLiteDb();
-
         InitializeComponent();
 
         MainPage = new AppShell(new ViewModels.AppShellVM());
@@ -16,7 +13,9 @@ public partial class App : Application
 
     protected override async void OnStart()
     {
-        if (!string.IsNullOrEmpty(Preferences.Default.Get("ID", string.Empty)))
+        await LocalDbDAL.BuildDbDAL.BuildDB();
+
+        if ((await LocalDbDAL.UserLocalDAl.GetUser()) is not null)
             await Shell.Current.GoToAsync($"//{nameof(Main)}");
 
         base.OnStart();

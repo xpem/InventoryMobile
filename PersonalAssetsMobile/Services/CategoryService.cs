@@ -1,13 +1,15 @@
 ﻿using BLL;
 using Models;
+using PersonalAssetsMobile.Services.Interfaces;
 
 namespace PersonalAssetsMobile.Services
 {
-    public class CategoryService : ServiceBase, ICategoryService
+    public class CategoryService : ICategoryService
     {
+
         public async Task<List<Category>> GetCategories()
         {
-            var resp = await CategoryBLL.GetCategories(Token);
+            var resp = await CategoryBLL.GetCategories();
 
             if (resp is not null && resp.Success)
                 return resp.Content as List<Category>;
@@ -17,7 +19,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<Category> GetCategoryById(int id)
         {
-            var resp = await CategoryBLL.GetCategoryById(Token, id.ToString());
+            var resp = await CategoryBLL.GetCategoryById(id.ToString());
 
             if (resp.Success)
                 return resp.Content as Category;
@@ -27,7 +29,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<(bool, string)> AddCategory(Category category)
         {
-            var resp = await CategoryBLL.AddCategory(Token, category);
+            var resp = await CategoryBLL.AddCategory(category);
 
             if (resp.Success)
                 return (true, "Categoria Adicionada!");
@@ -36,7 +38,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<(bool, string)> AltCategory(Category category)
         {
-            var resp = await CategoryBLL.AltCategory(Token, category);
+            var resp = await CategoryBLL.AltCategory(category);
 
             if (resp.Success)
                 return (true, "Categoria Atualizada!");
@@ -45,7 +47,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<(bool, string)> DelCategory(int id)
         {
-            var resp = await CategoryBLL.DelCategory(Token, id);
+            var resp = await CategoryBLL.DelCategory(id);
 
             if (resp.Success)
                 return (true, "Categoria Excluída!");

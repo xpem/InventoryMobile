@@ -1,9 +1,10 @@
-﻿using PersonalAssetsMobile.Views.Category.SubCategory;
+﻿using PersonalAssetsMobile.Services;
+using PersonalAssetsMobile.Views.Category.SubCategory;
 using System.Windows.Input;
 
 namespace PersonalAssetsMobile.UIModels
 {
-    public class UISubCategory
+    public class UISubCategory : BindableObject
     {
         public int? Id { get; set; }
 
@@ -12,8 +13,5 @@ namespace PersonalAssetsMobile.UIModels
         public string Icon { get; set; }
 
         public bool SystemDefault { get; set; }
-
-        public ICommand SubCategoryEditCommand => new Command(async (e) => await Shell.Current.GoToAsync($"{nameof(SubCategoryEdit)}?Id={e}", true));
-
     }
 }

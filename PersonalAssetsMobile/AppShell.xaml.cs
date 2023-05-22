@@ -28,6 +28,8 @@ public partial class AppShell : Shell
 
         Routing.RegisterRoute(nameof(ItemEdit), typeof(ItemEdit));
 
+        Routing.RegisterRoute(nameof(CategorySelector), typeof(CategorySelector));
+
         BindingContext = appShellVM;
     }
 }

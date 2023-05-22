@@ -1,8 +1,9 @@
 ﻿using PersonalAssetsMobile.Resources.Fonts.Icons;
-using PersonalAssetsMobile.Services;
+using PersonalAssetsMobile.Services.Interfaces;
 using PersonalAssetsMobile.Utils;
 using PersonalAssetsMobile.Views.Category;
 using PersonalAssetsMobile.Views.Category.SubCategory;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -63,7 +64,7 @@ namespace PersonalAssetsMobile.ViewModels.Category
 
         public ICommand AddSubCategoryCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(SubCategoryEdit)}?CategoryId={Id}", new Dictionary<string, object> { { "Category", (new Models.Category() { Id = Id, Name = Name }) } }));
 
-        public ICommand DeleteCategoryCommand => new Command(async (e) =>
+        public ICommand DeleteCategoryCommand => new Command(async () =>
         {
             if (SubCategoryObsCol.Count > 0)
             {
@@ -87,6 +88,34 @@ namespace PersonalAssetsMobile.ViewModels.Category
                         else
                             throw new Exception("Houve um erro ao tentar excluir A Categoria");
                     }
+                }
+            }
+        });
+
+        public ICommand SubCategoryEditCommand => new Command(async (e) => await Shell.Current.GoToAsync($"{nameof(SubCategoryEdit)}?Id={e}", true));
+
+        public ICommand DeleteSubCategoryCommand => new Command(async (e) =>
+        {
+            if (await Application.Current.MainPage.DisplayAlert("Confirmação", "Deseja excluir esta Sub Categoria?", "Sim", "Cancelar"))
+            {
+                (var success, var message) = await subCategoryService.DelSubCategory(Convert.ToInt32(e));
+
+                if (success)
+                {
+                    if (!await Application.Current.MainPage.DisplayAlert("Aviso", "Sub Categoria excluída!", null, "Ok"))
+                    {
+                        UIModels.UISubCategory sub = SubCategoryObsCol.Where(x => x.Id == Convert.ToInt32(e)).First();
+                        SubCategoryObsCol.Remove(sub);
+                        OnPropertyChanged(nameof(SubCategoryObsCol));
+                        //await Shell.Current.GoToAsync("..");
+                    }
+                }
+                else
+                {
+                    if (message != null)
+                        await Application.Current.MainPage.DisplayAlert("Aviso", message, null, "Ok");
+                    else
+                        throw new Exception("Houve um erro ao tentar excluir a Sub Categoria");
                 }
             }
         });
@@ -120,7 +149,7 @@ namespace PersonalAssetsMobile.ViewModels.Category
             List<Models.SubCategory> subCategoryList = await subCategoryService.GetSubCategoriesByCategoryId(Id);
 
             //System.Text.RegularExpressions.Regex.Unescape(@"\" + subCategory.Icon)
-            if (subCategoryList is not null)
+            if (subCategoryList != null && subCategoryList.Count > 0)
                 foreach (var subCategory in subCategoryList)
                 {
                     SubCategoryObsCol.Add(new UIModels.UISubCategory() { Id = subCategory.Id, Icon = SubCategoryIconsList.GetIconCode(subCategory.IconName), Name = subCategory.Name, SystemDefault = subCategory.SystemDefault != 1 });
