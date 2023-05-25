@@ -48,5 +48,8 @@
         }
 
         public Color Color { get; set; }
+
+
+        public bool HaveSubcategories { get; set; }
     }
 }

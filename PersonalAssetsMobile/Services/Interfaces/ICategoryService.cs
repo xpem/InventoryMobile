@@ -6,6 +6,8 @@ namespace PersonalAssetsMobile.Services.Interfaces
     {
         Task<List<Category>> GetCategories();
 
+        Task<List<Category>> GetCategoriesWithSubCategories();
+
         Task<Category> GetCategoryById(int id);
 
         Task<(bool, string)> AddCategory(Category category);

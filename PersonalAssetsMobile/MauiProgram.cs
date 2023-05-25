@@ -11,6 +11,7 @@ using PersonalAssetsMobile.Views;
 using PersonalAssetsMobile.Views.Category;
 using PersonalAssetsMobile.Views.Category.SubCategory;
 using PersonalAssetsMobile.Views.Item;
+using PersonalAssetsMobile.Views.Item.Selectors;
 
 namespace PersonalAssetsMobile;
 
@@ -69,6 +70,9 @@ public static class MauiProgram
 
         builder.Services.AddTransient<CategorySelector>();
         builder.Services.AddTransient<CategorySelectorVM>();
+
+        builder.Services.AddTransient<SubCategorySelector>();
+        builder.Services.AddTransient<SubCategorySelectorVM>();
 
         #endregion
 

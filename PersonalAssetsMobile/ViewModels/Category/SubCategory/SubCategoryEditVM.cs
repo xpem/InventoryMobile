@@ -1,12 +1,7 @@
-﻿using Models;
-using PersonalAssetsMobile.Resources.Fonts.Icons;
+﻿using PersonalAssetsMobile.Resources.Fonts.Icons;
 using PersonalAssetsMobile.Services.Interfaces;
 using PersonalAssetsMobile.Utils;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Web;
 using System.Windows.Input;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
 {
@@ -220,13 +215,19 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
             if (query.TryGetValue("Id", out object _id))
                 Id = Convert.ToInt32(_id);
 
+            if (query.TryGetValue("Category", out object value))
+            {
+                var category = value as Models.Category;
+                CategoryName = category.Name;
+                CategoryId = category.Id;
+            }
+
             if (Id != 0)
             {
                 Models.SubCategory subcategory = await subCategoryService.GetSubCategoryById(Id);
 
                 Name = subcategory.Name;
-                CategoryId = subcategory.Category.Id;
-                CategoryName = subcategory.Category.Name;
+                CategoryId = subcategory.CategoryId;
                 Icon = subcategory.IconName;
 
                 BtnConfirmationText = "Alterar";
@@ -234,13 +235,6 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
             }
             else
             {
-                if (query.TryGetValue("Category", out object value))
-                {
-                    var category = value as Models.Category;
-                    CategoryName = category.Name;
-                    CategoryId = category.Id;
-                }
-
                 BtnConfirmationText = "Cadastrar";
                 BtnConfirmationIcon = Icons.Plus;
             }

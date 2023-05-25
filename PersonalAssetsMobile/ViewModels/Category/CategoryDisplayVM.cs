@@ -1,9 +1,7 @@
-﻿using PersonalAssetsMobile.Resources.Fonts.Icons;
-using PersonalAssetsMobile.Services.Interfaces;
+﻿using PersonalAssetsMobile.Services.Interfaces;
 using PersonalAssetsMobile.Utils;
 using PersonalAssetsMobile.Views.Category;
 using PersonalAssetsMobile.Views.Category.SubCategory;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -62,7 +60,8 @@ namespace PersonalAssetsMobile.ViewModels.Category
 
         public ICommand CategoryEditCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(CategoryEdit)}?Id={Id}", true));
 
-        public ICommand AddSubCategoryCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(SubCategoryEdit)}?CategoryId={Id}", new Dictionary<string, object> { { "Category", (new Models.Category() { Id = Id, Name = Name }) } }));
+        public ICommand AddSubCategoryCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(SubCategoryEdit)}", true, new Dictionary<string, object> { { "Category", (new Models.Category() { Id = Id, Name = Name }) } }));
+        public ICommand SubCategoryEditCommand => new Command(async (e) => await Shell.Current.GoToAsync($"{nameof(SubCategoryEdit)}?Id={e}", true, new Dictionary<string, object> { { "Category", (new Models.Category() { Id = Id, Name = Name }) } }));
 
         public ICommand DeleteCategoryCommand => new Command(async () =>
         {
@@ -92,7 +91,6 @@ namespace PersonalAssetsMobile.ViewModels.Category
             }
         });
 
-        public ICommand SubCategoryEditCommand => new Command(async (e) => await Shell.Current.GoToAsync($"{nameof(SubCategoryEdit)}?Id={e}", true));
 
         public ICommand DeleteSubCategoryCommand => new Command(async (e) =>
         {
@@ -151,9 +149,8 @@ namespace PersonalAssetsMobile.ViewModels.Category
             //System.Text.RegularExpressions.Regex.Unescape(@"\" + subCategory.Icon)
             if (subCategoryList != null && subCategoryList.Count > 0)
                 foreach (var subCategory in subCategoryList)
-                {
                     SubCategoryObsCol.Add(new UIModels.UISubCategory() { Id = subCategory.Id, Icon = SubCategoryIconsList.GetIconCode(subCategory.IconName), Name = subCategory.Name, SystemDefault = subCategory.SystemDefault != 1 });
-                }
+
 
             OnPropertyChanged(nameof(SubCategoryObsCol));
         });

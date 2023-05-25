@@ -3,6 +3,7 @@ using PersonalAssetsMobile.Views;
 using PersonalAssetsMobile.Views.Category;
 using PersonalAssetsMobile.Views.Category.SubCategory;
 using PersonalAssetsMobile.Views.Item;
+using PersonalAssetsMobile.Views.Item.Selectors;
 
 namespace PersonalAssetsMobile;
 
@@ -29,6 +30,8 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(ItemEdit), typeof(ItemEdit));
 
         Routing.RegisterRoute(nameof(CategorySelector), typeof(CategorySelector));
+
+        Routing.RegisterRoute(nameof(SubCategorySelector), typeof(SubCategorySelector));
 
         BindingContext = appShellVM;
     }

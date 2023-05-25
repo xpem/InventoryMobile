@@ -17,6 +17,16 @@ namespace PersonalAssetsMobile.Services
             return null;
         }
 
+        public async Task<List<Category>> GetCategoriesWithSubCategories()
+        {
+            var resp = await CategoryBLL.GetCategoriesWithSubCategories();
+
+            if (resp is not null && resp.Success)
+                return resp.Content as List<Category>;
+
+            return null;
+        }
+
         public async Task<Category> GetCategoryById(int id)
         {
             var resp = await CategoryBLL.GetCategoryById(id.ToString());

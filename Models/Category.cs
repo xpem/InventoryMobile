@@ -10,5 +10,7 @@ namespace Models
 
         public int? SystemDefault { get; set; }
 
+        public List<SubCategory>? SubCategories { get; set; }
+
     }
 }

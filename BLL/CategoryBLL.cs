@@ -14,6 +14,13 @@ namespace BLL
             return ApiResponseHandler.Handler<List<Models.Category>>(resp);
         }
 
+        public static async Task<BLLResponse> GetCategoriesWithSubCategories()
+        {
+            var resp = await CategoryApiDAL.GetCategoriesWithSubCategories();
+
+            return ApiResponseHandler.Handler<List<Models.Category>>(resp);
+        }
+
         public static async Task<BLLResponse> GetCategoryById(string id)
         {
             var resp = await CategoryApiDAL.GetCategoryById(id);

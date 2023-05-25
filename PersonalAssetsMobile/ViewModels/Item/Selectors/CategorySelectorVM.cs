@@ -6,28 +6,28 @@ using System.Windows.Input;
 
 namespace PersonalAssetsMobile.ViewModels.Item.Selectors
 {
-    public class CategorySelectorVM : BindableObject
+    public class CategorySelectorVM : ViewModelBase
     {
         readonly ICategoryService categoryService;
 
         public CategorySelectorVM(ICategoryService _categoryService) { categoryService = _categoryService; }
 
-        public ObservableCollection<UICategory> Categories { get; set; } = new();
+        public ObservableCollection<UICategory> CategoriesObsList { get; set; }
+
+        public List<Models.Category> Categorylist { get; set; }
 
         public ICommand OnAppearingCommand => new Command(async (e) =>
         {
-            Categories = new();
+            CategoriesObsList = new();
+            Categorylist = await categoryService.GetCategoriesWithSubCategories();
+            CategoriesObsList.Add(new UICategory() { Id = -1, Name = "[Sem Categoria]", Color = Color.FromArgb("#2F9300"), HaveSubcategories = false });
 
-            List<Models.Category> list = await categoryService.GetCategories();
-            Categories.Add(new UICategory() { Id = 0, Name = "[Sem Categoria]", Color = Color.FromArgb("#2F9300") });
+            if (Categorylist != null && Categorylist.Count > 0)
+                foreach (var i in Categorylist)
+                    CategoriesObsList.Add(new UICategory() { Id = i.Id, Name = i.Name, Color = Color.FromArgb(i.Color), HaveSubcategories = i.SubCategories.Count > 0 });
 
-            if (list != null && list.Count > 0)
-                foreach (var i in list)
-                {
-                    Categories.Add(new UICategory() { Id = i.Id, Name = i.Name, Color = Color.FromArgb(i.Color) });
-                }
 
-            OnPropertyChanged(nameof(Categories));
+            OnPropertyChanged(nameof(CategoriesObsList));
         });
     }
 }
