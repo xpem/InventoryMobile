@@ -12,7 +12,7 @@ namespace ApiDAL
             await HttpClientFunctions.AuthRequest(RequestsTypes.Get, ApiKeys.ApiUri + "/category");
 
         public static async Task<ApiResponse> GetCategoriesWithSubCategories() =>
-            await HttpClientFunctions.AuthRequest(RequestsTypes.Get, ApiKeys.ApiUri + "/category/subcategories");
+            await HttpClientFunctions.AuthRequest(RequestsTypes.Get, ApiKeys.ApiUri + "/category/subcategory");
 
         public static async Task<ApiResponse> GetCategoryById(string id) =>
             await HttpClientFunctions.AuthRequest(RequestsTypes.Get, ApiKeys.ApiUri + "/category/" + id);

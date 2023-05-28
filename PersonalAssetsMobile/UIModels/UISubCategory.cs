@@ -1,8 +1,4 @@
-﻿using PersonalAssetsMobile.Services;
-using PersonalAssetsMobile.Views.Category.SubCategory;
-using System.Windows.Input;
-
-namespace PersonalAssetsMobile.UIModels
+﻿namespace PersonalAssetsMobile.UIModels
 {
     public class UISubCategory : BindableObject
     {

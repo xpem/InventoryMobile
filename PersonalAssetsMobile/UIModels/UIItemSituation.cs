@@ -8,11 +8,7 @@
         {
             get => id; set
             {
-                if (id != value)
-                {
-                    id = value;
-                    OnPropertyChanged();
-                }
+                if (id != value) { id = value; OnPropertyChanged(); }
             }
         }
 
@@ -21,11 +17,7 @@
         {
             get => name; set
             {
-                if (name != value)
-                {
-                    name = value;
-                    OnPropertyChanged();
-                }
+                if (name != value) { name = value; OnPropertyChanged(); }
             }
         }
 
