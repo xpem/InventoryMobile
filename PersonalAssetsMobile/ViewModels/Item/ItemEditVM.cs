@@ -102,17 +102,17 @@ namespace PersonalAssetsMobile.ViewModels.Item
 
         readonly IItemSituationService itemSituationService;
         readonly IAcquisitionTypeService acquisitionTypeService;
+        readonly IItemService itemService;
 
-        public ItemEditVM(IItemSituationService _itemSituationService, IAcquisitionTypeService _acquisitionTypeService)
+        public ItemEditVM(IItemSituationService _itemSituationService, IAcquisitionTypeService _acquisitionTypeService, IItemService _itemService)
         {
             itemSituationService = _itemSituationService;
             acquisitionTypeService = _acquisitionTypeService;
+            itemService = _itemService;
         }
 
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
-        {
-
-            DateTime acquisitionDate = DateTime.Now;
+        {           
             //backing of Category Selection Function
             if (query.ContainsKey("SelectedCategory") && query.TryGetValue("SelectedCategory", out object selectedCategory))
             {
@@ -131,66 +131,92 @@ namespace PersonalAssetsMobile.ViewModels.Item
             }
             else
             {
+                DateTime acquisitionDate = DateTime.Now;
+
                 CategoryName = "Selecione";
                 Name = Description = string.Empty;
                 AcquisitionValue = decimal.Zero;
+
+                AcquisitionDate = new DateTime(acquisitionDate.Year, acquisitionDate.Month, acquisitionDate.Day);
+
+                #region load lists
+
+                ItemsSituationObsList = new();
+
+                List<Models.ItemSituation> itemSituationList = await itemSituationService.GetItemSituation();
+
+                ItemsSituationObsList.Add(new UIItemSituation() { Id = -1, Name = "Selecione" });
+
+                foreach (Models.ItemSituation itemSituation in itemSituationList)
+                    ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituation.Id, Name = itemSituation.Name });
+
+                OnPropertyChanged(nameof(ItemsSituationObsList));
+
+                PkrItemSituationSelectedIndex = 0;
+
+                AcquisitionTypeObsList = new();
+
+                List<Models.AcquisitionType> acquisitionTypeList = await acquisitionTypeService.GetAcquisitionType();
+
+                AcquisitionTypeObsList.Add(new UIAcquisitionType() { Id = -1, Name = "Selecione" });
+
+                foreach (Models.AcquisitionType acquisitionType in acquisitionTypeList)
+                    AcquisitionTypeObsList.Add(new UIAcquisitionType() { Id = acquisitionType.Id, Name = acquisitionType.Name });
+
+                OnPropertyChanged(nameof(AcquisitionTypeObsList));
+
+                PkrAcquisitionTypeSelectedIndex = 0;
+
+                #endregion
             }
-
-            AcquisitionDate = new DateTime(acquisitionDate.Year, acquisitionDate.Month, acquisitionDate.Day);
-
-            #region load lists
-            ItemsSituationObsList = new();
-
-            List<Models.ItemSituation> itemSituationList = await itemSituationService.GetItemSituation();
-
-            ItemsSituationObsList.Add(new UIItemSituation() { Id = -1, Name = "Selecione" });
-
-            foreach (Models.ItemSituation itemSituation in itemSituationList)
-                ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituation.Id, Name = itemSituation.Name });
-
-            OnPropertyChanged(nameof(ItemsSituationObsList));
-
-            PkrItemSituationSelectedIndex = 0;
-
-            AcquisitionTypeObsList = new();
-
-            List<Models.AcquisitionType> acquisitionTypeList = await acquisitionTypeService.GetAcquisitionType();
-
-            AcquisitionTypeObsList.Add(new UIAcquisitionType() { Id = -1, Name = "Selecione" });
-
-            foreach (Models.AcquisitionType acquisitionType in acquisitionTypeList)
-                AcquisitionTypeObsList.Add(new UIAcquisitionType() { Id = acquisitionType.Id, Name = acquisitionType.Name });
-
-            OnPropertyChanged(nameof(AcquisitionTypeObsList));
-
-            PkrAcquisitionTypeSelectedIndex = 0;
-
-
-
-            #endregion
         }
 
         private async Task AddItem()
         {
             try
             {
-                if (await Validate())
-                {
-                    btnAddIsEnabled = false;
+                //if (await Validate())
+                //{
+                    BtnAddIsEnabled = false;
 
-                    Models.Item item = new()
+                    //Models.Item item = new()
+                    //{
+                    //    Name = Name.Trim(),
+                    //    AcquisitionDate = AcquisitionDate,
+                    //    AcquisitionType = AcquisitionTypeObsList[pkrAcquisitionTypeSelectedIndex].Id,
+                    //    Comment = Commentary.Trim(),
+                    //    PurchaseStore = AcquisitionStore.Trim(),
+                    //    PurchaseValue = AcquisitionValue.ToString(),
+                    //    Status = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id,
+                    //    ResaleValue = 0,
+                    //    TechnicalDescription = Description.Trim(),
+                    //};
+
+                    Models.Item mockitem = new()
                     {
-                        Name = Name,
-                        AcquisitionDate = AcquisitionDate,
-                        AcquisitionType = AcquisitionTypeObsList[pkrAcquisitionTypeSelectedIndex].Id,
-                        Comment = Commentary,
-                        PurchaseStore = AcquisitionStore,
-                        PurchaseValue = AcquisitionValue.ToString(),
-                        Status = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id,
+                        Name = "Smart TV 43 LG 43UQ7500",
+                        AcquisitionDate = new DateTime(2022,12,16),
+                        AcquisitionType = 1,
+                        Comment = null,
+                        PurchaseStore = "Americanas",
+                        PurchaseValue = "2027,98",
+                        Status = 1,
                         ResaleValue = 0,
-                        TechnicalDescription = Description
+                        TechnicalDescription = "4K UHD Wi-Fi Bluetooth HDR ThinQ AI Google Alexa"
                     };
-                }
+
+
+                    string message = "";
+
+                    (_, message) = await itemService.AddItem(mockitem);
+
+                    bool resposta = await Application.Current.MainPage.DisplayAlert("Aviso", message, null, "Ok");
+
+                    if (!resposta)
+                        await Shell.Current.GoToAsync("..");
+
+                    BtnAddIsEnabled = true;
+                //}
             }
             catch (Exception ex) { throw ex; }
         }

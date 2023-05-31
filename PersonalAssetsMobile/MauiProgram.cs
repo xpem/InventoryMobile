@@ -82,7 +82,7 @@ public static class MauiProgram
         builder.Services.AddScoped<ISubCategoryService, SubCategoryService>();
         builder.Services.AddScoped<IItemSituationService, ItemSituationService>();
         builder.Services.AddScoped<IAcquisitionTypeService, AcquisitionTypeService>();
-
+        builder.Services.AddScoped<IItemService, ItemService>();
         #endregion
 
         #endregion

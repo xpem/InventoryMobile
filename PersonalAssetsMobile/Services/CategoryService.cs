@@ -9,7 +9,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<List<Category>> GetCategories()
         {
-            var resp = await CategoryBLL.GetCategories();
+            BLLResponse resp = await CategoryBLL.GetCategories();
 
             if (resp is not null && resp.Success)
                 return resp.Content as List<Category>;
@@ -19,7 +19,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<List<Category>> GetCategoriesWithSubCategories()
         {
-            var resp = await CategoryBLL.GetCategoriesWithSubCategories();
+            BLLResponse resp = await CategoryBLL.GetCategoriesWithSubCategories();
 
             if (resp is not null && resp.Success)
                 return resp.Content as List<Category>;
@@ -29,7 +29,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<Category> GetCategoryById(int id)
         {
-            var resp = await CategoryBLL.GetCategoryById(id.ToString());
+            BLLResponse resp = await CategoryBLL.GetCategoryById(id.ToString());
 
             if (resp.Success)
                 return resp.Content as Category;
@@ -39,7 +39,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<(bool, string)> AddCategory(Category category)
         {
-            var resp = await CategoryBLL.AddCategory(category);
+            BLLResponse resp = await CategoryBLL.AddCategory(category);
 
             if (resp.Success)
                 return (true, "Categoria Adicionada!");
@@ -48,7 +48,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<(bool, string)> AltCategory(Category category)
         {
-            var resp = await CategoryBLL.AltCategory(category);
+            BLLResponse resp = await CategoryBLL.AltCategory(category);
 
             if (resp.Success)
                 return (true, "Categoria Atualizada!");
@@ -57,7 +57,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<(bool, string)> DelCategory(int id)
         {
-            var resp = await CategoryBLL.DelCategory(id);
+            BLLResponse resp = await CategoryBLL.DelCategory(id);
 
             if (resp.Success)
                 return (true, "Categoria Excluída!");

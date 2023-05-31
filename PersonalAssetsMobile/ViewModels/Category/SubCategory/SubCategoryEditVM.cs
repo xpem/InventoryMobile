@@ -107,16 +107,7 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
 
         public string BtnConfirmationIcon
         {
-            get => btnConfirmationIcon;
-            set
-            {
-                if (btnConfirmationIcon != value)
-                {
-                    btnConfirmationIcon = value;
-
-                    OnPropertyChanged(nameof(BtnConfirmationIcon));
-                }
-            }
+            get => btnConfirmationIcon; set { if (btnConfirmationIcon != value) { btnConfirmationIcon = value; OnPropertyChanged(nameof(BtnConfirmationIcon)); } }
         }
 
         public string BtnConfirmationText
@@ -145,7 +136,7 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
         {
             try
             {
-                if (await VerifyFields())
+                if (await Validate())
                 {
                     BtnInsertIsEnabled = false;
 
@@ -180,7 +171,7 @@ namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
             catch (Exception ex) { throw ex; }
         }
 
-        private async Task<bool> VerifyFields()
+        private async Task<bool> Validate()
         {
             bool valid = true;
 
