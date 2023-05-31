@@ -156,7 +156,7 @@ namespace PersonalAssetsMobile.ViewModels.Category
 
                     if (!resposta)
                         await Shell.Current.GoToAsync("..");
-              
+
                     BtnInsertIsEnabled = true;
                 }
 
@@ -171,7 +171,7 @@ namespace PersonalAssetsMobile.ViewModels.Category
             if (string.IsNullOrEmpty(Name))
             {
                 valid = false;
-                _ = Application.Current.MainPage.DisplayAlert("Aviso", "Digite um Nome válido", null, "Ok");
+                _ = await Application.Current.MainPage.DisplayAlert("Aviso", "Digite um Nome válido", null, "Ok");
             }
 
             return valid;

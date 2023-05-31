@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace Models
+﻿namespace Models
 {
     public class Category : ModelBase
     {

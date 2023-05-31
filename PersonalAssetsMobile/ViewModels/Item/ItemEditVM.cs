@@ -1,8 +1,8 @@
-﻿using PersonalAssetsMobile.Services;
-using PersonalAssetsMobile.Services.Interfaces;
+﻿using PersonalAssetsMobile.Services.Interfaces;
 using PersonalAssetsMobile.UIModels;
 using PersonalAssetsMobile.Views.Item;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
 
 namespace PersonalAssetsMobile.ViewModels.Item
@@ -16,20 +16,17 @@ namespace PersonalAssetsMobile.ViewModels.Item
         int? SubCategoryId { get; set; }
 
         string name;
-
-        public string Name
-        {
-            get => name; set { if (name != value) { name = value; OnPropertyChanged(nameof(Name)); } }
-        }
-
         string description;
+        string categoryName;
+        string acquisitionStore;
+        string commentary;
+
+        public string Name { get => name; set { if (name != value) { name = value; OnPropertyChanged(nameof(Name)); } } }
 
         public string Description
         {
             get => description; set { if (description != value) { description = value; OnPropertyChanged(nameof(Description)); } }
         }
-
-        string categoryName;
 
         public string CategoryName
         {
@@ -43,6 +40,23 @@ namespace PersonalAssetsMobile.ViewModels.Item
             get => acquisitionDate; set { if (acquisitionDate != value) { acquisitionDate = value; OnPropertyChanged(nameof(AcquisitionDate)); } }
         }
 
+        decimal acquisitionValue;
+
+        public decimal AcquisitionValue
+        {
+            get => acquisitionValue; set { if (acquisitionValue != value) { acquisitionValue = value; OnPropertyChanged(nameof(AcquisitionValue)); } }
+        }
+
+        public string AcquisitionStore
+        {
+            get => acquisitionStore; set { if (acquisitionStore != value) { acquisitionStore = value; OnPropertyChanged(nameof(AcquisitionStore)); } }
+        }
+
+        public string Commentary
+        {
+            get => commentary; set { if (commentary != value) { commentary = value; OnPropertyChanged(nameof(Commentary)); } }
+        }
+
         int pkrItemSituationSelectedIndex, pkrAcquisitionTypeSelectedIndex;
 
         public int PkrItemSituationSelectedIndex { get => pkrItemSituationSelectedIndex; set { pkrItemSituationSelectedIndex = value; OnPropertyChanged(nameof(PkrItemSituationSelectedIndex)); } }
@@ -54,6 +68,16 @@ namespace PersonalAssetsMobile.ViewModels.Item
         #region commands
 
         public ICommand CategorySelectorCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(CategorySelector)}", true));
+
+        public ICommand AddItemCommand => new Command(async () => await AddItem());
+
+        #endregion
+
+        #region Components Behaviors
+
+        bool btnAddIsEnabled = true;
+
+        public bool BtnAddIsEnabled { get => btnAddIsEnabled; set { if (value != btnAddIsEnabled) { btnAddIsEnabled = value; OnPropertyChanged(); } } }
 
         #endregion
 
@@ -92,7 +116,7 @@ namespace PersonalAssetsMobile.ViewModels.Item
             //backing of Category Selection Function
             if (query.ContainsKey("SelectedCategory") && query.TryGetValue("SelectedCategory", out object selectedCategory))
             {
-                var modelSelectedCategory = selectedCategory as Models.Category;
+                Models.Category modelSelectedCategory = selectedCategory as Models.Category;
                 CategoryId = modelSelectedCategory.Id;
 
                 if (modelSelectedCategory?.SubCategories?.Count > 0)
@@ -109,6 +133,7 @@ namespace PersonalAssetsMobile.ViewModels.Item
             {
                 CategoryName = "Selecione";
                 Name = Description = string.Empty;
+                AcquisitionValue = decimal.Zero;
             }
 
             AcquisitionDate = new DateTime(acquisitionDate.Year, acquisitionDate.Month, acquisitionDate.Day);
@@ -116,11 +141,11 @@ namespace PersonalAssetsMobile.ViewModels.Item
             #region load lists
             ItemsSituationObsList = new();
 
-            var itemSituationList = await itemSituationService.GetItemSituation();
+            List<Models.ItemSituation> itemSituationList = await itemSituationService.GetItemSituation();
 
-            ItemsSituationObsList.Add(new UIItemSituation() { Id = 0, Name = "Selecione" });
+            ItemsSituationObsList.Add(new UIItemSituation() { Id = -1, Name = "Selecione" });
 
-            foreach (var itemSituation in itemSituationList)
+            foreach (Models.ItemSituation itemSituation in itemSituationList)
                 ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituation.Id, Name = itemSituation.Name });
 
             OnPropertyChanged(nameof(ItemsSituationObsList));
@@ -129,20 +154,71 @@ namespace PersonalAssetsMobile.ViewModels.Item
 
             AcquisitionTypeObsList = new();
 
-            var acquisitionTypeList = await acquisitionTypeService.GetAcquisitionType();
+            List<Models.AcquisitionType> acquisitionTypeList = await acquisitionTypeService.GetAcquisitionType();
 
-            AcquisitionTypeObsList.Add(new UIAcquisitionType() { Id = 0, Name = "Selecione" });
+            AcquisitionTypeObsList.Add(new UIAcquisitionType() { Id = -1, Name = "Selecione" });
 
-            foreach (var acquisitionType in acquisitionTypeList)
+            foreach (Models.AcquisitionType acquisitionType in acquisitionTypeList)
                 AcquisitionTypeObsList.Add(new UIAcquisitionType() { Id = acquisitionType.Id, Name = acquisitionType.Name });
 
             OnPropertyChanged(nameof(AcquisitionTypeObsList));
 
             PkrAcquisitionTypeSelectedIndex = 0;
 
-            //add
+
 
             #endregion
+        }
+
+        private async Task AddItem()
+        {
+            try
+            {
+                if (await Validate())
+                {
+                    btnAddIsEnabled = false;
+
+                    Models.Item item = new()
+                    {
+                        Name = Name,
+                        AcquisitionDate = AcquisitionDate,
+                        AcquisitionType = AcquisitionTypeObsList[pkrAcquisitionTypeSelectedIndex].Id,
+                        Comment = Commentary,
+                        PurchaseStore = AcquisitionStore,
+                        PurchaseValue = AcquisitionValue.ToString(),
+                        Status = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id,
+                        ResaleValue = 0,
+                        TechnicalDescription = Description
+                    };
+                }
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+
+        private async Task<bool> Validate()
+        {
+            bool valid = true;
+
+            if (string.IsNullOrEmpty(Name))
+                valid = false;
+
+            if (!valid) { await Application.Current.MainPage.DisplayAlert("Aviso", "preencha com um nome válido", null, "Ok"); }
+            else
+            {
+                if (PkrItemSituationSelectedIndex is 0)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Aviso", "Selecione uma situação válida", null, "Ok");
+                    valid = false;
+                }
+                if (pkrAcquisitionTypeSelectedIndex is 0)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Aviso", "Selecione um tipo de aquisição válida", null, "Ok");
+                    valid = false;
+                }
+            }
+
+            return valid;
         }
     }
 }
