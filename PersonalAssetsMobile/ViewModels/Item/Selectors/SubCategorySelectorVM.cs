@@ -55,8 +55,6 @@ namespace PersonalAssetsMobile.ViewModels.Item.Selectors
             }
         }
 
-        public ICommand TestCommand => new Command(async () => await Shell.Current.GoToAsync("../..", true));
-
         public ICommand SelectCategoryCommand => new Command(async () =>
         {
             await Shell.Current.GoToAsync($"../..", true, new Dictionary<string, object> { { "SelectedCategory", new Models.Category() { Id = CategoryId, Name = categoryName } } });

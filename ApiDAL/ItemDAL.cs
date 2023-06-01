@@ -10,7 +10,7 @@ namespace ApiDAL
         {
             try
             {
-                string json = JsonSerializer.Serialize(new { item.Name, item.TechnicalDescription, item.AcquisitionDate, item.PurchaseValue, item.PurchaseStore, item.ResaleValue, item.Status, item.Comment, item.AcquisitionType });
+                string json = JsonSerializer.Serialize(new { item.Name, item.TechnicalDescription, item.AcquisitionDate, item.PurchaseValue, item.PurchaseStore, item.ResaleValue, item.Situation, item.Comment, item.AcquisitionType });
 
                 return await HttpClientFunctions.AuthRequest(Models.RequestsTypes.Post, ApiKeys.ApiUri + "/item", json);
             }

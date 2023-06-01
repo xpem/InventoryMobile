@@ -112,7 +112,7 @@ namespace PersonalAssetsMobile.ViewModels.Item
         }
 
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
-        {           
+        {
             //backing of Category Selection Function
             if (query.ContainsKey("SelectedCategory") && query.TryGetValue("SelectedCategory", out object selectedCategory))
             {
@@ -175,40 +175,26 @@ namespace PersonalAssetsMobile.ViewModels.Item
         {
             try
             {
-                //if (await Validate())
-                //{
+                if (await Validate())
+                {
                     BtnAddIsEnabled = false;
 
-                    //Models.Item item = new()
-                    //{
-                    //    Name = Name.Trim(),
-                    //    AcquisitionDate = AcquisitionDate,
-                    //    AcquisitionType = AcquisitionTypeObsList[pkrAcquisitionTypeSelectedIndex].Id,
-                    //    Comment = Commentary.Trim(),
-                    //    PurchaseStore = AcquisitionStore.Trim(),
-                    //    PurchaseValue = AcquisitionValue.ToString(),
-                    //    Status = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id,
-                    //    ResaleValue = 0,
-                    //    TechnicalDescription = Description.Trim(),
-                    //};
-
-                    Models.Item mockitem = new()
+                    Models.Item item = new()
                     {
-                        Name = "Smart TV 43 LG 43UQ7500",
-                        AcquisitionDate = new DateTime(2022,12,16),
-                        AcquisitionType = 1,
-                        Comment = null,
-                        PurchaseStore = "Americanas",
-                        PurchaseValue = "2027,98",
-                        Status = 1,
+                        Name = Name.Trim(),
+                        AcquisitionDate = AcquisitionDate,
+                        AcquisitionType = AcquisitionTypeObsList[pkrAcquisitionTypeSelectedIndex].Id,
+                        Comment = Commentary?.Trim(),
+                        PurchaseStore = AcquisitionStore?.Trim(),
+                        PurchaseValue = AcquisitionValue,
+                        Situation = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id,
                         ResaleValue = 0,
-                        TechnicalDescription = "4K UHD Wi-Fi Bluetooth HDR ThinQ AI Google Alexa"
+                        TechnicalDescription = Description.Trim(),
                     };
-
 
                     string message = "";
 
-                    (_, message) = await itemService.AddItem(mockitem);
+                    (_, message) = await itemService.AddItem(item);
 
                     bool resposta = await Application.Current.MainPage.DisplayAlert("Aviso", message, null, "Ok");
 
@@ -216,7 +202,7 @@ namespace PersonalAssetsMobile.ViewModels.Item
                         await Shell.Current.GoToAsync("..");
 
                     BtnAddIsEnabled = true;
-                //}
+                }
             }
             catch (Exception ex) { throw ex; }
         }
