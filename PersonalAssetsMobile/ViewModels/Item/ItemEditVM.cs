@@ -190,6 +190,7 @@ namespace PersonalAssetsMobile.ViewModels.Item
                         Situation = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id,
                         ResaleValue = 0,
                         TechnicalDescription = Description.Trim(),
+                        Category = new Models.Category() { Id = CategoryId, SubCategory = SubCategoryId is not null ? new Models.SubCategory() { Id = SubCategoryId.Value } : null },
                     };
 
                     string message = "";

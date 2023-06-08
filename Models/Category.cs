@@ -10,5 +10,9 @@
 
         public List<SubCategory>? SubCategories { get; set; }
 
+        /// <summary>
+        /// used in get item
+        /// </summary>
+        public SubCategory? SubCategory { get; set; }
     }
 }

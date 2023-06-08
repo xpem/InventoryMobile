@@ -19,5 +19,9 @@
         public int? Situation { get; set; }
 
         public string? Comment { get; set; }
+
+        public Category? Category { get; set; }
     }
+
+
 }

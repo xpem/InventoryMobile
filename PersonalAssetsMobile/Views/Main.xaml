@@ -43,7 +43,7 @@
                     CachingStrategy="RecycleElement"
                     HasUnevenRows="True"
                     IsGroupingEnabled="False"
-                    ItemsSource="{Binding Items}"
+                    ItemsSource="{Binding ItemsObsList}"
                     RowHeight="65"
                     SelectedItem="{Binding ItemUI}"
                     SeparatorVisibility="None"

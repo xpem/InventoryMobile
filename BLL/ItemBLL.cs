@@ -1,11 +1,17 @@
 ﻿using ApiDAL;
+using BLL.Handlers;
 using Models;
+using Models.Responses;
 using System.Text.Json.Nodes;
 
 namespace BLL
 {
     public class ItemBLL
     {
+
+        public static async Task<BLLResponse> GetItems() =>
+            ApiResponseHandler.Handler<List<Models.Item>>(await ItemDAL.GetItems());
+
         public static async Task<BLLResponse> AddItem(Models.Item item)
         {
             var resp = await ItemDAL.AddItem(item);

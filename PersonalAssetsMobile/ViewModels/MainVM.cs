@@ -13,12 +13,12 @@ namespace PersonalAssetsMobile.ViewModels
 
         ObservableCollection<UIItem> items;
 
-        public ObservableCollection<UIItem> Items
+        public ObservableCollection<UIItem> ItemsObsList
         {
             get => items; set
             {
                 items = value;
-                OnPropertyChanged(nameof(Items));
+                OnPropertyChanged(nameof(ItemsObsList));
             }
         }
 
@@ -100,7 +100,7 @@ namespace PersonalAssetsMobile.ViewModels
         {
             IsBusy = true;
 
-            Items = new();
+            //Items = new();
 
             //foreach (var i in ItemList.ListItems.Where(x => SelectedUIItemsStatus.Any(y => y.Id == x.StatusId)))
             //{
@@ -112,9 +112,12 @@ namespace PersonalAssetsMobile.ViewModels
 
         readonly IItemSituationService itemSituationService;
 
-        public MainVM(IItemSituationService _itemSituationService)
+        readonly IItemService itemService;
+
+        public MainVM(IItemSituationService _itemSituationService, IItemService _itemService)
         {
             itemSituationService = _itemSituationService;
+            itemService = _itemService;
             //ItemsStatus = new();
             //foreach (var _status in ItemsStatusList.itemsStatus)
             //{
@@ -132,7 +135,7 @@ namespace PersonalAssetsMobile.ViewModels
                 Color backgoundColor;
 
                 if (itemSituationList is not null && itemSituationList.Count > 0)
-                {                    
+                {
                     for (int i = 0; i < itemSituationList.Count; i++)
                     {
                         if (itemSituationList[i].Sequence is 1)
@@ -153,6 +156,21 @@ namespace PersonalAssetsMobile.ViewModels
                     //{
                     //    AcquisitionTypeList.Add(_acquisitionType);
                     //}
+
+                    var listItem = await itemService.GetItems();
+
+                    foreach (var item in listItem)
+                    {
+                        string categoryAndSubCategory = "";
+
+                        categoryAndSubCategory = item.Category.Name;
+
+                        if (item.Category.SubCategory is not null)
+                            categoryAndSubCategory += "/" + item.Category.SubCategory.Name;
+
+                        ItemsObsList.Add(new UIItem() { Id = item.Id, Name = item.Name, CategoryAndSubCategory = categoryAndSubCategory });
+                    }
+
 
                     OnPropertyChanged(nameof(ItemsSituationObsList));
                 }
