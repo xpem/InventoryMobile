@@ -119,13 +119,13 @@
                         Command="{Binding AddItemCommand}"
                         ContentLayout="Left,10"
                         FontSize="20"
-                        IsEnabled="{Binding BtnAddIsEnabled}"
+                        IsEnabled="{Binding BtnInsertIsEnabled}"
                         Style="{StaticResource ButtonPrimary}"
-                        Text="Cadastrar">
+                        Text="{Binding BtnInsertText}">
                         <Button.ImageSource>
                             <FontImageSource
                                 FontFamily="Icons"
-                                Glyph="{x:Static Icons:Icons.Plus}"
+                                Glyph="{Binding BtnInsertIcon}"
                                 Size="15"
                                 Color="#fff" />
                         </Button.ImageSource>

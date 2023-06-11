@@ -10,11 +10,11 @@
 
         public int AcquisitionType { get; set; }
 
-        public decimal PurchaseValue { get; set; }
+        public string? PurchaseValue { get; set; }
 
         public string? PurchaseStore { get; set; }
 
-        public decimal ResaleValue { get; set; }
+        public string? ResaleValue { get; set; }
 
         public int? Situation { get; set; }
 

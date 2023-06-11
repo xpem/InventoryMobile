@@ -1,4 +1,7 @@
-﻿using PersonalAssetsMobile.Services.Interfaces;
+﻿using Microsoft.Maui.Controls.Internals;
+using Models;
+using PersonalAssetsMobile.Resources.Fonts.Icons;
+using PersonalAssetsMobile.Services.Interfaces;
 using PersonalAssetsMobile.UIModels;
 using PersonalAssetsMobile.Views.Item;
 using System.Collections.ObjectModel;
@@ -10,6 +13,8 @@ namespace PersonalAssetsMobile.ViewModels.Item
     public class ItemEditVM : ViewModelBase, IQueryAttributable
     {
         #region fields
+
+        int ItemId { get; set; }
 
         int CategoryId { get; set; }
 
@@ -75,9 +80,15 @@ namespace PersonalAssetsMobile.ViewModels.Item
 
         #region Components Behaviors
 
-        bool btnAddIsEnabled = true;
+        string btnInsertText, btnInsertIcon;
 
-        public bool BtnAddIsEnabled { get => btnAddIsEnabled; set { if (value != btnAddIsEnabled) { btnAddIsEnabled = value; OnPropertyChanged(); } } }
+        public string BtnInsertText { get => btnInsertText; set { if (value != btnInsertText) { btnInsertText = value; OnPropertyChanged(nameof(BtnInsertText)); } } }
+
+        public string BtnInsertIcon { get => btnInsertIcon; set { if (value != btnInsertIcon) { btnInsertIcon = value; OnPropertyChanged(nameof(BtnInsertIcon)); } } }
+
+        bool btnInsertIsEnabled = true;
+
+        public bool BtnInsertIsEnabled { get => btnInsertIsEnabled; set { if (value != btnInsertIsEnabled) { btnInsertIsEnabled = value; OnPropertyChanged(nameof(BtnInsertIsEnabled)); } } }
 
         #endregion
 
@@ -131,15 +142,8 @@ namespace PersonalAssetsMobile.ViewModels.Item
             }
             else
             {
+
                 DateTime acquisitionDate = DateTime.Now;
-
-                CategoryName = "Selecione";
-                Name = Description = string.Empty;
-                AcquisitionValue = decimal.Zero;
-
-                AcquisitionDate = new DateTime(acquisitionDate.Year, acquisitionDate.Month, acquisitionDate.Day);
-
-                #region load lists
 
                 ItemsSituationObsList = new();
 
@@ -152,11 +156,9 @@ namespace PersonalAssetsMobile.ViewModels.Item
 
                 OnPropertyChanged(nameof(ItemsSituationObsList));
 
-                PkrItemSituationSelectedIndex = 0;
-
                 AcquisitionTypeObsList = new();
 
-                List<Models.AcquisitionType> acquisitionTypeList = await acquisitionTypeService.GetAcquisitionType();
+                List<AcquisitionType> acquisitionTypeList = await acquisitionTypeService.GetAcquisitionType();
 
                 AcquisitionTypeObsList.Add(new UIAcquisitionType() { Id = -1, Name = "Selecione" });
 
@@ -165,9 +167,51 @@ namespace PersonalAssetsMobile.ViewModels.Item
 
                 OnPropertyChanged(nameof(AcquisitionTypeObsList));
 
-                PkrAcquisitionTypeSelectedIndex = 0;
+                if (query.ContainsKey("Id") && query.TryGetValue("Id", out object itemId))
+                {
+                    ItemId = Convert.ToInt32(itemId);
+                    Models.Item item = await itemService.GetItemById(ItemId);
 
-                #endregion
+                    acquisitionDate = item.AcquisitionDate;
+                    Name = item.Name;
+                    AcquisitionValue = Convert.ToDecimal(item.PurchaseValue.Replace('.', ','));
+
+                    string categoryAndSubCategory = item.Category.Name;
+                    CategoryId = item.Category.Id;
+
+                    if (item.Category.SubCategory is not null)
+                    {
+                        categoryAndSubCategory += "/" + item.Category.SubCategory.Name;
+                        SubCategoryId = item.Category.SubCategory.Id;
+                    }
+
+                    CategoryName = categoryAndSubCategory;
+                    Description = item.TechnicalDescription;
+                    Commentary = item.Comment;
+
+                    PkrItemSituationSelectedIndex = ItemsSituationObsList.IndexOf(ItemsSituationObsList.Where(s => s.Id == item.Situation.Value).First());
+                    PkrAcquisitionTypeSelectedIndex = AcquisitionTypeObsList.IndexOf(AcquisitionTypeObsList.Where(s => s.Id == item.AcquisitionType).First());
+
+                    AcquisitionStore = item.PurchaseStore;
+
+                    BtnInsertIcon = Icons.Pen;
+                    BtnInsertText = "Atualizar";
+                }
+                else
+                {
+                    CategoryName = "Selecione";
+                    Name = Description = string.Empty;
+                    AcquisitionValue = decimal.Zero;
+
+                    BtnInsertIcon = Icons.Plus;
+                    BtnInsertText = "Cadastrar";
+
+                    PkrItemSituationSelectedIndex = 0;
+
+                    PkrAcquisitionTypeSelectedIndex = 0;
+                }
+                AcquisitionDate = new DateTime(acquisitionDate.Year, acquisitionDate.Month, acquisitionDate.Day);
+
             }
         }
 
@@ -177,7 +221,7 @@ namespace PersonalAssetsMobile.ViewModels.Item
             {
                 if (await Validate())
                 {
-                    BtnAddIsEnabled = false;
+                    BtnInsertIsEnabled = false;
 
                     Models.Item item = new()
                     {
@@ -186,9 +230,9 @@ namespace PersonalAssetsMobile.ViewModels.Item
                         AcquisitionType = AcquisitionTypeObsList[pkrAcquisitionTypeSelectedIndex].Id,
                         Comment = Commentary?.Trim(),
                         PurchaseStore = AcquisitionStore?.Trim(),
-                        PurchaseValue = AcquisitionValue,
+                        PurchaseValue = AcquisitionValue.ToString(),
                         Situation = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id,
-                        ResaleValue = 0,
+                        ResaleValue = "0",
                         TechnicalDescription = Description.Trim(),
                         Category = new Models.Category() { Id = CategoryId, SubCategory = SubCategoryId is not null ? new Models.SubCategory() { Id = SubCategoryId.Value } : null },
                     };
@@ -202,7 +246,7 @@ namespace PersonalAssetsMobile.ViewModels.Item
                     if (!resposta)
                         await Shell.Current.GoToAsync("..");
 
-                    BtnAddIsEnabled = true;
+                    BtnInsertIsEnabled = true;
                 }
             }
             catch (Exception ex) { throw ex; }

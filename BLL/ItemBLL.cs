@@ -12,6 +12,9 @@ namespace BLL
         public static async Task<BLLResponse> GetItems() =>
             ApiResponseHandler.Handler<List<Models.Item>>(await ItemDAL.GetItems());
 
+        public static async Task<BLLResponse> GetItemById(string id) =>
+            ApiResponseHandler.Handler<Item>(await ItemDAL.GetItemById(id));
+
         public static async Task<BLLResponse> AddItem(Models.Item item)
         {
             var resp = await ItemDAL.AddItem(item);
@@ -30,8 +33,8 @@ namespace BLL
                         AcquisitionDate = jResp["AcquisitionDate"]?.GetValue<DateTime>() ?? DateTime.MinValue,
                         AcquisitionType = jResp["AcquisitionType"]?.GetValue<Int32>() ?? Int32.MinValue,
                         PurchaseStore = jResp["PurchaseStore"]?.GetValue<string>(),
-                        PurchaseValue = Convert.ToDecimal(jResp["PurchaseValue"]?.GetValue<string>()),
-                        ResaleValue = Convert.ToDecimal(jResp["ResaleValue"]?.GetValue<string>()),
+                        PurchaseValue = jResp["PurchaseValue"]?.GetValue<string>(),
+                        ResaleValue = jResp["ResaleValue"]?.GetValue<string>(),
                         //CreatedAt = jResp["CreatedAt"]?.GetValue<DateTime>(),
                         //UpdatedAt = jResp["UpdatedAt"]?.GetValue<DateTime>(),
                         Comment = jResp["Comment"]?.GetValue<string>(),

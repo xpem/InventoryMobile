@@ -11,6 +11,9 @@ namespace ApiDAL
         public static async Task<ApiResponse> GetItems() =>
             await HttpClientFunctions.AuthRequest(RequestsTypes.Get, ApiKeys.ApiUri + "/item");
 
+        public static async Task<ApiResponse> GetItemById(string id) =>
+           await HttpClientFunctions.AuthRequest(RequestsTypes.Get, ApiKeys.ApiUri + "/item/" + id);
+
         public static async Task<ApiResponse> AddItem(Models.Item item)
         {
             try

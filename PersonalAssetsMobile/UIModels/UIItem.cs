@@ -22,7 +22,7 @@
 
         public string SubCategoryIcon { get; set; }
 
-        public int StatusId { get; set; }
+        public int SituationId { get; set; }
 
         public string TechnicalDescription { get; set; }
 

@@ -17,6 +17,17 @@ namespace PersonalAssetsMobile.Services
             return null;
         }
 
+        public async Task<Item> GetItemById(int id)
+        {
+            BLLResponse resp = await ItemBLL.GetItemById(id.ToString());
+
+            if (resp is not null && resp.Success)
+                return resp.Content as Models.Item;
+
+            return null;
+        }
+
+
         public async Task<(bool, string)> AddItem(Models.Item item)
         {
             var resp = await ItemBLL.AddItem(item);

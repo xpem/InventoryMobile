@@ -7,26 +7,17 @@ namespace BLL
 {
     public class CategoryBLL
     {
-        public static async Task<BLLResponse> GetCategories()
-        {
-            var resp = await CategoryApiDAL.GetCategories();
+        public static async Task<BLLResponse> GetCategories() =>
+            ApiResponseHandler.Handler<List<Models.Category>>(await CategoryApiDAL.GetCategories());
 
-            return ApiResponseHandler.Handler<List<Models.Category>>(resp);
-        }
 
-        public static async Task<BLLResponse> GetCategoriesWithSubCategories()
-        {
-            var resp = await CategoryApiDAL.GetCategoriesWithSubCategories();
+        public static async Task<BLLResponse> GetCategoriesWithSubCategories() =>
+            ApiResponseHandler.Handler<List<Models.Category>>(await CategoryApiDAL.GetCategoriesWithSubCategories());
 
-            return ApiResponseHandler.Handler<List<Models.Category>>(resp);
-        }
 
-        public static async Task<BLLResponse> GetCategoryById(string id)
-        {
-            var resp = await CategoryApiDAL.GetCategoryById(id);
+        public static async Task<BLLResponse> GetCategoryById(string id) =>
+            ApiResponseHandler.Handler<Models.Category>(await CategoryApiDAL.GetCategoryById(id));
 
-            return ApiResponseHandler.Handler<Models.Category>(resp);
-        }
 
         public static async Task<BLLResponse> AddCategory(Category category)
         {

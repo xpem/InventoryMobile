@@ -1,5 +1,8 @@
-﻿using PersonalAssetsMobile.Services.Interfaces;
+﻿using Models;
+using PersonalAssetsMobile.Resources.Fonts.Icons;
+using PersonalAssetsMobile.Services.Interfaces;
 using PersonalAssetsMobile.UIModels;
+using PersonalAssetsMobile.Utils;
 using PersonalAssetsMobile.Views.Item;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -40,7 +43,7 @@ namespace PersonalAssetsMobile.ViewModels
 
                     if (itemUI is not null)
                     {
-                        Shell.Current.GoToAsync($"{nameof(ItemEdit)}?Key={itemUI.Id}", true);
+                        Shell.Current.GoToAsync($"{nameof(ItemEdit)}?Id={itemUI.Id}", true);
                     }
                     else
                     {
@@ -158,6 +161,8 @@ namespace PersonalAssetsMobile.ViewModels
                     //}
 
                     var listItem = await itemService.GetItems();
+                    ItemsObsList = new();
+                    string IconUniCode;
 
                     foreach (var item in listItem)
                     {
@@ -168,9 +173,21 @@ namespace PersonalAssetsMobile.ViewModels
                         if (item.Category.SubCategory is not null)
                             categoryAndSubCategory += "/" + item.Category.SubCategory.Name;
 
-                        ItemsObsList.Add(new UIItem() { Id = item.Id, Name = item.Name, CategoryAndSubCategory = categoryAndSubCategory });
-                    }
+                        if (item.Category.SubCategory is null && item.Category.SubCategory.IconName is null)
+                            IconUniCode = Icons.Tag;
+                        else
+                            IconUniCode = SubCategoryIconsList.GetIconCode(item.Category.SubCategory.IconName);
 
+                        ItemsObsList.Add(new UIItem()
+                        {
+                            Id = item.Id,
+                            Name = item.Name,
+                            CategoryAndSubCategory = categoryAndSubCategory,
+                            CategoryColor = Color.FromArgb(item.Category.Color),
+                            SituationId = item.Situation.Value,
+                            SubCategoryIcon = IconUniCode,
+                        });
+                    }
 
                     OnPropertyChanged(nameof(ItemsSituationObsList));
                 }
