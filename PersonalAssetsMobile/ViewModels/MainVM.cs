@@ -14,13 +14,15 @@ namespace PersonalAssetsMobile.ViewModels
         //  public ObservableCollection<ItemGroup> Items { get; } = new();
         readonly Color BgButtonSelectedColor = Color.FromArgb("#29A0B1");
 
-        ObservableCollection<UIItem> items;
+        List<Models.Item> ListAllItems;
+
+        ObservableCollection<UIItem> itemsObsList;
 
         public ObservableCollection<UIItem> ItemsObsList
         {
-            get => items; set
+            get => itemsObsList; set
             {
-                items = value;
+                itemsObsList = value;
                 OnPropertyChanged(nameof(ItemsObsList));
             }
         }
@@ -131,9 +133,9 @@ namespace PersonalAssetsMobile.ViewModels
         public ICommand OnAppearingCommand => new Command(async (e) =>
         {
             ItemsSituationObsList = new();
-
             if (isOn)
             {
+                IsBusy = true;
                 List<Models.ItemSituation> itemSituationList = await itemSituationService.GetItemSituation();
                 Color backgoundColor;
 
@@ -151,8 +153,8 @@ namespace PersonalAssetsMobile.ViewModels
 
                     SelectedUIItemsStatus.Add(ItemsSituationObsList.First());
 
-                    FilterItemsList();
 
+                    OnPropertyChanged(nameof(ItemsSituationObsList));
                     //AcquisitionTypeList = new ObservableCollection<UIAcquisitionType>();
 
                     //foreach (var _acquisitionType in UIModels.UIAcquisitionTypeList.UIAcquisitionTypes)
@@ -160,11 +162,14 @@ namespace PersonalAssetsMobile.ViewModels
                     //    AcquisitionTypeList.Add(_acquisitionType);
                     //}
 
-                    var listItem = await itemService.GetItems();
+                    ListAllItems = await itemService.GetItems();
+
+                    FilterItemsList();
+
                     ItemsObsList = new();
                     string IconUniCode;
 
-                    foreach (var item in listItem)
+                    foreach (var item in ListAllItems)
                     {
                         string categoryAndSubCategory = "";
 
@@ -188,9 +193,8 @@ namespace PersonalAssetsMobile.ViewModels
                             SubCategoryIcon = IconUniCode,
                         });
                     }
-
-                    OnPropertyChanged(nameof(ItemsSituationObsList));
                 }
+                IsBusy = false;
             }
         });
     }

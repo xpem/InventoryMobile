@@ -10,5 +10,6 @@ namespace PersonalAssetsMobile.Services.Interfaces
 
         Task<(bool, string)> AddItem(Models.Item item);
 
+        Task<(bool, string)> AltItem(Models.Item item);
     }
 }

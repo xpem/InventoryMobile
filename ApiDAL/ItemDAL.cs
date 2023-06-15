@@ -37,6 +37,29 @@ namespace ApiDAL
             catch (Exception ex) { throw ex; }
         }
 
+        public static async Task<ApiResponse> AltItem(Models.Item item)
+        {
+            try
+            {
+                string json = JsonSerializer.Serialize(new
+                {
+                    item.Name,
+                    item.TechnicalDescription,
+                    item.AcquisitionDate,
+                    item.PurchaseValue,
+                    item.PurchaseStore,
+                    item.ResaleValue,
+                    Situation = new { Id = item.Situation },
+                    item.Comment,
+                    item.AcquisitionType,
+                    Category = new { item.Category?.Id, SubCategory = item.Category?.SubCategory is not null ? new { item.Category.SubCategory.Id } : null }
+                });
+
+                return await HttpClientFunctions.AuthRequest(Models.RequestsTypes.Put, ApiKeys.ApiUri + "/item/" + item.Id, json);
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
 
     }
 }

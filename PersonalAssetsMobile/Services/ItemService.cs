@@ -27,13 +27,21 @@ namespace PersonalAssetsMobile.Services
             return null;
         }
 
-
         public async Task<(bool, string)> AddItem(Models.Item item)
         {
             var resp = await ItemBLL.AddItem(item);
 
             if (resp.Success)
                 return (true, "Item Adicionado!");
+            else return (false, "Ocorreu um erro ao tentar adicionar o item");
+        }
+
+        public async Task<(bool, string)> AltItem(Models.Item item)
+        {
+            var resp = await ItemBLL.AltItem(item);
+
+            if (resp.Success)
+                return (true, "Item Atualizada!");
             else return (false, "Ocorreu um erro ao tentar adicionar o item");
         }
     }

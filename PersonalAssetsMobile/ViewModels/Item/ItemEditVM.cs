@@ -1,11 +1,9 @@
-﻿using Microsoft.Maui.Controls.Internals;
-using Models;
+﻿using Models;
 using PersonalAssetsMobile.Resources.Fonts.Icons;
 using PersonalAssetsMobile.Services.Interfaces;
 using PersonalAssetsMobile.UIModels;
 using PersonalAssetsMobile.Views.Item;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
 
 namespace PersonalAssetsMobile.ViewModels.Item
@@ -74,7 +72,7 @@ namespace PersonalAssetsMobile.ViewModels.Item
 
         public ICommand CategorySelectorCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(CategorySelector)}", true));
 
-        public ICommand AddItemCommand => new Command(async () => await AddItem());
+        public ICommand AddItemCommand => new Command(async () => await InsertItem());
 
         #endregion
 
@@ -142,7 +140,6 @@ namespace PersonalAssetsMobile.ViewModels.Item
             }
             else
             {
-
                 DateTime acquisitionDate = DateTime.Now;
 
                 ItemsSituationObsList = new();
@@ -211,11 +208,10 @@ namespace PersonalAssetsMobile.ViewModels.Item
                     PkrAcquisitionTypeSelectedIndex = 0;
                 }
                 AcquisitionDate = new DateTime(acquisitionDate.Year, acquisitionDate.Month, acquisitionDate.Day);
-
             }
         }
 
-        private async Task AddItem()
+        private async Task InsertItem()
         {
             try
             {
@@ -239,7 +235,13 @@ namespace PersonalAssetsMobile.ViewModels.Item
 
                     string message = "";
 
-                    (_, message) = await itemService.AddItem(item);
+                    if (ItemId > 0)
+                    {
+                        item.Id = ItemId;
+                        (_, message) = await itemService.AltItem(item);
+                    }
+                    else
+                        (_, message) = await itemService.AddItem(item);
 
                     bool resposta = await Application.Current.MainPage.DisplayAlert("Aviso", message, null, "Ok");
 
