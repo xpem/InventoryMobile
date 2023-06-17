@@ -41,7 +41,7 @@ namespace PersonalAssetsMobile.Services
 
             if (resp.Success)
                 return (true, "Sub Categoria Atualizada!");
-            else return (false, "Ocorreu um erro ao tentar atualizar a sub categoria");
+            else return (false, "Ocorreu um erro ao tentar alterar a sub categoria");
         }
 
         public async Task<(bool, string)> DelSubCategory(int id)

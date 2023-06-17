@@ -21,9 +21,9 @@
         </Style>
     </ContentPage.Resources>
     <ContentPage.Content>
-        <ScrollView HorizontalOptions="CenterAndExpand">
+        <ScrollView HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
             <Frame IsEnabled="{Binding IsNotBusy}" Style="{StaticResource FramePrimary}">
-                <VerticalStackLayout>
+                <StackLayout>
                     <Label Style="{StaticResource Icon}" Text="{x:Static Icons:Icons.ClipboardList}" />
 
                     <components:BorderedEntry LabelText="Email" Text="{Binding Email}" />
@@ -91,7 +91,7 @@
                         Text="@Emanuel Martins"
                         TextColor="{StaticResource Gray100}"
                         VerticalOptions="End" />
-                </VerticalStackLayout>
+                </StackLayout>
             </Frame>
         </ScrollView>
     </ContentPage.Content>

@@ -65,6 +65,16 @@ namespace BLL
             return new BLLResponse() { Success = false, Content = null };
         }
 
+        public static async Task<BLLResponse> DelItem(int id)
+        {
+            var resp = await ItemDAL.DelItem(id);
+
+            if (resp is not null && resp.Content is not null)
+                return new BLLResponse() { Success = resp.Success, Content = resp.Content };
+
+            return new BLLResponse() { Success = false, Content = null };
+        }
+
         public static Item BuildItemResponse(JsonNode jResp) => new()
         {
             Id = jResp["Id"]?.GetValue<int>() ?? 0,

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -13,41 +14,54 @@ public partial class BorderedCurrencyEntry : ContentView
     public static readonly BindableProperty TextProperty = BindableProperty.Create(
     propertyName: nameof(Text), returnType: typeof(string), declaringType: typeof(BorderedEntry), defaultValue: null, defaultBindingMode: BindingMode.TwoWay);
 
+    [GeneratedRegex("\\D")]
+    private static partial Regex OnlyDigits();
+
     public string Text
     {
         get { return (string)GetValue(TextProperty); }
         set
         {
-            string valueFromString = Regex.Replace(value.ToString(), @"\D", "");
-            string _value = "";
+            string valueFromString = OnlyDigits().Replace(value.ToString(), "");
+            string _value="0";
+
             if (valueFromString.Length <= 0)
             { _value = "0"; }
             else
             {
-                long valueLong;
-                if (!long.TryParse(valueFromString, out valueLong))
-                {
-                    _value = "0";
-                }
+                if (string.IsNullOrEmpty(valueFromString)) _value = "0";
+                //if (!long.TryParse(valueFromString, out long valueLong))
+                //{
+                //    _value = "0";
+                //}
                 else
                 {
-                    if (valueLong <= 0)
+                    if (Convert.ToDecimal(valueFromString) <= 0)
                     {
                         _value = "0";
                     }
                     else
-                    {
+                    { 
+                        Debug.WriteLine(valueFromString);
+
+                        var decValue = (Convert.ToDecimal(valueFromString) / 100m);
+                        Debug.WriteLine(decValue);
+                        var currencyFormatValue = decValue.ToString("N2", new CultureInfo("pt-BR", false));
+                        Debug.WriteLine(currencyFormatValue);
+                        
+                        
                         //if (valueFromString.Length > 2)
                         //{
-                            _value = Decimal.Parse((valueLong / 100m).ToString()).ToString("N2", new CultureInfo("pt-BR", false));
+                        _value = currencyFormatValue;
                         //}else
                         //{
                         //    _value = valueFromString;
                         //}
                     }
-                }               
+                }
             }
-            SetValue(TextProperty, _value);
+            Debug.WriteLine("Passou aqui" + _value);
+            SetValueCore(TextProperty, _value);
 
             //Cursor = value.Length;
         }
@@ -69,4 +83,5 @@ public partial class BorderedCurrencyEntry : ContentView
         this.EntryCurrency.CursorPosition = this.EntryCurrency.Text?.Length ?? 0;
 
     }
+
 }

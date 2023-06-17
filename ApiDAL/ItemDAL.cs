@@ -60,6 +60,14 @@ namespace ApiDAL
             catch (Exception ex) { throw ex; }
         }
 
+        public static async Task<ApiResponse> DelItem(int id)
+        {
+            try
+            {
+                return await HttpClientFunctions.AuthRequest(RequestsTypes.Delete, ApiKeys.ApiUri + "/item/" + id);
+            }
+            catch (Exception ex) { throw ex; }
+        }
 
     }
 }

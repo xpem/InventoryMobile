@@ -10,7 +10,7 @@ namespace PersonalAssetsMobile.ViewModels
 
         string email, password, btnSignInText = "Acessar";
 
-        bool btnSignInEnabled = false;
+        bool btnSignInEnabled = true;
 
         public string Email { get => email; set { if (email != value) { email = value; OnPropertyChanged(nameof(Email)); } } }
 

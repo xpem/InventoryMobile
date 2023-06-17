@@ -14,7 +14,7 @@ namespace ApiDAL
             {
                 string json = JsonSerializer.Serialize(new { name, email, password });
 
-                return await HttpClientFunctions.PostAsync(ApiKeys.ApiBookshelfUri + "/user", json);             
+                return await HttpClientFunctions.PostAsync(ApiKeys.ApiBookshelfUri + "/user", json);
             }
             catch (Exception ex) { throw ex; }
         }
@@ -25,14 +25,14 @@ namespace ApiDAL
             return await HttpClientFunctions.PostAsync(ApiKeys.ApiBookshelfUri + "/user/recoverpassword", json);
         }
 
-        public static async Task<(bool,string?)> GetUserToken(string email, string password)
+        public static async Task<(bool, string?)> GetUserToken(string email, string password)
         {
             try
             {
                 string json = JsonSerializer.Serialize(new { email, password });
 
-                var resp = await HttpClientFunctions.Request(RequestsTypes.Post, ApiKeys.ApiBookshelfUri + "/user/session", json);
-                
+                var resp = await HttpClientFunctions.Request(RequestsTypes.Post, ApiKeys.ApiBookshelfUri + "/user/session", null, json);
+
                 if (resp is not null && resp.Content is not null)
                 {
                     JsonNode? jResp = JsonNode.Parse(resp.Content);

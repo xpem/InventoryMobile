@@ -5,6 +5,7 @@ using PersonalAssetsMobile.UIModels;
 using PersonalAssetsMobile.Utils;
 using PersonalAssetsMobile.Views.Item;
 using System.Collections.ObjectModel;
+using System.Linq.Expressions;
 using System.Windows.Input;
 
 namespace PersonalAssetsMobile.ViewModels
@@ -14,7 +15,7 @@ namespace PersonalAssetsMobile.ViewModels
         //  public ObservableCollection<ItemGroup> Items { get; } = new();
         readonly Color BgButtonSelectedColor = Color.FromArgb("#29A0B1");
 
-        List<Models.Item> ListAllItems;
+        List<UIItem> ListAllItems;
 
         ObservableCollection<UIItem> itemsObsList;
 
@@ -56,7 +57,7 @@ namespace PersonalAssetsMobile.ViewModels
             }
         }
 
-        readonly List<UIItemSituation> SelectedUIItemsStatus = new();
+        List<UIItemSituation> SelectedUIItemsStatus { get; set; }
 
         public ICommand ItemSituationSelectdCommand => new Command((e) =>
         {
@@ -105,12 +106,12 @@ namespace PersonalAssetsMobile.ViewModels
         {
             IsBusy = true;
 
-            //Items = new();
+            ItemsObsList = new();
 
-            //foreach (var i in ItemList.ListItems.Where(x => SelectedUIItemsStatus.Any(y => y.Id == x.StatusId)))
-            //{
-            //    Items.Add(i);
-            //}
+            foreach (var i in ListAllItems.Where(x => SelectedUIItemsStatus.Any(y => y.Id == x.SituationId)))
+            {
+                ItemsObsList.Add(i);
+            }
 
             IsBusy = false;
         }
@@ -132,69 +133,87 @@ namespace PersonalAssetsMobile.ViewModels
 
         public ICommand OnAppearingCommand => new Command(async (e) =>
         {
-            ItemsSituationObsList = new();
             if (isOn)
             {
                 IsBusy = true;
-                List<Models.ItemSituation> itemSituationList = await itemSituationService.GetItemSituation();
-                Color backgoundColor;
-
-                if (itemSituationList is not null && itemSituationList.Count > 0)
+                try
                 {
-                    for (int i = 0; i < itemSituationList.Count; i++)
+                    Color backgoundColor;
+
+                    List<Models.ItemSituation> itemSituationList = await itemSituationService.GetItemSituation();
+
+                    if (itemSituationList is not null && itemSituationList.Count > 0)
                     {
-                        if (itemSituationList[i].Sequence is 1)
-                            backgoundColor = Color.FromArgb("#29A0B1");
-                        else
-                            backgoundColor = Color.FromArgb("#919191");
-
-                        ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituationList[i].Id, Name = itemSituationList[i].Name, BackgoundColor = backgoundColor });
-                    }
-
-                    SelectedUIItemsStatus.Add(ItemsSituationObsList.First());
-
-
-                    OnPropertyChanged(nameof(ItemsSituationObsList));
-                    //AcquisitionTypeList = new ObservableCollection<UIAcquisitionType>();
-
-                    //foreach (var _acquisitionType in UIModels.UIAcquisitionTypeList.UIAcquisitionTypes)
-                    //{
-                    //    AcquisitionTypeList.Add(_acquisitionType);
-                    //}
-
-                    ListAllItems = await itemService.GetItems();
-
-                    FilterItemsList();
-
-                    ItemsObsList = new();
-                    string IconUniCode;
-
-                    foreach (var item in ListAllItems)
-                    {
-                        string categoryAndSubCategory = "";
-
-                        categoryAndSubCategory = item.Category.Name;
-
-                        if (item.Category.SubCategory is not null)
-                            categoryAndSubCategory += "/" + item.Category.SubCategory.Name;
-
-                        if (item.Category.SubCategory is null && item.Category.SubCategory.IconName is null)
-                            IconUniCode = Icons.Tag;
-                        else
-                            IconUniCode = SubCategoryIconsList.GetIconCode(item.Category.SubCategory.IconName);
-
-                        ItemsObsList.Add(new UIItem()
+                        if (SelectedUIItemsStatus is null)
                         {
-                            Id = item.Id,
-                            Name = item.Name,
-                            CategoryAndSubCategory = categoryAndSubCategory,
-                            CategoryColor = Color.FromArgb(item.Category.Color),
-                            SituationId = item.Situation.Value,
-                            SubCategoryIcon = IconUniCode,
-                        });
+                            ItemsSituationObsList = new();
+
+                            for (int i = 0; i < itemSituationList.Count; i++)
+                            {
+                                if (itemSituationList[i].Sequence is 1)
+                                    backgoundColor = Color.FromArgb("#29A0B1");
+                                else
+                                    backgoundColor = Color.FromArgb("#919191");
+
+                                ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituationList[i].Id, Name = itemSituationList[i].Name, BackgoundColor = backgoundColor });
+                            }
+
+                            OnPropertyChanged(nameof(ItemsSituationObsList));
+
+                            SelectedUIItemsStatus = new() { ItemsSituationObsList.First() };
+                        }
+
+                        //AcquisitionTypeList = new ObservableCollection<UIAcquisitionType>();
+
+                        //foreach (var _acquisitionType in UIModels.UIAcquisitionTypeList.UIAcquisitionTypes)
+                        //{
+                        //    AcquisitionTypeList.Add(_acquisitionType);
+                        //}
+
+                        var listItems = await itemService.GetItems();
+
+                        //FilterItemsList();
+
+                        ItemsObsList = new();
+                        ListAllItems = new();
+
+                        string IconUniCode;
+
+                        foreach (var item in listItems)
+                        {
+                            string categoryAndSubCategory = "";
+
+                            categoryAndSubCategory = item.Category.Name;
+
+                            if (item.Category.SubCategory is not null)
+                                categoryAndSubCategory += "/" + item.Category.SubCategory.Name;
+
+                            if (item.Category.SubCategory is null && item.Category.SubCategory.IconName is null)
+                                IconUniCode = Icons.Tag;
+                            else
+                                IconUniCode = SubCategoryIconsList.GetIconCode(item.Category.SubCategory.IconName);
+
+
+                            UIItem uIItem = new()
+                            {
+                                Id = item.Id,
+                                Name = item.Name,
+                                CategoryAndSubCategory = categoryAndSubCategory,
+                                CategoryColor = Color.FromArgb(item.Category.Color),
+                                SituationId = item.Situation.Value,
+                                SubCategoryIcon = IconUniCode,
+                            };
+
+                            ListAllItems.Add(uIItem);
+
+                            if (SelectedUIItemsStatus.Exists(x => x.Id == item.Situation))
+                                ItemsObsList.Add(uIItem);
+                        }
+
+                        IsBusy = false;
                     }
                 }
-                IsBusy = false;
+                catch (Exception ex) { throw ex; }
             }
         });
     }

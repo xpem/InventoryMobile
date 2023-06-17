@@ -21,8 +21,10 @@ namespace PersonalAssetsMobile.ViewModels
 
         public AppShellVM()
         {
-            if (!string.IsNullOrEmpty(Preferences.Default.Get("EMAIL", string.Empty)))
-                Email = Preferences.Default.Get("EMAIL", "");
+            var user = LocalDbDAL.UserLocalDAl.GetUser().Result;
+
+            if (user is not null)
+                Email = user.Email;
         }
     }
 }

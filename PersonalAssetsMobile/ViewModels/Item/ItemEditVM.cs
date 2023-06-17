@@ -72,7 +72,9 @@ namespace PersonalAssetsMobile.ViewModels.Item
 
         public ICommand CategorySelectorCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(CategorySelector)}", true));
 
-        public ICommand AddItemCommand => new Command(async () => await InsertItem());
+        public ICommand AddItemCommand => new Command(async () => await AltItem());
+
+        public ICommand DelItemCommand => new Command(async () => await DeleteItem());
 
         #endregion
 
@@ -84,9 +86,11 @@ namespace PersonalAssetsMobile.ViewModels.Item
 
         public string BtnInsertIcon { get => btnInsertIcon; set { if (value != btnInsertIcon) { btnInsertIcon = value; OnPropertyChanged(nameof(BtnInsertIcon)); } } }
 
-        bool btnInsertIsEnabled = true;
+        bool btnInsertIsEnabled = true, btnDeleteIsVisible;
 
         public bool BtnInsertIsEnabled { get => btnInsertIsEnabled; set { if (value != btnInsertIsEnabled) { btnInsertIsEnabled = value; OnPropertyChanged(nameof(BtnInsertIsEnabled)); } } }
+
+        public bool BtnDeleteIsVisible { get => btnDeleteIsVisible; set { if (value != btnDeleteIsVisible) { btnDeleteIsVisible = value; OnPropertyChanged(nameof(BtnDeleteIsVisible)); } } }
 
         #endregion
 
@@ -193,6 +197,7 @@ namespace PersonalAssetsMobile.ViewModels.Item
 
                     BtnInsertIcon = Icons.Pen;
                     BtnInsertText = "Atualizar";
+                    BtnDeleteIsVisible = true;
                 }
                 else
                 {
@@ -202,6 +207,7 @@ namespace PersonalAssetsMobile.ViewModels.Item
 
                     BtnInsertIcon = Icons.Plus;
                     BtnInsertText = "Cadastrar";
+                    BtnDeleteIsVisible = false;
 
                     PkrItemSituationSelectedIndex = 0;
 
@@ -211,7 +217,22 @@ namespace PersonalAssetsMobile.ViewModels.Item
             }
         }
 
-        private async Task InsertItem()
+        private async Task DeleteItem()
+        {
+            if (await Application.Current.MainPage.DisplayAlert("Confirmação", "Deseja excluir este Item?", "Sim", "Cancelar"))
+            {
+                IsBusy = true;
+
+                await itemService.DelItem(ItemId);
+
+                IsBusy = false;
+
+                if (!await Application.Current.MainPage.DisplayAlert("Aviso", "Item excluído!", null, "Ok"))
+                    await Shell.Current.GoToAsync("..");
+            }
+        }
+
+        private async Task AltItem()
         {
             try
             {
@@ -253,7 +274,6 @@ namespace PersonalAssetsMobile.ViewModels.Item
             }
             catch (Exception ex) { throw ex; }
         }
-
 
         private async Task<bool> Validate()
         {

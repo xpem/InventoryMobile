@@ -31,7 +31,8 @@
                 Margin="5,5,5,0"
                 FontAttributes="Bold"
                 FontSize="12"
-                Text="Status" />
+                Text="Status"
+                TextColor="White" />
             <ScrollView Orientation="Horizontal">
                 <StackLayout BindableLayout.ItemsSource="{Binding ItemsSituationObsList, Mode=TwoWay}" Orientation="Horizontal">
                     <BindableLayout.ItemTemplate>
@@ -47,8 +48,11 @@
                 </StackLayout>
             </ScrollView>
         </StackLayout>
-        <StackLayout Padding="10">
-            <Grid Margin="10" RowDefinitions="*">
+        <StackLayout Padding="10" VerticalOptions="FillAndExpand">
+            <Grid
+                Margin="10"
+                RowDefinitions="*"
+                VerticalOptions="FillAndExpand">
                 <ListView
                     x:Name="ItemsListView"
                     CachingStrategy="RecycleElement"
@@ -58,7 +62,7 @@
                     RowHeight="65"
                     SelectedItem="{Binding ItemUI}"
                     SeparatorVisibility="None"
-                    VerticalOptions="Start">
+                    VerticalOptions="FillAndExpand">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="model:UIItem">
                             <ViewCell>

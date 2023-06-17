@@ -42,7 +42,16 @@ namespace PersonalAssetsMobile.Services
 
             if (resp.Success)
                 return (true, "Item Atualizada!");
-            else return (false, "Ocorreu um erro ao tentar adicionar o item");
+            else return (false, "Ocorreu um erro ao tentar alterar o item");
+        }
+
+        public async Task<(bool, string)> DelItem(int id)
+        {
+            var resp = await ItemBLL.DelItem(id);
+
+            if (resp.Success)
+                return (true, "Item Excluído!");
+            else return (false, "Ocorreu um erro ao tentar excluir o item");
         }
     }
 }
