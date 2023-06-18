@@ -18,6 +18,8 @@ namespace PersonalAssetsMobile.ViewModels.Item
 
         int? SubCategoryId { get; set; }
 
+        const int resaleStatusId = 5;
+
         string name;
         string description;
         string categoryName;
@@ -43,11 +45,16 @@ namespace PersonalAssetsMobile.ViewModels.Item
             get => acquisitionDate; set { if (acquisitionDate != value) { acquisitionDate = value; OnPropertyChanged(nameof(AcquisitionDate)); } }
         }
 
-        decimal acquisitionValue;
+        string acquisitionValue, resaleValue;
 
-        public decimal AcquisitionValue
+        public string AcquisitionValue
         {
             get => acquisitionValue; set { if (acquisitionValue != value) { acquisitionValue = value; OnPropertyChanged(nameof(AcquisitionValue)); } }
+        }
+
+        public string ResaleValue
+        {
+            get => resaleValue; set { if (resaleValue != value) { resaleValue = value; OnPropertyChanged(nameof(ResaleValue)); } }
         }
 
         public string AcquisitionStore
@@ -62,7 +69,25 @@ namespace PersonalAssetsMobile.ViewModels.Item
 
         int pkrItemSituationSelectedIndex, pkrAcquisitionTypeSelectedIndex;
 
-        public int PkrItemSituationSelectedIndex { get => pkrItemSituationSelectedIndex; set { pkrItemSituationSelectedIndex = value; OnPropertyChanged(nameof(PkrItemSituationSelectedIndex)); } }
+        public int PkrItemSituationSelectedIndex
+        {
+            get => pkrItemSituationSelectedIndex;
+            set
+            {
+                if (pkrItemSituationSelectedIndex != value)
+                {
+                    pkrItemSituationSelectedIndex = value;
+
+
+
+                    if (ItemsSituationObsList[pkrItemSituationSelectedIndex].Id == resaleStatusId)
+                        StlResaleValueIsVisible = true;
+                    else StlResaleValueIsVisible = false;
+
+                    OnPropertyChanged(nameof(PkrItemSituationSelectedIndex));
+                }
+            }
+        }
 
         public int PkrAcquisitionTypeSelectedIndex { get => pkrAcquisitionTypeSelectedIndex; set { pkrAcquisitionTypeSelectedIndex = value; OnPropertyChanged(nameof(PkrAcquisitionTypeSelectedIndex)); } }
 
@@ -86,11 +111,13 @@ namespace PersonalAssetsMobile.ViewModels.Item
 
         public string BtnInsertIcon { get => btnInsertIcon; set { if (value != btnInsertIcon) { btnInsertIcon = value; OnPropertyChanged(nameof(BtnInsertIcon)); } } }
 
-        bool btnInsertIsEnabled = true, btnDeleteIsVisible;
+        bool btnInsertIsEnabled = true, btnDeleteIsVisible, stlResaleValueIsVisible;
 
         public bool BtnInsertIsEnabled { get => btnInsertIsEnabled; set { if (value != btnInsertIsEnabled) { btnInsertIsEnabled = value; OnPropertyChanged(nameof(BtnInsertIsEnabled)); } } }
 
         public bool BtnDeleteIsVisible { get => btnDeleteIsVisible; set { if (value != btnDeleteIsVisible) { btnDeleteIsVisible = value; OnPropertyChanged(nameof(BtnDeleteIsVisible)); } } }
+
+        public bool StlResaleValueIsVisible { get => stlResaleValueIsVisible; set { if (value != stlResaleValueIsVisible) { stlResaleValueIsVisible = value; OnPropertyChanged(nameof(StlResaleValueIsVisible)); } } }
 
         #endregion
 
@@ -175,7 +202,7 @@ namespace PersonalAssetsMobile.ViewModels.Item
 
                     acquisitionDate = item.AcquisitionDate;
                     Name = item.Name;
-                    AcquisitionValue = Convert.ToDecimal(item.PurchaseValue.Replace('.', ','));
+                    AcquisitionValue = item.PurchaseValue;
 
                     string categoryAndSubCategory = item.Category.Name;
                     CategoryId = item.Category.Id;
@@ -203,7 +230,7 @@ namespace PersonalAssetsMobile.ViewModels.Item
                 {
                     CategoryName = "Selecione";
                     Name = Description = string.Empty;
-                    AcquisitionValue = decimal.Zero;
+                    AcquisitionValue = "0";
 
                     BtnInsertIcon = Icons.Plus;
                     BtnInsertText = "Cadastrar";
@@ -249,7 +276,7 @@ namespace PersonalAssetsMobile.ViewModels.Item
                         PurchaseStore = AcquisitionStore?.Trim(),
                         PurchaseValue = AcquisitionValue.ToString(),
                         Situation = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id,
-                        ResaleValue = "0",
+                        ResaleValue = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id == resaleStatusId ? ResaleValue.ToString() : "0",
                         TechnicalDescription = Description.Trim(),
                         Category = new Models.Category() { Id = CategoryId, SubCategory = SubCategoryId is not null ? new Models.SubCategory() { Id = SubCategoryId.Value } : null },
                     };

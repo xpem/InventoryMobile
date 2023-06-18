@@ -75,7 +75,7 @@
                                     <!--<Grid RowDefinitions="5,auto" VerticalOptions="FillAndExpand" Margin="0,0,5,5">
                                     <Rectangle HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="{Binding CategoryColor}"></Rectangle>-->
                                     <Grid
-                                        Margin="0,10,5,10"
+                                        Margin="5,10,5,10"
                                         ColumnDefinitions="50,auto"
                                         VerticalOptions="FillAndExpand">
                                         <Button

@@ -19,6 +19,7 @@ public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
+        //implementar um dark theme padrão
         //opção de cadastro de categoria e subcategoria nas telas de seleção
 
         var builder = MauiApp.CreateBuilder();

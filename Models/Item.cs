@@ -21,6 +21,10 @@
         public string? Comment { get; set; }
 
         public Category? Category { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public DateTime UpdatedAt { get; set; }
     }
 
 

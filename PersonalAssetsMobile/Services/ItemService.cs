@@ -12,7 +12,14 @@ namespace PersonalAssetsMobile.Services
             BLLResponse resp = await ItemBLL.GetItems();
 
             if (resp is not null && resp.Success)
-                return resp.Content as List<Models.Item>;
+            {
+                var itemListResp = resp.Content as List<Item>;
+                itemListResp = (from item in itemListResp orderby item.CreatedAt descending select item).ToList();
+
+                if (itemListResp.Count > 0)
+                    return itemListResp;
+                else return null;
+            }
 
             return null;
         }
