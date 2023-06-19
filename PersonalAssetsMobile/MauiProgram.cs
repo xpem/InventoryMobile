@@ -19,7 +19,12 @@ public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
+        //todo
+        //
+        //cadastro de items com dependencia
         //implementar um dark theme padrão
+        //implementar auto complete no campo "loja"
+        //implementar mecanismo para funcionamento offline.
         //opção de cadastro de categoria e subcategoria nas telas de seleção
 
         var builder = MauiApp.CreateBuilder();

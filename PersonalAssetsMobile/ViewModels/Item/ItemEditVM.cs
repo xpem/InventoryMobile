@@ -4,6 +4,7 @@ using PersonalAssetsMobile.Services.Interfaces;
 using PersonalAssetsMobile.UIModels;
 using PersonalAssetsMobile.Views.Item;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Windows.Input;
 
 namespace PersonalAssetsMobile.ViewModels.Item
@@ -78,14 +79,15 @@ namespace PersonalAssetsMobile.ViewModels.Item
                 {
                     pkrItemSituationSelectedIndex = value;
 
-
-
                     if (ItemsSituationObsList[pkrItemSituationSelectedIndex].Id == resaleStatusId)
+                    {
                         StlResaleValueIsVisible = true;
+                        ResaleValue = "0";
+                        OnPropertyChanged(nameof(ResaleValue));
+                    }
                     else StlResaleValueIsVisible = false;
-
-                    OnPropertyChanged(nameof(PkrItemSituationSelectedIndex));
                 }
+                OnPropertyChanged(nameof(PkrItemSituationSelectedIndex));
             }
         }
 
@@ -220,6 +222,7 @@ namespace PersonalAssetsMobile.ViewModels.Item
                     PkrItemSituationSelectedIndex = ItemsSituationObsList.IndexOf(ItemsSituationObsList.Where(s => s.Id == item.Situation.Value).First());
                     PkrAcquisitionTypeSelectedIndex = AcquisitionTypeObsList.IndexOf(AcquisitionTypeObsList.Where(s => s.Id == item.AcquisitionType).First());
 
+                    ResaleValue = item.ResaleValue;
                     AcquisitionStore = item.PurchaseStore;
 
                     BtnInsertIcon = Icons.Pen;
@@ -267,6 +270,9 @@ namespace PersonalAssetsMobile.ViewModels.Item
                 {
                     BtnInsertIsEnabled = false;
 
+                    decimal decAquisitionValue = decimal.Parse(AcquisitionValue, NumberStyles.AllowCurrencySymbol | NumberStyles.Number);
+                    decimal decResaleValue = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id == resaleStatusId ? decimal.Parse(ResaleValue, NumberStyles.AllowCurrencySymbol | NumberStyles.Number) : 0;
+
                     Models.Item item = new()
                     {
                         Name = Name.Trim(),
@@ -274,9 +280,9 @@ namespace PersonalAssetsMobile.ViewModels.Item
                         AcquisitionType = AcquisitionTypeObsList[pkrAcquisitionTypeSelectedIndex].Id,
                         Comment = Commentary?.Trim(),
                         PurchaseStore = AcquisitionStore?.Trim(),
-                        PurchaseValue = AcquisitionValue.ToString(),
+                        PurchaseValue = decAquisitionValue.ToString(),
                         Situation = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id,
-                        ResaleValue = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id == resaleStatusId ? ResaleValue.ToString() : "0",
+                        ResaleValue = decResaleValue.ToString(),
                         TechnicalDescription = Description.Trim(),
                         Category = new Models.Category() { Id = CategoryId, SubCategory = SubCategoryId is not null ? new Models.SubCategory() { Id = SubCategoryId.Value } : null },
                     };

@@ -57,12 +57,10 @@
                                     WidthRequest="200" />
                             </Border>
                         </VerticalStackLayout>
-                        <VerticalStackLayout HorizontalOptions="End" IsVisible="{Binding StlResaleValueIsVisible}">
-                            <components:BorderedCurrencyEntry
-                                LabelText="Valor de revenda"
-                                Text="{Binding ResaleValue}"
-                                WidthRequest="150" />
-                        </VerticalStackLayout>
+                        <!--    -->
+                        <StackLayout HorizontalOptions="End" IsVisible="{Binding StlResaleValueIsVisible}">
+                            <components:BorderedCurrencyEntry LabelText="Valor de revenda" Text="{Binding ResaleValue}" />
+                        </StackLayout>
                     </StackLayout>
 
                     <Label
