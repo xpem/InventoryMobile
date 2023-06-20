@@ -26,6 +26,7 @@ public static class MauiProgram
         //implementar auto complete no campo "loja"
         //implementar mecanismo para funcionamento offline.
         //opção de cadastro de categoria e subcategoria nas telas de seleção
+        //tela com filtros?
 
         var builder = MauiApp.CreateBuilder();
         builder

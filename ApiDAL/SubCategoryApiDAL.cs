@@ -28,7 +28,7 @@ namespace ApiDAL
         {
             try
             {
-                string json = JsonSerializer.Serialize(new { subCategory.Name, subCategory.IconName, Category = new { Id = subCategory.CategoryId } });
+                string json = JsonSerializer.Serialize(new { subCategory.Name, subCategory.IconName, subCategory.CategoryId });
 
                 return await HttpClientFunctions.AuthRequest(RequestsTypes.Post, ApiKeys.ApiUri + "/subcategory", json);
             }
