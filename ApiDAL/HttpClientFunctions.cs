@@ -67,6 +67,7 @@ namespace ApiDAL
                 {
                     Success = httpResponse.IsSuccessStatusCode,
                     Error = httpResponse.StatusCode == HttpStatusCode.Unauthorized ? ErrorTypes.Unauthorized : null,
+                    TryRefreshToken = httpResponse.StatusCode == HttpStatusCode.Unauthorized,
                     Content = await httpResponse.Content.ReadAsStringAsync()
                 };
             }

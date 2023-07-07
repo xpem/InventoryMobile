@@ -1,4 +1,6 @@
+using PersonalAssetsMobile.UIModels;
 using PersonalAssetsMobile.ViewModels;
+using PersonalAssetsMobile.Views.Item;
 
 namespace PersonalAssetsMobile.Views;
 
@@ -16,6 +18,13 @@ public partial class Main : ContentPage
     {
         var view = sender as View;
         vm.ItemSituationSelectdCommand.Execute(view.BindingContext);
+    }
+
+    private void ItemsListView_ItemTapped(object sender, ItemTappedEventArgs e)
+    {
+        var TappedItem = e.Item as UIItem;
+
+        Shell.Current.GoToAsync($"{nameof(ItemEdit)}?Id={TappedItem.Id}", true);
     }
 
     //private void BtnCategorySelected_Clicked(object sender, EventArgs e)

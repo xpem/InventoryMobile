@@ -78,14 +78,14 @@ namespace PersonalAssetsMobile.ViewModels.Item
                 if (pkrItemSituationSelectedIndex != value)
                 {
                     pkrItemSituationSelectedIndex = value;
-
-                    if (ItemsSituationObsList[pkrItemSituationSelectedIndex].Id == resaleStatusId)
-                    {
-                        StlResaleValueIsVisible = true;
-                        ResaleValue = "0";
-                        OnPropertyChanged(nameof(ResaleValue));
-                    }
-                    else StlResaleValueIsVisible = false;
+                    if (pkrItemSituationSelectedIndex > 0)
+                        if (ItemsSituationObsList[pkrItemSituationSelectedIndex].Id == resaleStatusId)
+                        {
+                            StlResaleValueIsVisible = true;
+                            ResaleValue = "0";
+                            OnPropertyChanged(nameof(ResaleValue));
+                        }
+                        else StlResaleValueIsVisible = false;
                 }
                 OnPropertyChanged(nameof(PkrItemSituationSelectedIndex));
             }

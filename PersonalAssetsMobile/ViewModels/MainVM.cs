@@ -7,6 +7,7 @@ using PersonalAssetsMobile.Views.Item;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 using System.Windows.Input;
+using System.Xml.Linq;
 
 namespace PersonalAssetsMobile.ViewModels
 {
@@ -33,57 +34,57 @@ namespace PersonalAssetsMobile.ViewModels
 
         public ObservableCollection<UIItemSituation> ItemsSituationObsList { get; set; }
 
-        UIItem itemUI;
+        //UIItem itemUI;
 
-        public UIItem ItemUI
-        {
-            get => itemUI;
-            set
-            {
-                if (itemUI != value)
-                {
-                    itemUI = value;
+        //public UIItem ItemUI
+        //{
+        //    get => itemUI;
+        //    set
+        //    {
+        //        if (itemUI != value)
+        //        {
+        //            itemUI = value;
 
-                    if (itemUI is not null)
-                    {
-                        Shell.Current.GoToAsync($"{nameof(ItemEdit)}?Id={itemUI.Id}", true);
-                    }
-                    else
-                    {
-                        throw new Exception("Id de item nulo");
-                    }
-                    OnPropertyChanged();
-                }
-            }
-        }
+        //            if (itemUI is not null)
+        //            {
+        //                Shell.Current.GoToAsync($"{nameof(ItemEdit)}?Id={itemUI.Id}", true);
+        //            }
+        //            else
+        //            {
+        //                throw new Exception("Id de item nulo");
+        //            }
+        //            OnPropertyChanged();
+        //        }
+        //    }
+        //}
 
-        List<UIItemSituation> SelectedUIItemsStatus { get; set; }
+        // List<UIItemSituation> SelectedUIItemsStatus { get; set; }
+
+        UIItemSituation SelectedUIItemsStatus { get; set; }
 
         public ICommand ItemSituationSelectdCommand => new Command((e) =>
-        {
-            var itemSituation = e as UIItemSituation;
-
-            var bgcolor = itemSituation.BackgoundColor;
-
-            if (bgcolor.Equals(BgButtonSelectedColor))
             {
-                if (SelectedUIItemsStatus.Count > 1)
+                var itemSituation = e as UIItemSituation;
+
+                var bgcolor = itemSituation.BackgoundColor;
+
+                if (!bgcolor.Equals(BgButtonSelectedColor))
                 {
-                    ItemsSituationObsList.Where(x => x.Id == itemSituation.Id).First().BackgoundColor = Color.FromArgb("#919191");
-                    SelectedUIItemsStatus.Remove(itemSituation);
+                    //if (SelectedUIItemsStatus.Count > 1)
+                    //{
+                    //ItemsSituationObsList.Where(x => x.Id == itemSituation.Id).First().BackgoundColor = Color.FromArgb("#919191");                    
+                    //SelectedUIItemsStatus.Remove(itemSituation);
+                    //}
+                    ItemsSituationObsList.Where(x => x.Id == SelectedUIItemsStatus.Id).ToList().ForEach(y => y.BackgoundColor = Color.FromArgb("#919191"));
+                    ItemsSituationObsList.Where(x => x.Id == itemSituation.Id).First().BackgoundColor = BgButtonSelectedColor;
+                    SelectedUIItemsStatus = itemSituation;
                 }
-            }
-            else
-            {
-                ItemsSituationObsList.Where(x => x.Id == itemSituation.Id).First().BackgoundColor = BgButtonSelectedColor;
-                SelectedUIItemsStatus.Add(itemSituation);
-            }
 
-            FilterItemsList();
+                FilterItemsList();
 
-            OnPropertyChanged(nameof(ItemsSituationObsList));
+                OnPropertyChanged(nameof(ItemsSituationObsList));
 
-        });
+            });
 
         //public ICommand CategorySelectedCommand => new Command((e) =>
         //{
@@ -108,7 +109,7 @@ namespace PersonalAssetsMobile.ViewModels
 
             ItemsObsList = new();
 
-            foreach (var i in ListAllItems.Where(x => SelectedUIItemsStatus.Any(y => y.Id == x.SituationId)))
+            foreach (var i in ListAllItems.Where(x => x.SituationId == SelectedUIItemsStatus.Id))//SelectedUIItemsStatus.Any(y => y.Id == x.SituationId)))
             {
                 ItemsObsList.Add(i);
             }
@@ -141,12 +142,14 @@ namespace PersonalAssetsMobile.ViewModels
                     Color backgoundColor;
 
                     List<Models.ItemSituation> itemSituationList = await itemSituationService.GetItemSituation();
+                    var listItems = await itemService.GetItems();
 
                     if (itemSituationList is not null && itemSituationList.Count > 0)
                     {
                         if (SelectedUIItemsStatus is null)
                         {
                             ItemsSituationObsList = new();
+                            string textSituationItem;
 
                             for (int i = 0; i < itemSituationList.Count; i++)
                             {
@@ -154,13 +157,16 @@ namespace PersonalAssetsMobile.ViewModels
                                     backgoundColor = Color.FromArgb("#29A0B1");
                                 else
                                     backgoundColor = Color.FromArgb("#919191");
+                                var teste = listItems.Where(x => x.Situation == itemSituationList[i].Id);
 
-                                ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituationList[i].Id, Name = itemSituationList[i].Name, BackgoundColor = backgoundColor });
+                                textSituationItem = $"{itemSituationList[i].Name} ({listItems.Where(x => x.Situation == itemSituationList[i].Id).Count()})";
+
+                                ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituationList[i].Id, Name = textSituationItem, BackgoundColor = backgoundColor });
                             }
 
                             OnPropertyChanged(nameof(ItemsSituationObsList));
 
-                            SelectedUIItemsStatus = new() { ItemsSituationObsList.First() };
+                            SelectedUIItemsStatus = ItemsSituationObsList.First();
                         }
 
                         //AcquisitionTypeList = new ObservableCollection<UIAcquisitionType>();
@@ -170,7 +176,6 @@ namespace PersonalAssetsMobile.ViewModels
                         //    AcquisitionTypeList.Add(_acquisitionType);
                         //}
 
-                        var listItems = await itemService.GetItems();
 
                         //FilterItemsList();
 
@@ -188,7 +193,7 @@ namespace PersonalAssetsMobile.ViewModels
                             if (item.Category.SubCategory is not null)
                                 categoryAndSubCategory += "/" + item.Category.SubCategory.Name;
 
-                            if (item.Category.SubCategory is null && item.Category.SubCategory.IconName is null)
+                            if (item.Category.SubCategory is null || item.Category.SubCategory.IconName is null)
                                 IconUniCode = Icons.Tag;
                             else
                                 IconUniCode = SubCategoryIconsList.GetIconCode(item.Category.SubCategory.IconName);
@@ -206,8 +211,11 @@ namespace PersonalAssetsMobile.ViewModels
 
                             ListAllItems.Add(uIItem);
 
-                            if (SelectedUIItemsStatus.Exists(x => x.Id == item.Situation))
-                                ItemsObsList.Add(uIItem);
+                            if (item.Situation == SelectedUIItemsStatus.Id)
+                                itemsObsList.Add(uIItem);
+
+                            //if (SelectedUIItemsStatus.Exists(x => x.Id == item.Situation))
+                            //    ItemsObsList.Add(uIItem);
                         }
 
                         IsBusy = false;
