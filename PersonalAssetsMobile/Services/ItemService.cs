@@ -1,15 +1,16 @@
 ﻿using BLL;
 using Models;
-using PersonalAssetsMobile.Services.Interfaces;
+using InventoryMobile.Services.Interfaces;
+using Models.Responses;
 
-namespace PersonalAssetsMobile.Services
+namespace InventoryMobile.Services
 {
-    public class ItemService : IItemService
+    public class ItemService(IItemBLL itemBLL) : IItemService
     {
 
         public async Task<List<Models.Item>> GetItems()
         {
-            BLLResponse resp = await ItemBLL.GetItems();
+            BLLResponse resp = await itemBLL.GetItems();
 
             if (resp is not null && resp.Success)
             {
@@ -26,7 +27,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<Item> GetItemById(int id)
         {
-            BLLResponse resp = await ItemBLL.GetItemById(id.ToString());
+            BLLResponse resp = await itemBLL.GetItemById(id.ToString());
 
             if (resp is not null && resp.Success)
                 return resp.Content as Models.Item;
@@ -36,7 +37,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<(bool, string)> AddItem(Models.Item item)
         {
-            var resp = await ItemBLL.AddItem(item);
+            var resp = await itemBLL.AddItem(item);
 
             if (resp.Success)
                 return (true, "Item Adicionado!");
@@ -45,7 +46,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<(bool, string)> AltItem(Models.Item item)
         {
-            var resp = await ItemBLL.AltItem(item);
+            var resp = await itemBLL.AltItem(item);
 
             if (resp.Success)
                 return (true, "Item Atualizada!");
@@ -54,7 +55,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<(bool, string)> DelItem(int id)
         {
-            var resp = await ItemBLL.DelItem(id);
+            var resp = await itemBLL.DelItem(id);
 
             if (resp.Success)
                 return (true, "Item Excluído!");

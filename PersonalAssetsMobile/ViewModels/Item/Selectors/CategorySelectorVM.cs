@@ -1,10 +1,10 @@
-﻿using PersonalAssetsMobile.Services.Interfaces;
-using PersonalAssetsMobile.UIModels;
-using PersonalAssetsMobile.ViewModels.Category;
+﻿using InventoryMobile.Services.Interfaces;
+using InventoryMobile.UIModels;
+using InventoryMobile.ViewModels.Category;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace PersonalAssetsMobile.ViewModels.Item.Selectors
+namespace InventoryMobile.ViewModels.Item.Selectors
 {
     public class CategorySelectorVM : ViewModelBase
     {

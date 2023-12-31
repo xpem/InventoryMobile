@@ -1,6 +1,6 @@
-using PersonalAssetsMobile.ViewModels.Item;
+using InventoryMobile.ViewModels.Item;
 
-namespace PersonalAssetsMobile.Views.Item;
+namespace InventoryMobile.Views.Item;
 
 public partial class ItemEdit : ContentPage
 {

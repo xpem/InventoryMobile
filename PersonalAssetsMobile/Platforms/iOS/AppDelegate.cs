@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace PersonalAssetsMobile;
+namespace InventoryMobile;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

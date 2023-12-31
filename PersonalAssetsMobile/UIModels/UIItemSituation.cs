@@ -1,4 +1,4 @@
-﻿namespace PersonalAssetsMobile.UIModels
+﻿namespace InventoryMobile.UIModels
 {
     public class UIItemSituation : BindableObject
     {

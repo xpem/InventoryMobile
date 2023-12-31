@@ -1,6 +1,6 @@
-using PersonalAssetsMobile.ViewModels;
+using InventoryMobile.ViewModels;
 
-namespace PersonalAssetsMobile.Views;
+namespace InventoryMobile.Views;
 
 public partial class SignUp : ContentPage
 {

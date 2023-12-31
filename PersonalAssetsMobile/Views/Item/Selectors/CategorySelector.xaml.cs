@@ -1,9 +1,9 @@
-using PersonalAssetsMobile.UIModels;
-using PersonalAssetsMobile.ViewModels.Item.Selectors;
-using PersonalAssetsMobile.Views.Item.Selectors;
+using InventoryMobile.UIModels;
+using InventoryMobile.ViewModels.Item.Selectors;
+using InventoryMobile.Views.Item.Selectors;
 using System.Xml.Linq;
 
-namespace PersonalAssetsMobile.Views.Item;
+namespace InventoryMobile.Views.Item;
 
 public partial class CategorySelector : ContentPage
 {

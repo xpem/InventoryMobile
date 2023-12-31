@@ -1,7 +1,7 @@
-﻿using PersonalAssetsMobile.Views;
+﻿using InventoryMobile.Views;
 using System.Windows.Input;
 
-namespace PersonalAssetsMobile.ViewModels
+namespace InventoryMobile.ViewModels
 {
     public class AppShellVM : BindableObject//: ViewModelBase
     {
@@ -21,10 +21,10 @@ namespace PersonalAssetsMobile.ViewModels
 
         public AppShellVM()
         {
-            var user = LocalDbDAL.UserLocalDAl.GetUser().Result;
+            //var user = LocalDbDAL.UserLocalDAl.GetUser().Result;
 
-            if (user is not null)
-                Email = user.Email;
+            //if (user is not null)
+            //    Email = user.Email;
         }
     }
 }

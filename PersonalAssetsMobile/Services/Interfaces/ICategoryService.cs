@@ -1,6 +1,6 @@
 ﻿using Models;
 
-namespace PersonalAssetsMobile.Services.Interfaces
+namespace InventoryMobile.Services.Interfaces
 {
     public interface ICategoryService
     {

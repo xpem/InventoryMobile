@@ -1,11 +1,11 @@
-﻿using PersonalAssetsMobile.ViewModels;
-using PersonalAssetsMobile.Views;
-using PersonalAssetsMobile.Views.Category;
-using PersonalAssetsMobile.Views.Category.SubCategory;
-using PersonalAssetsMobile.Views.Item;
-using PersonalAssetsMobile.Views.Item.Selectors;
+﻿using InventoryMobile.ViewModels;
+using InventoryMobile.Views;
+using InventoryMobile.Views.Category;
+using InventoryMobile.Views.Category.SubCategory;
+using InventoryMobile.Views.Item;
+using InventoryMobile.Views.Item.Selectors;
 
-namespace PersonalAssetsMobile;
+namespace InventoryMobile;
 
 public partial class AppShell : Shell
 {

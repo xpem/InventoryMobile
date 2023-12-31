@@ -6,18 +6,17 @@ using System.Text.Json.Nodes;
 
 namespace BLL
 {
-    public class ItemBLL
+    public class ItemBLL(IItemDAL itemDAL) : IItemBLL
     {
 
-        public static async Task<BLLResponse> GetItems() =>
-            ApiResponseHandler.Handler<List<Models.Item>>(await ItemDAL.GetItems());
+        public async Task<BLLResponse> GetItems() => ApiResponseHandler.Handler<List<Models.Item>>(await itemDAL.GetItems());
 
-        public static async Task<BLLResponse> GetItemById(string id) =>
-            ApiResponseHandler.Handler<Item>(await ItemDAL.GetItemById(id));
+        public async Task<BLLResponse> GetItemById(string id) =>
+            ApiResponseHandler.Handler<Item>(await itemDAL.GetItemById(id));
 
-        public static async Task<BLLResponse> AddItem(Models.Item item)
+        public async Task<BLLResponse> AddItem(Models.Item item)
         {
-            var resp = await ItemDAL.AddItem(item);
+            var resp = await itemDAL.AddItem(item);
 
             if (resp is not null && resp.Success && resp.Content is not null)
             {
@@ -33,12 +32,12 @@ namespace BLL
                         AcquisitionDate = jResp["AcquisitionDate"]?.GetValue<DateTime>() ?? DateTime.MinValue,
                         AcquisitionType = jResp["AcquisitionType"]?.GetValue<Int32>() ?? Int32.MinValue,
                         PurchaseStore = jResp["PurchaseStore"]?.GetValue<string>(),
-                        PurchaseValue = jResp["PurchaseValue"]?.GetValue<string>(),
-                        ResaleValue = jResp["ResaleValue"]?.GetValue<string>(),
+                        PurchaseValue = jResp["PurchaseValue"]?.GetValue<decimal>(),
+                        ResaleValue = jResp["ResaleValue"]?.GetValue<decimal>(),
                         //CreatedAt = jResp["CreatedAt"]?.GetValue<DateTime>(),
                         //UpdatedAt = jResp["UpdatedAt"]?.GetValue<DateTime>(),
                         Comment = jResp["Comment"]?.GetValue<string>(),
-                        Situation = jResp["Situation"]?.GetValue<Int32>(),
+                        Situation = new ItemSituation() { Id = jResp["Situation"]?.GetValue<int>() ?? 0 },
                     };
 
                     return new BLLResponse() { Success = resp.Success, Content = itemResp };
@@ -49,9 +48,9 @@ namespace BLL
             return new BLLResponse() { Success = false, Content = null };
         }
 
-        public static async Task<BLLResponse> AltItem(Models.Item item)
+        public async Task<BLLResponse> AltItem(Models.Item item)
         {
-            var resp = await ItemDAL.AltItem(item);
+            var resp = await itemDAL.AltItem(item);
 
             if (resp is not null && resp.Success && resp.Content is not null)
             {
@@ -65,9 +64,9 @@ namespace BLL
             return new BLLResponse() { Success = false, Content = null };
         }
 
-        public static async Task<BLLResponse> DelItem(int id)
+        public async Task<BLLResponse> DelItem(int id)
         {
-            var resp = await ItemDAL.DelItem(id);
+            var resp = await itemDAL.DelItem(id);
 
             if (resp is not null && resp.Content is not null)
                 return new BLLResponse() { Success = resp.Success, Content = resp.Content };
@@ -75,7 +74,7 @@ namespace BLL
             return new BLLResponse() { Success = false, Content = null };
         }
 
-        public static Item BuildItemResponse(JsonNode jResp) => new()
+        public Item BuildItemResponse(JsonNode jResp) => new()
         {
             Id = jResp["Id"]?.GetValue<int>() ?? 0,
             Name = jResp["Name"]?.GetValue<string>(),
@@ -83,12 +82,12 @@ namespace BLL
             AcquisitionDate = jResp["AcquisitionDate"]?.GetValue<DateTime>() ?? DateTime.MinValue,
             AcquisitionType = jResp["AcquisitionType"]?.GetValue<Int32>() ?? Int32.MinValue,
             PurchaseStore = jResp["PurchaseStore"]?.GetValue<string>(),
-            PurchaseValue = jResp["PurchaseValue"]?.GetValue<string>(),
-            ResaleValue = jResp["ResaleValue"]?.GetValue<string>(),
+            PurchaseValue = jResp["PurchaseValue"]?.GetValue<decimal>(),
+            ResaleValue = jResp["ResaleValue"]?.GetValue<decimal>(),
             //CreatedAt = jResp["CreatedAt"]?.GetValue<DateTime>(),
             //UpdatedAt = jResp["UpdatedAt"]?.GetValue<DateTime>(),
             Comment = jResp["Comment"]?.GetValue<string>(),
-            Situation = jResp["Situation"]?.GetValue<Int32>()
+            Situation = new ItemSituation() { Id = jResp["Situation"]?.GetValue<int>() ?? 0 }
         };
     }
 }

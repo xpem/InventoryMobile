@@ -1,6 +1,6 @@
-using PersonalAssetsMobile.ViewModels.Category;
+using InventoryMobile.ViewModels.Category;
 
-namespace PersonalAssetsMobile.Views.Category;
+namespace InventoryMobile.Views.Category;
 
 public partial class CategoryEdit : ContentPage
 {

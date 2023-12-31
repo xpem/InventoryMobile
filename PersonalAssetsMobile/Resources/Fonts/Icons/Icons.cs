@@ -1,4 +1,4 @@
-﻿namespace PersonalAssetsMobile.Resources.Fonts.Icons
+﻿namespace InventoryMobile.Resources.Fonts.Icons
 {
 
     static class Icons

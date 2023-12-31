@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace PersonalAssetsMobile;
+namespace InventoryMobile;
 
 public class Program
 {

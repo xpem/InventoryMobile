@@ -1,6 +1,6 @@
-using PersonalAssetsMobile.ViewModels.Category.SubCategory;
+using InventoryMobile.ViewModels.Category.SubCategory;
 
-namespace PersonalAssetsMobile.Views.Category.SubCategory;
+namespace InventoryMobile.Views.Category.SubCategory;
 
 public partial class SubCategoryEdit : ContentPage
 {

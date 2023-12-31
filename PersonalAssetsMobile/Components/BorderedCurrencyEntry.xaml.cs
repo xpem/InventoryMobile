@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace PersonalAssetsMobile.Components;
+namespace InventoryMobile.Components;
 
 public partial class BorderedCurrencyEntry : ContentView
 {

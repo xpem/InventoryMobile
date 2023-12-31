@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="PersonalAssetsMobile.Views.SignUp"
+    x:Class="InventoryMobile.Views.SignUp"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:Icons="clr-namespace:PersonalAssetsMobile.Resources.Fonts.Icons"
-    xmlns:components="clr-namespace:PersonalAssetsMobile.Components"
-    xmlns:viewmodels="clr-namespace:PersonalAssetsMobile.ViewModels"
+    xmlns:Icons="clr-namespace:InventoryMobile.Resources.Fonts.Icons"
+    xmlns:components="clr-namespace:InventoryMobile.Components"
+    xmlns:viewmodels="clr-namespace:InventoryMobile.ViewModels"
     Title="Cadastrar Usuário"
     x:DataType="viewmodels:SignUpVM"
     Shell.FlyoutBehavior="Disabled"
@@ -38,7 +38,7 @@
 
                         <Button
                             Margin="0,10,0,20"
-                            Command="{Binding AddUserCommand}"
+                            Command="{Binding SignUpCommand}"
                             ContentLayout="Left,10"
                             FontSize="20"
                             IsEnabled="{Binding BtnIsEnabled}"

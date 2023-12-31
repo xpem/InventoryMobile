@@ -1,6 +1,6 @@
 using static System.Net.Mime.MediaTypeNames;
 
-namespace PersonalAssetsMobile.Components;
+namespace InventoryMobile.Components;
 
 public partial class FlyoutHeader : ContentView
 {

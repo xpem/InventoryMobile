@@ -1,14 +1,14 @@
 ﻿using BLL;
 using Models;
-using PersonalAssetsMobile.Services.Interfaces;
+using InventoryMobile.Services.Interfaces;
 
-namespace PersonalAssetsMobile.Services
+namespace InventoryMobile.Services
 {
-    public class SubCategoryService : ISubCategoryService
+    public class SubCategoryService(ISubCategoryBLL subCategoryBLL) : ISubCategoryService
     {
         public async Task<List<Models.SubCategory>> GetSubCategoriesByCategoryId(int categoryId)
         {
-            var resp = await SubCategoryBLL.GetSubCategoriesByCategoryId(categoryId);
+            var resp = await subCategoryBLL.GetSubCategoriesByCategoryId(categoryId);
 
             if (resp is not null && resp.Success && resp.Content is not null)
                 return resp.Content as List<SubCategory>;
@@ -18,7 +18,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<SubCategory> GetSubCategoryById(int id)
         {
-            var resp = await SubCategoryBLL.GetSubCategoryById(id.ToString());
+            var resp = await subCategoryBLL.GetSubCategoryById(id.ToString());
 
             if (resp.Success)
                 return resp.Content as SubCategory;
@@ -28,7 +28,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<(bool, string)> AddSubcategory(SubCategory subCategory)
         {
-            var resp = await SubCategoryBLL.AddSubCategory(subCategory);
+            var resp = await subCategoryBLL.AddSubCategory(subCategory);
 
             if (resp.Success)
                 return (true, "Sub Categoria Adicionada!");
@@ -37,7 +37,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<(bool, string)> AltSubCategory(SubCategory subCategory)
         {
-            var resp = await SubCategoryBLL.AltSubCategory(subCategory);
+            var resp = await subCategoryBLL.AltSubCategory(subCategory);
 
             if (resp.Success)
                 return (true, "Sub Categoria Atualizada!");
@@ -46,7 +46,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<(bool, string)> DelSubCategory(int id)
         {
-            var resp = await SubCategoryBLL.DelSubCategory(id);
+            var resp = await subCategoryBLL.DelSubCategory(id);
 
             if (resp.Success)
                 return (true, "Sub Categoria Excluída!");

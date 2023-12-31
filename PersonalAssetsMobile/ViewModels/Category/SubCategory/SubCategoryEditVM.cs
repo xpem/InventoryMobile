@@ -1,9 +1,9 @@
-﻿using PersonalAssetsMobile.Resources.Fonts.Icons;
-using PersonalAssetsMobile.Services.Interfaces;
-using PersonalAssetsMobile.Utils;
+﻿using InventoryMobile.Resources.Fonts.Icons;
+using InventoryMobile.Services.Interfaces;
+using InventoryMobile.Utils;
 using System.Windows.Input;
 
-namespace PersonalAssetsMobile.ViewModels.Category.SubCategory
+namespace InventoryMobile.ViewModels.Category.SubCategory
 {
     public class SubCategoryEditVM : ViewModelBase, IQueryAttributable
     {

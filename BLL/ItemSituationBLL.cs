@@ -1,14 +1,20 @@
 ﻿using ApiDAL;
 using BLL.Handlers;
 using Models;
+using Models.Responses;
 
 namespace BLL
 {
-    public class ItemSituationBLL
+    public interface IItemSituationBLL
     {
-        public static async Task<BLLResponse> GetItemSituation()
+        Task<BLLResponse> GetItemSituation();
+    }
+
+    public class ItemSituationBLL(IItemSituationDAL itemSituationDAL) : IItemSituationBLL
+    {
+        public async Task<BLLResponse> GetItemSituation()
         {
-            var resp = await ItemSituationDAL.GetItemSituation();
+            var resp = await itemSituationDAL.GetItemSituation();
 
             return ApiResponseHandler.Handler<List<ItemSituation>>(resp);
         }

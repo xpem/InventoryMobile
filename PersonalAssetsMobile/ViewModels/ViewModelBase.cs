@@ -1,7 +1,7 @@
 ﻿using BLL;
 using Plugin.Connectivity;
 
-namespace PersonalAssetsMobile.ViewModels
+namespace InventoryMobile.ViewModels
 {
     public class ViewModelBase : BindableObject
     {
@@ -16,18 +16,5 @@ namespace PersonalAssetsMobile.ViewModels
         }
 
         public bool IsNotBusy => !isBusy;
-
-        public ViewModelBase()
-        {
-            if (CrossConnectivity.Current.IsConnected)
-            {
-                Task.Run(async () => isOn = await CheckServerBLL.CheckServer()).Wait();
-
-                if (!isOn)
-                    _ = Application.Current.MainPage.DisplayAlert("Aviso", "Não foi possivel se conectar a internet", null, "Ok");
-            }
-            else _ = Application.Current.MainPage.DisplayAlert("Aviso", "Não foi possivel se conectar a internet", null, "Ok");
-
-        }
     }
 }

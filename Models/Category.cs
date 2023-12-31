@@ -6,7 +6,7 @@
 
         public string? Color { get; set; }
 
-        public int? SystemDefault { get; set; }
+        public bool? SystemDefault { get; set; }
 
         public List<SubCategory>? SubCategories { get; set; }
 

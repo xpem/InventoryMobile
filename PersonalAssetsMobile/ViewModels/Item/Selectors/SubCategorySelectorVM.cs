@@ -1,10 +1,10 @@
 ﻿using Models;
-using PersonalAssetsMobile.UIModels;
-using PersonalAssetsMobile.Utils;
+using InventoryMobile.UIModels;
+using InventoryMobile.Utils;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace PersonalAssetsMobile.ViewModels.Item.Selectors
+namespace InventoryMobile.ViewModels.Item.Selectors
 {
     public class SubCategorySelectorVM : ViewModelBase, IQueryAttributable
     {
@@ -48,7 +48,7 @@ namespace PersonalAssetsMobile.ViewModels.Item.Selectors
                                 Id = subCategory.Id,
                                 Icon = SubCategoryIconsList.GetIconCode(subCategory.IconName),
                                 Name = subCategory.Name,
-                                SystemDefault = subCategory.SystemDefault != 1
+                                SystemDefault = subCategory.SystemDefault.Value
                             });
 
                 OnPropertyChanged(nameof(SubCategoryObsList));

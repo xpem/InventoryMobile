@@ -1,8 +1,8 @@
-using PersonalAssetsMobile.UIModels;
-using PersonalAssetsMobile.ViewModels.Category;
-using PersonalAssetsMobile.Views.Category;
+using InventoryMobile.UIModels;
+using InventoryMobile.ViewModels.Category;
+using InventoryMobile.Views.Category;
 
-namespace PersonalAssetsMobile.Views;
+namespace InventoryMobile.Views;
 
 public partial class CategoryList : ContentPage
 {

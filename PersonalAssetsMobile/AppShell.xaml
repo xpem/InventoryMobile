@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="PersonalAssetsMobile.AppShell"
+    x:Class="InventoryMobile.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:Components="clr-namespace:PersonalAssetsMobile.Components"
-    xmlns:Icons="clr-namespace:PersonalAssetsMobile.Resources.Fonts.Icons"
-    xmlns:local="clr-namespace:PersonalAssetsMobile.Views"
-    xmlns:vm="clr-namespace:PersonalAssetsMobile.ViewModels"
+    xmlns:Components="clr-namespace:InventoryMobile.Components"
+    xmlns:Icons="clr-namespace:InventoryMobile.Resources.Fonts.Icons"
+    xmlns:local="clr-namespace:InventoryMobile.Views"
+    xmlns:vm="clr-namespace:InventoryMobile.ViewModels"
     FlyoutBackgroundColor="#29A0B1">
     <!--  x:DataType="vm:AppShellVM"  -->
 

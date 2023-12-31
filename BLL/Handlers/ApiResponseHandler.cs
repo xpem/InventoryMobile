@@ -42,7 +42,12 @@ namespace BLL.Handlers
         {
             try
             {
-                var item = JsonSerializer.Deserialize<TModel>(content);
+                JsonSerializerOptions options = new()
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                TModel? item = JsonSerializer.Deserialize<TModel>(content, options);
                 if (item is not null)
                     return item;
                 else throw new Exception("item nulo");

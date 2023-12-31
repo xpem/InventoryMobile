@@ -1,4 +1,4 @@
-namespace PersonalAssetsMobile.Components;
+namespace InventoryMobile.Components;
 
 public partial class BorderedEntry : VerticalStackLayout
 {

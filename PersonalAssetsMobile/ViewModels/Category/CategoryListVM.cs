@@ -1,10 +1,10 @@
-﻿using PersonalAssetsMobile.Services.Interfaces;
-using PersonalAssetsMobile.UIModels;
-using PersonalAssetsMobile.Views.Category;
+﻿using InventoryMobile.Services.Interfaces;
+using InventoryMobile.UIModels;
+using InventoryMobile.Views.Category;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace PersonalAssetsMobile.ViewModels.Category
+namespace InventoryMobile.ViewModels.Category
 {
     public class CategoryListVM : ViewModelBase
     {

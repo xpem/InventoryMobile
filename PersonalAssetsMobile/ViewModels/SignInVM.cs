@@ -1,14 +1,16 @@
-﻿using PersonalAssetsMobile.Services;
-using PersonalAssetsMobile.Views;
+﻿using BLL;
+using BLL.Interface;
+using InventoryMobile.Services;
+using InventoryMobile.Views;
 using Plugin.Connectivity;
 using System.Windows.Input;
 
-namespace PersonalAssetsMobile.ViewModels
+namespace InventoryMobile.ViewModels
 {
-    public class SignInVM : ViewModelBase
+    public class SignInVM(IUserBLL userBLL) : ViewModelBase
     {
 
-        string email, password, btnSignInText = "Acessar";
+        string email = "", password = "", btnSignInText = "Acessar";
 
         bool btnSignInEnabled = true;
 
@@ -19,12 +21,6 @@ namespace PersonalAssetsMobile.ViewModels
         public string BtnSignInText { get => btnSignInText; set { if (btnSignInText != value) { btnSignInText = value; OnPropertyChanged(nameof(BtnSignInText)); } } }
 
         public bool BtnSignInEnabled { get => btnSignInEnabled; set { if (btnSignInEnabled != value) { btnSignInEnabled = value; OnPropertyChanged(nameof(BtnSignInEnabled)); } } }
-
-
-        public SignInVM()
-        {
-            Email = Password = "";
-        }
 
         public ICommand SignUpCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(SignUp)}"));
 
@@ -45,12 +41,27 @@ namespace PersonalAssetsMobile.ViewModels
                             btnSignInText = "Acessando...";
                             BtnSignInEnabled = false;
 
-                            string message = await UserService.SignIn(email, password);
+                            var resp = await userBLL.SignIn(Email, Password);
 
-                            if (message is null)
+                            if (resp.Success)
+                            {
                                 await Shell.Current.GoToAsync($"//{nameof(Main)}");
+
+                                //Application.Current.MainPage = new NavigationPage();
+                                //_ = (Application.Current.MainPage.Navigation).PushAsync(navigation.ResolvePage<Main>(), true);
+                            }
                             else
-                                await Application.Current.MainPage.DisplayAlert("Aviso", message, null, "Ok");
+                            {
+                                string errorMessage = "";
+
+                                if (resp.Error == Models.Responses.ErrorTypes.WrongEmailOrPassword)
+                                    errorMessage = "Email/senha incorretos";
+                                else if (resp.Error == Models.Responses.ErrorTypes.ServerUnavaliable)
+                                    errorMessage = "Servidor indisponível, favor entrar em contato com o desenvolvedor.";
+                                else errorMessage = "Erro não mapeado, favor entrar em contato com o desenvolvedor.";
+
+                                await Application.Current.MainPage.DisplayAlert("Aviso", errorMessage, null, "Ok");
+                            }
 
                             BtnSignInEnabled = true;
                             btnSignInText = "Acessar";

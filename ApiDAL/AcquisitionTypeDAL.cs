@@ -3,8 +3,13 @@ using Models.Responses;
 
 namespace ApiDAL
 {
-    public static class AcquisitionTypeDAL
+    public interface IAcquisitionTypeDAL
     {
-        public static async Task<ApiResponse> GetAcquisitionType() => await HttpClientFunctions.AuthRequest(Models.RequestsTypes.Get, ApiKeys.ApiUri + "/acquisitiontype");
+        Task<ApiResponse> GetAcquisitionType();
+    }
+
+    public class AcquisitionTypeDAL(IHttpClientFunctions httpClientFunctions) : IAcquisitionTypeDAL
+    {
+        public async Task<ApiResponse> GetAcquisitionType() => await httpClientFunctions.AuthRequest(Models.RequestsTypes.Get, ApiKeys.ApiAddress + "/acquisitiontype");
     }
 }

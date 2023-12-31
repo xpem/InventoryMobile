@@ -1,23 +1,38 @@
-﻿using PersonalAssetsMobile.Views;
+﻿using BLL;
+using BLL.Interface;
+using InventoryMobile.Views;
+using Plugin.Connectivity;
 
-namespace PersonalAssetsMobile;
+namespace InventoryMobile;
 
 public partial class App : Application
 {
-    public App()
+    public App(IBuildDbBLL buildDbBLL, IUserBLL userBLL, ICheckServerBLL checkServerBLL)
     {
-        InitializeComponent();
+        try
+        {
+            buildDbBLL.Init();
 
-        MainPage = new AppShell(new ViewModels.AppShellVM());
-    }
+            InitializeComponent();
 
-    protected override async void OnStart()
-    {
-        await LocalDbDAL.BuildDbDAL.BuildDB();
+            Models.User user = userBLL.GetUserLocal();
+            MainPage = new AppShell(new ViewModels.AppShellVM());
 
-        if ((await LocalDbDAL.UserLocalDAl.GetUser()) is not null)
-            await Shell.Current.GoToAsync($"//{nameof(Main)}");
+            bool isOn = false;
 
-        base.OnStart();
+            if (CrossConnectivity.Current.IsConnected)
+            {
+                Task.Run(async () => isOn = await checkServerBLL.CheckServer()).Wait();
+
+                if (!isOn)
+                    _ = Application.Current.MainPage.DisplayAlert("Aviso", "Não foi possivel se conectar a internet", null, "Ok");
+            }
+            else _ = Application.Current.MainPage.DisplayAlert("Aviso", "Não foi possivel se conectar a internet", null, "Ok");
+
+
+            if (user != null)
+                Shell.Current.GoToAsync($"//{nameof(Main)}");
+        }
+        catch { throw; }
     }
 }

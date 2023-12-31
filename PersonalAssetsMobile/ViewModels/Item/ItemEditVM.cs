@@ -1,15 +1,16 @@
 ﻿using Models;
-using PersonalAssetsMobile.Resources.Fonts.Icons;
-using PersonalAssetsMobile.Services.Interfaces;
-using PersonalAssetsMobile.UIModels;
-using PersonalAssetsMobile.Views.Item;
+using InventoryMobile.Resources.Fonts.Icons;
+using InventoryMobile.Services.Interfaces;
+using InventoryMobile.UIModels;
+using InventoryMobile.Views.Item;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows.Input;
+using BLL;
 
-namespace PersonalAssetsMobile.ViewModels.Item
+namespace InventoryMobile.ViewModels.Item
 {
-    public class ItemEditVM : ViewModelBase, IQueryAttributable
+    public class ItemEditVM(IAcquisitionTypeService _acquisitionTypeService, IItemService _itemService, IItemSituationBLL itemSituationBLL) : ViewModelBase, IQueryAttributable
     {
         #region fields
 
@@ -142,17 +143,6 @@ namespace PersonalAssetsMobile.ViewModels.Item
             }
         }
 
-        readonly IItemSituationService itemSituationService;
-        readonly IAcquisitionTypeService acquisitionTypeService;
-        readonly IItemService itemService;
-
-        public ItemEditVM(IItemSituationService _itemSituationService, IAcquisitionTypeService _acquisitionTypeService, IItemService _itemService)
-        {
-            itemSituationService = _itemSituationService;
-            acquisitionTypeService = _acquisitionTypeService;
-            itemService = _itemService;
-        }
-
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
             //backing of Category Selection Function
@@ -175,9 +165,13 @@ namespace PersonalAssetsMobile.ViewModels.Item
             {
                 DateTime acquisitionDate = DateTime.Now;
 
-                ItemsSituationObsList = new();
+                ItemsSituationObsList = [];
+                List<ItemSituation> itemSituationList = [];
 
-                List<Models.ItemSituation> itemSituationList = await itemSituationService.GetItemSituation();
+                var resp = await itemSituationBLL.GetItemSituation();
+
+                if (resp is not null && resp.Success)
+                    itemSituationList = resp.Content as List<ItemSituation>;
 
                 ItemsSituationObsList.Add(new UIItemSituation() { Id = -1, Name = "Selecione" });
 
@@ -186,9 +180,9 @@ namespace PersonalAssetsMobile.ViewModels.Item
 
                 OnPropertyChanged(nameof(ItemsSituationObsList));
 
-                AcquisitionTypeObsList = new();
+                AcquisitionTypeObsList = [];
 
-                List<AcquisitionType> acquisitionTypeList = await acquisitionTypeService.GetAcquisitionType();
+                List<AcquisitionType> acquisitionTypeList = await _acquisitionTypeService.GetAcquisitionType();
 
                 AcquisitionTypeObsList.Add(new UIAcquisitionType() { Id = -1, Name = "Selecione" });
 
@@ -200,11 +194,11 @@ namespace PersonalAssetsMobile.ViewModels.Item
                 if (query.ContainsKey("Id") && query.TryGetValue("Id", out object itemId))
                 {
                     ItemId = Convert.ToInt32(itemId);
-                    Models.Item item = await itemService.GetItemById(ItemId);
+                    Models.Item item = await _itemService.GetItemById(ItemId);
 
                     acquisitionDate = item.AcquisitionDate;
                     Name = item.Name;
-                    AcquisitionValue = item.PurchaseValue;
+                    AcquisitionValue = item.PurchaseValue.ToString();
 
                     string categoryAndSubCategory = item.Category.Name;
                     CategoryId = item.Category.Id;
@@ -219,10 +213,10 @@ namespace PersonalAssetsMobile.ViewModels.Item
                     Description = item.TechnicalDescription;
                     Commentary = item.Comment;
 
-                    PkrItemSituationSelectedIndex = ItemsSituationObsList.IndexOf(ItemsSituationObsList.Where(s => s.Id == item.Situation.Value).First());
+                    PkrItemSituationSelectedIndex = ItemsSituationObsList.IndexOf(ItemsSituationObsList.Where(s => s.Id == item.Situation.Id).First());
                     PkrAcquisitionTypeSelectedIndex = AcquisitionTypeObsList.IndexOf(AcquisitionTypeObsList.Where(s => s.Id == item.AcquisitionType).First());
 
-                    ResaleValue = item.ResaleValue;
+                    ResaleValue = item.ResaleValue.ToString();
                     AcquisitionStore = item.PurchaseStore;
 
                     BtnInsertIcon = Icons.Pen;
@@ -253,7 +247,7 @@ namespace PersonalAssetsMobile.ViewModels.Item
             {
                 IsBusy = true;
 
-                await itemService.DelItem(ItemId);
+                await _itemService.DelItem(ItemId);
 
                 IsBusy = false;
 
@@ -280,9 +274,9 @@ namespace PersonalAssetsMobile.ViewModels.Item
                         AcquisitionType = AcquisitionTypeObsList[pkrAcquisitionTypeSelectedIndex].Id,
                         Comment = Commentary?.Trim(),
                         PurchaseStore = AcquisitionStore?.Trim(),
-                        PurchaseValue = decAquisitionValue.ToString(),
-                        Situation = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id,
-                        ResaleValue = decResaleValue.ToString(),
+                        PurchaseValue = decAquisitionValue,
+                        Situation = new ItemSituation() { Id = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id },
+                        ResaleValue = decResaleValue,
                         TechnicalDescription = Description.Trim(),
                         Category = new Models.Category() { Id = CategoryId, SubCategory = SubCategoryId is not null ? new Models.SubCategory() { Id = SubCategoryId.Value } : null },
                     };
@@ -292,10 +286,10 @@ namespace PersonalAssetsMobile.ViewModels.Item
                     if (ItemId > 0)
                     {
                         item.Id = ItemId;
-                        (_, message) = await itemService.AltItem(item);
+                        (_, message) = await _itemService.AltItem(item);
                     }
                     else
-                        (_, message) = await itemService.AddItem(item);
+                        (_, message) = await _itemService.AddItem(item);
 
                     bool resposta = await Application.Current.MainPage.DisplayAlert("Aviso", message, null, "Ok");
 

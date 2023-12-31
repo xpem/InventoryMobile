@@ -1,29 +1,30 @@
 ﻿using ApiDAL;
 using BLL.Handlers;
 using Models;
+using Models.Responses;
 using System.Text.Json.Nodes;
 
 namespace BLL
 {
-    public class SubCategoryBLL
+    public class SubCategoryBLL(SubCategoryApiDAL subCategoryApiDAL) : ISubCategoryBLL
     {
-        public static async Task<BLLResponse> GetSubCategoriesByCategoryId(int categoryId)
+        public async Task<BLLResponse> GetSubCategoriesByCategoryId(int categoryId)
         {
-            var resp = await SubCategoryApiDAL.GetSubCategoriesByCategoryId(categoryId.ToString());
+            var resp = await subCategoryApiDAL.GetSubCategoriesByCategoryId(categoryId.ToString());
 
             return ApiResponseHandler.Handler<List<SubCategory>>(resp);
         }
 
-        public static async Task<BLLResponse> GetSubCategoryById(string id)
+        public async Task<BLLResponse> GetSubCategoryById(string id)
         {
-            var resp = await SubCategoryApiDAL.GetSubCategoryById(id);
+            var resp = await subCategoryApiDAL.GetSubCategoryById(id);
 
             return ApiResponseHandler.Handler<SubCategory>(resp);
         }
 
-        public static async Task<BLLResponse> AddSubCategory(SubCategory subCategory)
+        public async Task<BLLResponse> AddSubCategory(SubCategory subCategory)
         {
-            var resp = await SubCategoryApiDAL.AddSubCategory(subCategory);
+            var resp = await subCategoryApiDAL.AddSubCategory(subCategory);
 
             if (resp is not null && resp.Success && resp.Content is not null)
             {
@@ -35,7 +36,7 @@ namespace BLL
                         Id = jResp["Id"]?.GetValue<int>() ?? 0,
                         Name = jResp["Name"]?.GetValue<string>(),
                         IconName = jResp["IconName"]?.GetValue<string>(),
-                        SystemDefault = jResp["SystemDefault"]?.GetValue<int>()
+                        SystemDefault = jResp["SystemDefault"]?.GetValue<bool>()
                     };
 
                     return new BLLResponse() { Success = resp.Success, Content = subCategoryResp };
@@ -46,9 +47,9 @@ namespace BLL
             return new BLLResponse() { Success = false, Content = null };
         }
 
-        public static async Task<BLLResponse> AltSubCategory(SubCategory subCategory)
+        public async Task<BLLResponse> AltSubCategory(SubCategory subCategory)
         {
-            var resp = await SubCategoryApiDAL.AltSubCategory(subCategory);
+            var resp = await subCategoryApiDAL.AltSubCategory(subCategory);
 
             if (resp is not null && resp.Content is not null)
             {
@@ -62,7 +63,7 @@ namespace BLL
                             Id = jResp["Id"]?.GetValue<int>() ?? 0,
                             Name = jResp["Name"]?.GetValue<string>(),
                             IconName = jResp["IconName"]?.GetValue<string>(),
-                            SystemDefault = jResp["SystemDefault"]?.GetValue<int>()
+                            SystemDefault = jResp["SystemDefault"]?.GetValue<bool>()
                         };
 
                         return new BLLResponse() { Success = resp.Success, Content = subCategoryResp };
@@ -74,9 +75,9 @@ namespace BLL
             return new BLLResponse() { Success = false, Content = null };
         }
 
-        public static async Task<BLLResponse> DelSubCategory(int id)
+        public async Task<BLLResponse> DelSubCategory(int id)
         {
-            var resp = await SubCategoryApiDAL.DelSubCategory(id);
+            var resp = await subCategoryApiDAL.DelSubCategory(id);
 
             if (resp is not null && resp.Content is not null)
                 return new BLLResponse() { Success = resp.Success, Content = resp.Content };

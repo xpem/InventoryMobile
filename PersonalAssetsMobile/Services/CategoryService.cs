@@ -1,15 +1,16 @@
 ﻿using BLL;
 using Models;
-using PersonalAssetsMobile.Services.Interfaces;
+using InventoryMobile.Services.Interfaces;
+using Models.Responses;
 
-namespace PersonalAssetsMobile.Services
+namespace InventoryMobile.Services
 {
-    public class CategoryService : ICategoryService
+    public class CategoryService(ICategoryBLL categoryBLL) : ICategoryService
     {
 
         public async Task<List<Category>> GetCategories()
         {
-            BLLResponse resp = await CategoryBLL.GetCategories();
+            BLLResponse resp = await categoryBLL.GetCategories();
 
             if (resp is not null && resp.Success)
                 return resp.Content as List<Category>;
@@ -19,7 +20,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<List<Category>> GetCategoriesWithSubCategories()
         {
-            BLLResponse resp = await CategoryBLL.GetCategoriesWithSubCategories();
+            BLLResponse resp = await categoryBLL.GetCategoriesWithSubCategories();
 
             if (resp is not null && resp.Success)
                 return resp.Content as List<Category>;
@@ -29,7 +30,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<Category> GetCategoryById(int id)
         {
-            BLLResponse resp = await CategoryBLL.GetCategoryById(id.ToString());
+            BLLResponse resp = await categoryBLL.GetCategoryById(id.ToString());
 
             if (resp.Success)
                 return resp.Content as Category;
@@ -39,7 +40,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<(bool, string)> AddCategory(Category category)
         {
-            BLLResponse resp = await CategoryBLL.AddCategory(category);
+            BLLResponse resp = await categoryBLL.AddCategory(category);
 
             if (resp.Success)
                 return (true, "Categoria Adicionada!");
@@ -48,7 +49,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<(bool, string)> AltCategory(Category category)
         {
-            BLLResponse resp = await CategoryBLL.AltCategory(category);
+            BLLResponse resp = await categoryBLL.AltCategory(category);
 
             if (resp.Success)
                 return (true, "Categoria Atualizada!");
@@ -57,7 +58,7 @@ namespace PersonalAssetsMobile.Services
 
         public async Task<(bool, string)> DelCategory(int id)
         {
-            BLLResponse resp = await CategoryBLL.DelCategory(id);
+            BLLResponse resp = await categoryBLL.DelCategory(id);
 
             if (resp.Success)
                 return (true, "Categoria Excluída!");

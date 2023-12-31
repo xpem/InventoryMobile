@@ -1,11 +1,11 @@
-﻿using PersonalAssetsMobile.Services.Interfaces;
-using PersonalAssetsMobile.Utils;
-using PersonalAssetsMobile.Views.Category;
-using PersonalAssetsMobile.Views.Category.SubCategory;
+﻿using InventoryMobile.Services.Interfaces;
+using InventoryMobile.Utils;
+using InventoryMobile.Views.Category;
+using InventoryMobile.Views.Category.SubCategory;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace PersonalAssetsMobile.ViewModels.Category
+namespace InventoryMobile.ViewModels.Category
 {
     public class CategoryDisplayVM : ViewModelBase, IQueryAttributable
     {
@@ -141,7 +141,7 @@ namespace PersonalAssetsMobile.ViewModels.Category
 
             CategoryColor = Color.FromArgb(category.Color);
             Name = category.Name;
-            SystemDefault = category.SystemDefault != 1;
+            SystemDefault = category.SystemDefault.Value;
             SubCategoryObsCol = new();
 
             List<Models.SubCategory> subCategoryList = await subCategoryService.GetSubCategoriesByCategoryId(Id);
@@ -149,7 +149,7 @@ namespace PersonalAssetsMobile.ViewModels.Category
             //System.Text.RegularExpressions.Regex.Unescape(@"\" + subCategory.Icon)
             if (subCategoryList != null && subCategoryList.Count > 0)
                 foreach (var subCategory in subCategoryList)
-                    SubCategoryObsCol.Add(new UIModels.UISubCategory() { Id = subCategory.Id, Icon = SubCategoryIconsList.GetIconCode(subCategory.IconName), Name = subCategory.Name, SystemDefault = subCategory.SystemDefault != 1 });
+                    SubCategoryObsCol.Add(new UIModels.UISubCategory() { Id = subCategory.Id, Icon = SubCategoryIconsList.GetIconCode(subCategory.IconName), Name = subCategory.Name, SystemDefault = subCategory.SystemDefault.Value });
 
 
             OnPropertyChanged(nameof(SubCategoryObsCol));

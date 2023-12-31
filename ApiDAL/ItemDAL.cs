@@ -1,20 +1,28 @@
 ﻿using ApiRepos;
 using Models;
 using Models.Responses;
-using System.Net.NetworkInformation;
 using System.Text.Json;
 
 namespace ApiDAL
 {
-    public static class ItemDAL
+    public interface IItemDAL
     {
-        public static async Task<ApiResponse> GetItems() =>
-            await HttpClientFunctions.AuthRequest(RequestsTypes.Get, ApiKeys.ApiUri + "/item");
+        Task<ApiResponse> AddItem(Item item);
+        Task<ApiResponse> AltItem(Item item);
+        Task<ApiResponse> DelItem(int id);
+        Task<ApiResponse> GetItemById(string id);
+        Task<ApiResponse> GetItems();
+    }
 
-        public static async Task<ApiResponse> GetItemById(string id) =>
-           await HttpClientFunctions.AuthRequest(RequestsTypes.Get, ApiKeys.ApiUri + "/item/" + id);
+    public class ItemDAL(IHttpClientFunctions httpClientFunctions) : IItemDAL
+    {
+        public async Task<ApiResponse> GetItems() =>
+            await httpClientFunctions.AuthRequest(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item");
 
-        public static async Task<ApiResponse> AddItem(Models.Item item)
+        public async Task<ApiResponse> GetItemById(string id) =>
+           await httpClientFunctions.AuthRequest(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item/" + id);
+
+        public async Task<ApiResponse> AddItem(Models.Item item)
         {
             try
             {
@@ -32,12 +40,12 @@ namespace ApiDAL
                     Category = new { item.Category?.Id, SubCategory = item.Category?.SubCategory is not null ? new { item.Category.SubCategory.Id } : null }
                 });
 
-                return await HttpClientFunctions.AuthRequest(Models.RequestsTypes.Post, ApiKeys.ApiUri + "/item", json);
+                return await httpClientFunctions.AuthRequest(Models.RequestsTypes.Post, ApiKeys.ApiAddress + "/Inventory/item", json);
             }
             catch (Exception ex) { throw ex; }
         }
 
-        public static async Task<ApiResponse> AltItem(Models.Item item)
+        public async Task<ApiResponse> AltItem(Models.Item item)
         {
             try
             {
@@ -55,18 +63,18 @@ namespace ApiDAL
                     Category = new { item.Category?.Id, SubCategory = item.Category?.SubCategory is not null ? new { item.Category.SubCategory.Id } : null }
                 });
 
-                return await HttpClientFunctions.AuthRequest(Models.RequestsTypes.Put, ApiKeys.ApiUri + "/item/" + item.Id, json);
+                return await httpClientFunctions.AuthRequest(Models.RequestsTypes.Put, ApiKeys.ApiAddress + "/Inventory/item/" + item.Id, json);
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex) { throw; }
         }
 
-        public static async Task<ApiResponse> DelItem(int id)
+        public async Task<ApiResponse> DelItem(int id)
         {
             try
             {
-                return await HttpClientFunctions.AuthRequest(RequestsTypes.Delete, ApiKeys.ApiUri + "/item/" + id);
+                return await httpClientFunctions.AuthRequest(RequestsTypes.Delete, ApiKeys.ApiAddress + "/Inventory/item/" + id);
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex) { throw; }
         }
 
     }

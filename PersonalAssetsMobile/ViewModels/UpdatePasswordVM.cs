@@ -1,10 +1,12 @@
-﻿using PersonalAssetsMobile.Services;
-using PersonalAssetsMobile.Utils;
+﻿using BLL;
+using BLL.Interface;
+using InventoryMobile.Services;
+using InventoryMobile.Utils;
 using System.Windows.Input;
 
-namespace PersonalAssetsMobile.ViewModels
+namespace InventoryMobile.ViewModels
 {
-    public class UpdatePasswordVM : ViewModelBase
+    public class UpdatePasswordVM(IUserBLL userBLL) : ViewModelBase
     {
         string email;
         string btnSendEmailText = "Enviar Email";
@@ -36,8 +38,7 @@ namespace PersonalAssetsMobile.ViewModels
             }
             else
             {
-                //condicionar mensagem de sucesso
-                string message = await UserService.RecoverPassword(Email);
+                userBLL.RecoverPassword(Email);
 
                 await Application.Current.MainPage.DisplayAlert("Aviso", "Email de alteração de senha enviado!", null, "Ok");
 

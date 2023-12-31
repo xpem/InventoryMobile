@@ -1,19 +1,25 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-using PersonalAssetsMobile.Services;
-using PersonalAssetsMobile.Services.Interfaces;
-using PersonalAssetsMobile.ViewModels;
-using PersonalAssetsMobile.ViewModels.Category;
-using PersonalAssetsMobile.ViewModels.Category.SubCategory;
-using PersonalAssetsMobile.ViewModels.Item;
-using PersonalAssetsMobile.ViewModels.Item.Selectors;
-using PersonalAssetsMobile.Views;
-using PersonalAssetsMobile.Views.Category;
-using PersonalAssetsMobile.Views.Category.SubCategory;
-using PersonalAssetsMobile.Views.Item;
-using PersonalAssetsMobile.Views.Item.Selectors;
+using InventoryMobile.Services;
+using InventoryMobile.Services.Interfaces;
+using InventoryMobile.ViewModels;
+using InventoryMobile.ViewModels.Category;
+using InventoryMobile.ViewModels.Category.SubCategory;
+using InventoryMobile.ViewModels.Item;
+using InventoryMobile.ViewModels.Item.Selectors;
+using InventoryMobile.Views;
+using InventoryMobile.Views.Category;
+using InventoryMobile.Views.Category.SubCategory;
+using InventoryMobile.Views.Item;
+using InventoryMobile.Views.Item.Selectors;
+using BLL;
+using DbContextDAL;
+using DbContextDAL.Interface;
+using BLL.Interface;
+using ApiDAL.Interfaces;
+using ApiDAL;
 
-namespace PersonalAssetsMobile;
+namespace InventoryMobile;
 
 public static class MauiProgram
 {
@@ -21,6 +27,7 @@ public static class MauiProgram
     {
         //todo
         //
+        //efetuar build de distribuição local do app para testes
         //cadastro de items com dependencia
         //implementar um dark theme padrão
         //implementar auto complete no campo "loja"
@@ -85,13 +92,40 @@ public static class MauiProgram
 
         #endregion
 
-        #region services
+        #region UIServices
 
         builder.Services.AddScoped<ICategoryService, CategoryService>();
         builder.Services.AddScoped<ISubCategoryService, SubCategoryService>();
-        builder.Services.AddScoped<IItemSituationService, ItemSituationService>();
         builder.Services.AddScoped<IAcquisitionTypeService, AcquisitionTypeService>();
         builder.Services.AddScoped<IItemService, ItemService>();
+
+        #endregion
+
+        builder.Services.AddDbContext<InventoryDbContextDAL>();
+
+        #region BLL
+
+        builder.Services.AddScoped<IBuildDbBLL, BuildDbBLL>();
+        builder.Services.AddScoped<IUserBLL, UserBLL>();
+        builder.Services.AddScoped<ICheckServerBLL, CheckServerBLL>();
+        builder.Services.AddScoped<IItemBLL, ItemBLL>();
+        builder.Services.AddScoped<IItemSituationBLL, ItemSituationBLL>();
+
+        #endregion
+
+        #region DAL
+
+        builder.Services.AddScoped<IUserDAL, UserDAL>();
+        builder.Services.AddScoped<IItemSituationDAL, ItemSituationDAL>();
+
+        #endregion
+
+        #region ApiDAL
+
+        builder.Services.AddScoped<IHttpClientFunctions, HttpClientFunctions>();
+        builder.Services.AddScoped<IUserApiDAL, UserApiDAL>();
+        builder.Services.AddScoped<IItemDAL, ItemDAL>();
+
         #endregion
 
         #endregion

@@ -1,7 +1,7 @@
-using PersonalAssetsMobile.UIModels;
-using PersonalAssetsMobile.ViewModels.Item.Selectors;
+using InventoryMobile.UIModels;
+using InventoryMobile.ViewModels.Item.Selectors;
 
-namespace PersonalAssetsMobile.Views.Item.Selectors;
+namespace InventoryMobile.Views.Item.Selectors;
 
 public partial class SubCategorySelector : ContentPage
 {

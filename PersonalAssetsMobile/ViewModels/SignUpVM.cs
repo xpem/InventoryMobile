@@ -1,11 +1,13 @@
-﻿using PersonalAssetsMobile.Services;
-using PersonalAssetsMobile.Utils;
+﻿using BLL;
+using BLL.Interface;
+using InventoryMobile.Services;
+using InventoryMobile.Utils;
 using Plugin.Connectivity;
 using System.Windows.Input;
 
-namespace PersonalAssetsMobile.ViewModels
+namespace InventoryMobile.ViewModels
 {
-    public class SignUpVM : ViewModelBase
+    public class SignUpVM(IUserBLL userBLL) : ViewModelBase
     {
         string name, email, password, confirmPassword;
         bool btnIsEnabled = true;
@@ -20,7 +22,7 @@ namespace PersonalAssetsMobile.ViewModels
 
         public bool BtnIsEnabled { get => btnIsEnabled; set { if (btnIsEnabled != value) { btnIsEnabled = value; OnPropertyChanged(nameof(BtnIsEnabled)); } } }
 
-        public ICommand AddUserCommand => new Command(async () =>
+        public ICommand SignUpCommand => new Command(async () =>
         {
             if (!CrossConnectivity.Current.IsConnected)
             {
@@ -33,17 +35,17 @@ namespace PersonalAssetsMobile.ViewModels
                 btnIsEnabled = false;
 
                 //
-                (bool success, string message) = await UserService.AddUser(name, email, password);
+                Models.Responses.BLLResponse resp = userBLL.AddUser(name, email, password);
 
-                if (success)
+                if (!resp.Success)
+                    await Application.Current.MainPage.DisplayAlert("Erro", "Não foi possível cadastrar o usuário!", null, "Ok");
+                else
                 {
                     bool res = await Application.Current.MainPage.DisplayAlert("Aviso", "Usuário cadastrado!", null, "Ok");
 
                     if (!res)
                         await Shell.Current.GoToAsync("..");
                 }
-                else
-                    await Application.Current.MainPage.DisplayAlert("Aviso", message, null, "Ok");
             }
         });
 
@@ -71,12 +73,11 @@ namespace PersonalAssetsMobile.ViewModels
 
             if (string.IsNullOrEmpty(ConfirmPassword))
                 validInformation = false;
-            else if (ConfirmPassword.ToUpper() != Password.ToUpper())
+            else if (!ConfirmPassword.Equals(Password, StringComparison.CurrentCultureIgnoreCase))
                 validInformation = false;
 
             if (!validInformation)
                 _ = Application.Current.MainPage.DisplayAlert("Aviso", "Preencha os campos e confirme a senha corretamente", null, "Ok");
-
 
             return validInformation;
         }

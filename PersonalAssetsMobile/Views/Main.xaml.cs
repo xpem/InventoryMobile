@@ -1,8 +1,8 @@
-using PersonalAssetsMobile.UIModels;
-using PersonalAssetsMobile.ViewModels;
-using PersonalAssetsMobile.Views.Item;
+using InventoryMobile.UIModels;
+using InventoryMobile.ViewModels;
+using InventoryMobile.Views.Item;
 
-namespace PersonalAssetsMobile.Views;
+namespace InventoryMobile.Views;
 
 public partial class Main : ContentPage
 {

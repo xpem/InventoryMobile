@@ -1,17 +1,20 @@
 ﻿using Models;
-using PersonalAssetsMobile.Resources.Fonts.Icons;
-using PersonalAssetsMobile.Services.Interfaces;
-using PersonalAssetsMobile.UIModels;
-using PersonalAssetsMobile.Utils;
-using PersonalAssetsMobile.Views.Item;
+using InventoryMobile.Resources.Fonts.Icons;
+using InventoryMobile.Services.Interfaces;
+using InventoryMobile.UIModels;
+using InventoryMobile.Utils;
+using InventoryMobile.Views.Item;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 using System.Windows.Input;
 using System.Xml.Linq;
+using BLL;
+using Models.Responses;
+using ApiDAL;
 
-namespace PersonalAssetsMobile.ViewModels
+namespace InventoryMobile.ViewModels
 {
-    public class MainVM : ViewModelBase
+    public class MainVM(IItemBLL itemBLL, IItemSituationBLL itemSituationBLL) : ViewModelBase
     {
         //  public ObservableCollection<ItemGroup> Items { get; } = new();
         readonly Color BgButtonSelectedColor = Color.FromArgb("#29A0B1");
@@ -107,7 +110,7 @@ namespace PersonalAssetsMobile.ViewModels
         {
             IsBusy = true;
 
-            ItemsObsList = new();
+            ItemsObsList = [];
 
             foreach (var i in ListAllItems.Where(x => x.SituationId == SelectedUIItemsStatus.Id))//SelectedUIItemsStatus.Any(y => y.Id == x.SituationId)))
             {
@@ -115,21 +118,6 @@ namespace PersonalAssetsMobile.ViewModels
             }
 
             IsBusy = false;
-        }
-
-        readonly IItemSituationService itemSituationService;
-
-        readonly IItemService itemService;
-
-        public MainVM(IItemSituationService _itemSituationService, IItemService _itemService)
-        {
-            itemSituationService = _itemSituationService;
-            itemService = _itemService;
-            //ItemsStatus = new();
-            //foreach (var _status in ItemsStatusList.itemsStatus)
-            //{
-            //    ItemsStatus.Add(_status);
-            //}
         }
 
         public ICommand OnAppearingCommand => new Command(async (e) =>
@@ -141,14 +129,27 @@ namespace PersonalAssetsMobile.ViewModels
                 {
                     Color backgoundColor;
 
-                    List<Models.ItemSituation> itemSituationList = await itemSituationService.GetItemSituation();
-                    var listItems = await itemService.GetItems();
+                    List<Models.ItemSituation> itemSituationList = [];
+
+                    var respItemSituation = await itemSituationBLL.GetItemSituation();
+
+                    if (respItemSituation is not null && respItemSituation.Success)
+                        itemSituationList = respItemSituation.Content as List<ItemSituation>;
+
+                    var respItems = await itemBLL.GetItems();
+
+                    List<Models.Item> itemList = [];
+                    if (respItems is not null && respItems.Success)
+                    {
+                        itemList = respItems.Content as List<Models.Item>;
+                        itemList = [.. (from item in itemList orderby item.CreatedAt descending select item)];
+                    }
 
                     if (itemSituationList is not null && itemSituationList.Count > 0)
                     {
                         if (SelectedUIItemsStatus is null)
                         {
-                            ItemsSituationObsList = new();
+                            ItemsSituationObsList = [];
                             string textSituationItem;
 
                             for (int i = 0; i < itemSituationList.Count; i++)
@@ -157,9 +158,8 @@ namespace PersonalAssetsMobile.ViewModels
                                     backgoundColor = Color.FromArgb("#29A0B1");
                                 else
                                     backgoundColor = Color.FromArgb("#919191");
-                                var teste = listItems.Where(x => x.Situation == itemSituationList[i].Id);
 
-                                textSituationItem = $"{itemSituationList[i].Name} ({listItems.Where(x => x.Situation == itemSituationList[i].Id).Count()})";
+                                textSituationItem = $"{itemSituationList[i].Name} ({itemList.Where(x => x.Situation.Id == itemSituationList[i].Id).Count()})";
 
                                 ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituationList[i].Id, Name = textSituationItem, BackgoundColor = backgoundColor });
                             }
@@ -179,44 +179,44 @@ namespace PersonalAssetsMobile.ViewModels
 
                         //FilterItemsList();
 
-                        ItemsObsList = new();
-                        ListAllItems = new();
+                        ItemsObsList = [];
+                        ListAllItems = [];
 
                         string IconUniCode;
-
-                        foreach (var item in listItems)
-                        {
-                            string categoryAndSubCategory = "";
-
-                            categoryAndSubCategory = item.Category.Name;
-
-                            if (item.Category.SubCategory is not null)
-                                categoryAndSubCategory += "/" + item.Category.SubCategory.Name;
-
-                            if (item.Category.SubCategory is null || item.Category.SubCategory.IconName is null)
-                                IconUniCode = Icons.Tag;
-                            else
-                                IconUniCode = SubCategoryIconsList.GetIconCode(item.Category.SubCategory.IconName);
-
-
-                            UIItem uIItem = new()
+                        if (itemList is not null)
+                            foreach (var item in itemList)
                             {
-                                Id = item.Id,
-                                Name = item.Name,
-                                CategoryAndSubCategory = categoryAndSubCategory,
-                                CategoryColor = Color.FromArgb(item.Category.Color),
-                                SituationId = item.Situation.Value,
-                                SubCategoryIcon = IconUniCode,
-                            };
+                                string categoryAndSubCategory = "";
 
-                            ListAllItems.Add(uIItem);
+                                categoryAndSubCategory = item.Category.Name;
 
-                            if (item.Situation == SelectedUIItemsStatus.Id)
-                                itemsObsList.Add(uIItem);
+                                if (item.Category.SubCategory is not null)
+                                    categoryAndSubCategory += "/" + item.Category.SubCategory.Name;
 
-                            //if (SelectedUIItemsStatus.Exists(x => x.Id == item.Situation))
-                            //    ItemsObsList.Add(uIItem);
-                        }
+                                if (item.Category.SubCategory is null || item.Category.SubCategory.IconName is null)
+                                    IconUniCode = Icons.Tag;
+                                else
+                                    IconUniCode = SubCategoryIconsList.GetIconCode(item.Category.SubCategory.IconName);
+
+
+                                UIItem uIItem = new()
+                                {
+                                    Id = item.Id,
+                                    Name = item.Name,
+                                    CategoryAndSubCategory = categoryAndSubCategory,
+                                    CategoryColor = Color.FromArgb(item.Category.Color),
+                                    SituationId = item.Situation.Id,
+                                    SubCategoryIcon = IconUniCode,
+                                };
+
+                                ListAllItems.Add(uIItem);
+
+                                if (item.Situation.Id == SelectedUIItemsStatus.Id)
+                                    itemsObsList.Add(uIItem);
+
+                                //if (SelectedUIItemsStatus.Exists(x => x.Id == item.Situation))
+                                //    ItemsObsList.Add(uIItem);
+                            }
 
                         IsBusy = false;
                     }
