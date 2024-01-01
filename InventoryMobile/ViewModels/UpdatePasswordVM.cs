@@ -1,6 +1,4 @@
-﻿using BLL;
-using BLL.Interface;
-using InventoryMobile.Services;
+﻿using BLL.Interface;
 using InventoryMobile.Utils;
 using System.Windows.Input;
 

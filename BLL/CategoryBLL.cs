@@ -1,4 +1,4 @@
-﻿using ApiDAL;
+﻿using ApiDAL.Interfaces;
 using BLL.Handlers;
 using Models;
 using Models.Responses;
@@ -8,21 +8,15 @@ namespace BLL
 {
     public class CategoryBLL(ICategoryApiDAL categoryApiDAL) : ICategoryBLL
     {
-        public async Task<BLLResponse> GetCategories() =>
-            ApiResponseHandler.Handler<List<Models.Category>>(await categoryApiDAL.GetCategories());
+        public async Task<BLLResponse> GetCategoriesAsync() => ApiResponseHandler.Handler<List<Models.Category>>(await categoryApiDAL.GetCategoriesAsync());
 
+        public async Task<BLLResponse> GetCategoriesWithSubCategoriesAsync() => ApiResponseHandler.Handler<List<Models.Category>>(await categoryApiDAL.GetCategoriesWithSubCategoriesAsync());
 
-        public async Task<BLLResponse> GetCategoriesWithSubCategories() =>
-            ApiResponseHandler.Handler<List<Models.Category>>(await categoryApiDAL.GetCategoriesWithSubCategories());
+        public async Task<BLLResponse> GetCategoryByIdAsync(string id) => ApiResponseHandler.Handler<Models.Category>(await categoryApiDAL.GetCategoryByIdAsync(id));
 
-
-        public async Task<BLLResponse> GetCategoryById(string id) =>
-            ApiResponseHandler.Handler<Models.Category>(await categoryApiDAL.GetCategoryById(id));
-
-
-        public async Task<BLLResponse> AddCategory(Category category)
+        public async Task<BLLResponse> AddCategoryAsync(Category category)
         {
-            var resp = await categoryApiDAL.AddCategory(category);
+            var resp = await categoryApiDAL.AddCategoryAsync(category);
 
             if (resp is not null && resp.Content is not null)
             {
@@ -45,9 +39,9 @@ namespace BLL
             return new BLLResponse() { Success = false, Content = null };
         }
 
-        public async Task<BLLResponse> AltCategory(Category category)
+        public async Task<BLLResponse> AltCategoryAsync(Category category)
         {
-            var resp = await categoryApiDAL.AltCategory(category);
+            var resp = await categoryApiDAL.AltCategoryAsync(category);
 
             if (resp is not null && resp.Content is not null)
             {
@@ -73,9 +67,9 @@ namespace BLL
             return new BLLResponse() { Success = false, Content = null };
         }
 
-        public async Task<BLLResponse> DelCategory(int id)
+        public async Task<BLLResponse> DelCategoryAsync(int id)
         {
-            var resp = await categoryApiDAL.DelCategory(id);
+            var resp = await categoryApiDAL.DelCategoryAsync(id);
 
             if (resp is not null && resp.Content is not null)
                 return new BLLResponse() { Success = resp.Success, Content = resp.Content };

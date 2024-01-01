@@ -8,7 +8,7 @@ namespace DbContextDAL
     {
         public Models.User? GetUserLocal() => inventoryDbContextDAL.User.FirstOrDefault();
 
-        public int GetUid() => inventoryDbContextDAL.User.Select(x => x.Id).First();
+        public int? GetUid() => inventoryDbContextDAL.User.Select(x => x.Id).FirstOrDefault();
 
         public async Task<int> ExecuteAddUserAsync(User user)
         {

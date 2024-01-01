@@ -1,16 +1,16 @@
-﻿using Models;
+﻿using BLL;
 using InventoryMobile.Resources.Fonts.Icons;
-using InventoryMobile.Services.Interfaces;
 using InventoryMobile.UIModels;
 using InventoryMobile.Views.Item;
+using Models;
+using Models.Responses;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows.Input;
-using BLL;
 
 namespace InventoryMobile.ViewModels.Item
 {
-    public class ItemEditVM(IAcquisitionTypeService _acquisitionTypeService, IItemService _itemService, IItemSituationBLL itemSituationBLL) : ViewModelBase, IQueryAttributable
+    public class ItemEditVM(IItemBLL itemBLL, IItemSituationBLL itemSituationBLL, IAcquisitionTypeBLL acquisitionTypeBLL) : ViewModelBase, IQueryAttributable
     {
         #region fields
 
@@ -168,10 +168,10 @@ namespace InventoryMobile.ViewModels.Item
                 ItemsSituationObsList = [];
                 List<ItemSituation> itemSituationList = [];
 
-                var resp = await itemSituationBLL.GetItemSituation();
+                var respItemSituationList = await itemSituationBLL.GetItemSituation();
 
-                if (resp is not null && resp.Success)
-                    itemSituationList = resp.Content as List<ItemSituation>;
+                if (respItemSituationList is not null && respItemSituationList.Success)
+                    itemSituationList = respItemSituationList.Content as List<ItemSituation>;
 
                 ItemsSituationObsList.Add(new UIItemSituation() { Id = -1, Name = "Selecione" });
 
@@ -182,7 +182,12 @@ namespace InventoryMobile.ViewModels.Item
 
                 AcquisitionTypeObsList = [];
 
-                List<AcquisitionType> acquisitionTypeList = await _acquisitionTypeService.GetAcquisitionType();
+                List<AcquisitionType> acquisitionTypeList = [];
+
+                var respAcquisitionTypeList = await acquisitionTypeBLL.GetAcquisitionType();
+
+                if (respAcquisitionTypeList is not null && respAcquisitionTypeList.Success)
+                    acquisitionTypeList = respAcquisitionTypeList.Content as List<AcquisitionType>;
 
                 AcquisitionTypeObsList.Add(new UIAcquisitionType() { Id = -1, Name = "Selecione" });
 
@@ -194,31 +199,37 @@ namespace InventoryMobile.ViewModels.Item
                 if (query.ContainsKey("Id") && query.TryGetValue("Id", out object itemId))
                 {
                     ItemId = Convert.ToInt32(itemId);
-                    Models.Item item = await _itemService.GetItemById(ItemId);
+                    Models.Item item;
 
-                    acquisitionDate = item.AcquisitionDate;
-                    Name = item.Name;
-                    AcquisitionValue = item.PurchaseValue.ToString();
+                    BLLResponse resp = await itemBLL.GetItemById(ItemId.ToString());
 
-                    string categoryAndSubCategory = item.Category.Name;
-                    CategoryId = item.Category.Id;
-
-                    if (item.Category.SubCategory is not null)
+                    if (resp is not null && resp.Success)
                     {
-                        categoryAndSubCategory += "/" + item.Category.SubCategory.Name;
-                        SubCategoryId = item.Category.SubCategory.Id;
+                        item = resp.Content as Models.Item;
+
+                        acquisitionDate = item.AcquisitionDate;
+                        Name = item.Name;
+                        AcquisitionValue = item.PurchaseValue.ToString();
+
+                        string categoryAndSubCategory = item.Category.Name;
+                        CategoryId = item.Category.Id;
+
+                        if (item.Category.SubCategory is not null)
+                        {
+                            categoryAndSubCategory += "/" + item.Category.SubCategory.Name;
+                            SubCategoryId = item.Category.SubCategory.Id;
+                        }
+
+                        CategoryName = categoryAndSubCategory;
+                        Description = item.TechnicalDescription;
+                        Commentary = item.Comment;
+
+                        PkrItemSituationSelectedIndex = ItemsSituationObsList.IndexOf(ItemsSituationObsList.Where(s => s.Id == item.Situation.Id).FirstOrDefault());
+                        PkrAcquisitionTypeSelectedIndex = AcquisitionTypeObsList.IndexOf(AcquisitionTypeObsList.Where(s => s.Id == item.AcquisitionType).FirstOrDefault());
+
+                        ResaleValue = item.ResaleValue.ToString();
+                        AcquisitionStore = item.PurchaseStore;
                     }
-
-                    CategoryName = categoryAndSubCategory;
-                    Description = item.TechnicalDescription;
-                    Commentary = item.Comment;
-
-                    PkrItemSituationSelectedIndex = ItemsSituationObsList.IndexOf(ItemsSituationObsList.Where(s => s.Id == item.Situation.Id).First());
-                    PkrAcquisitionTypeSelectedIndex = AcquisitionTypeObsList.IndexOf(AcquisitionTypeObsList.Where(s => s.Id == item.AcquisitionType).First());
-
-                    ResaleValue = item.ResaleValue.ToString();
-                    AcquisitionStore = item.PurchaseStore;
-
                     BtnInsertIcon = Icons.Pen;
                     BtnInsertText = "Atualizar";
                     BtnDeleteIsVisible = true;
@@ -247,7 +258,7 @@ namespace InventoryMobile.ViewModels.Item
             {
                 IsBusy = true;
 
-                await _itemService.DelItem(ItemId);
+                await itemBLL.DelItem(ItemId);
 
                 IsBusy = false;
 
@@ -286,11 +297,18 @@ namespace InventoryMobile.ViewModels.Item
                     if (ItemId > 0)
                     {
                         item.Id = ItemId;
-                        (_, message) = await _itemService.AltItem(item);
+
+                        var resp = await itemBLL.AltItem(item);
+                        if (resp.Success)
+                            message = "Item Atualizada!";
                     }
                     else
-                        (_, message) = await _itemService.AddItem(item);
+                    {
+                        var resp = await itemBLL.AddItem(item);
 
+                        if (resp.Success)
+                            message = "Item Adicionado!";
+                    }
                     bool resposta = await Application.Current.MainPage.DisplayAlert("Aviso", message, null, "Ok");
 
                     if (!resposta)

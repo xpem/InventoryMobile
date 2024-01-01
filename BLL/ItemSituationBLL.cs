@@ -10,7 +10,7 @@ namespace BLL
         Task<BLLResponse> GetItemSituation();
     }
 
-    public class ItemSituationBLL(IItemSituationDAL itemSituationDAL) : IItemSituationBLL
+    public class ItemSituationBLL(IItemSituationApiDAL itemSituationDAL) : IItemSituationBLL
     {
         public async Task<BLLResponse> GetItemSituation()
         {

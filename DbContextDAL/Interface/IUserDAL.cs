@@ -8,7 +8,7 @@ namespace DbContextDAL.Interface
 
         int ExecuteUpdateLastUpdateUser(DateTime lastUpdate, int uid);
 
-        int GetUid();
+        int? GetUid();
 
         User? GetUserLocal();
     }

@@ -5,11 +5,11 @@ namespace BLL
 {
     public interface ICategoryBLL
     {
-        Task<BLLResponse> AddCategory(Category category);
-        Task<BLLResponse> AltCategory(Category category);
-        Task<BLLResponse> DelCategory(int id);
-        Task<BLLResponse> GetCategories();
-        Task<BLLResponse> GetCategoriesWithSubCategories();
-        Task<BLLResponse> GetCategoryById(string id);
+        Task<BLLResponse> AddCategoryAsync(Category category);
+        Task<BLLResponse> AltCategoryAsync(Category category);
+        Task<BLLResponse> DelCategoryAsync(int id);
+        Task<BLLResponse> GetCategoriesAsync();
+        Task<BLLResponse> GetCategoriesWithSubCategoriesAsync();
+        Task<BLLResponse> GetCategoryByIdAsync(string id);
     }
 }

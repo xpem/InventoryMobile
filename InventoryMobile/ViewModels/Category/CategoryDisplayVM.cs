@@ -1,13 +1,14 @@
-﻿using InventoryMobile.Services.Interfaces;
+﻿using BLL;
 using InventoryMobile.Utils;
 using InventoryMobile.Views.Category;
 using InventoryMobile.Views.Category.SubCategory;
+using Models.Responses;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels.Category
 {
-    public class CategoryDisplayVM : ViewModelBase, IQueryAttributable
+    public class CategoryDisplayVM(ICategoryBLL categoryBLL, ISubCategoryBLL subCategoryBLL) : ViewModelBase, IQueryAttributable
     {
         int Id;
 
@@ -56,7 +57,7 @@ namespace InventoryMobile.ViewModels.Category
             }
         }
 
-        public ObservableCollection<UIModels.UISubCategory> SubCategoryObsCol { get; set; } = new();
+        public ObservableCollection<UIModels.UISubCategory> SubCategoryObsCol { get; set; } = [];
 
         public ICommand CategoryEditCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(CategoryEdit)}?Id={Id}", true));
 
@@ -67,13 +68,21 @@ namespace InventoryMobile.ViewModels.Category
         {
             if (SubCategoryObsCol.Count > 0)
             {
-                await Application.Current.MainPage.DisplayAlert("Aviso", "Não é possivel excluir uma categoria que tenha subcategorias relacionadas", null, "Ok");
+                _ = Application.Current.MainPage.DisplayAlert("Aviso", "Não é possivel excluir uma categoria que tenha subcategorias relacionadas", null, "Ok");
             }
             else
             {
                 if (await Application.Current.MainPage.DisplayAlert("Confirmação", "Deseja excluir esta Categoria?", "Sim", "Cancelar"))
                 {
-                    (var success, var message) = await categoryService.DelCategory(Id);
+                    bool success = false;
+                    string message = null;
+                    BLLResponse resp = await categoryBLL.DelCategoryAsync(Id);
+
+                    if (resp.Success)
+                    {
+                        success = resp.Success;
+                        message = resp.Content as string;
+                    }
 
                     if (success)
                     {
@@ -91,12 +100,19 @@ namespace InventoryMobile.ViewModels.Category
             }
         });
 
-
         public ICommand DeleteSubCategoryCommand => new Command(async (e) =>
         {
             if (await Application.Current.MainPage.DisplayAlert("Confirmação", "Deseja excluir esta Sub Categoria?", "Sim", "Cancelar"))
             {
-                (var success, var message) = await subCategoryService.DelSubCategory(Convert.ToInt32(e));
+                bool success = false;
+                string message = null;
+                var resp = await subCategoryBLL.DelSubCategory(Convert.ToInt32(e));
+
+                if (resp.Success)
+                {
+                    success = true;
+                    message = "Sub Categoria Excluída!";
+                }
 
                 if (success)
                 {
@@ -123,18 +139,14 @@ namespace InventoryMobile.ViewModels.Category
             Id = Convert.ToInt32(query["Id"]);
         }
 
-        readonly ICategoryService categoryService;
-        readonly ISubCategoryService subCategoryService;
-
-        public CategoryDisplayVM(ICategoryService _categoryService, ISubCategoryService _subCategoryService)
-        {
-            categoryService = _categoryService;
-            subCategoryService = _subCategoryService;
-        }
-
         public ICommand OnAppearingCommand => new Command(async (e) =>
         {
-            Models.Category category = await categoryService.GetCategoryById(Id);
+            Models.Category category = null;
+
+            BLLResponse resp = await categoryBLL.GetCategoryByIdAsync(Id.ToString());
+
+            if (resp.Success)
+                category = resp.Content as Models.Category;
 
             //Category no longer exists in the db
             if (category == null) await Shell.Current.GoToAsync("..");
@@ -142,15 +154,21 @@ namespace InventoryMobile.ViewModels.Category
             CategoryColor = Color.FromArgb(category.Color);
             Name = category.Name;
             SystemDefault = category.SystemDefault.Value;
-            SubCategoryObsCol = new();
+            SubCategoryObsCol = [];
 
-            List<Models.SubCategory> subCategoryList = await subCategoryService.GetSubCategoriesByCategoryId(Id);
+            List<Models.SubCategory> subCategoryList =[];
 
-            //System.Text.RegularExpressions.Regex.Unescape(@"\" + subCategory.Icon)
-            if (subCategoryList != null && subCategoryList.Count > 0)
-                foreach (var subCategory in subCategoryList)
-                    SubCategoryObsCol.Add(new UIModels.UISubCategory() { Id = subCategory.Id, Icon = SubCategoryIconsList.GetIconCode(subCategory.IconName), Name = subCategory.Name, SystemDefault = subCategory.SystemDefault.Value });
+            var respSubCategoryBLL = await subCategoryBLL.GetSubCategoriesByCategoryId(Id);
 
+            if (respSubCategoryBLL is not null && respSubCategoryBLL.Success && respSubCategoryBLL.Content is not null)
+            {
+                subCategoryList = respSubCategoryBLL.Content as List<Models.SubCategory>;
+
+                //System.Text.RegularExpressions.Regex.Unescape(@"\" + subCategory.Icon)
+                if (subCategoryList != null && subCategoryList.Count > 0)
+                    foreach (var subCategory in subCategoryList)
+                        SubCategoryObsCol.Add(new UIModels.UISubCategory() { Id = subCategory.Id, Icon = SubCategoryIconsList.GetIconCode(subCategory.IconName), Name = subCategory.Name, SystemDefault = subCategory.SystemDefault.Value });
+            }
 
             OnPropertyChanged(nameof(SubCategoryObsCol));
         });

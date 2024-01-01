@@ -1,16 +1,11 @@
-﻿using Models;
+﻿using BLL;
 using InventoryMobile.Resources.Fonts.Icons;
-using InventoryMobile.Services.Interfaces;
 using InventoryMobile.UIModels;
 using InventoryMobile.Utils;
 using InventoryMobile.Views.Item;
+using Models;
 using System.Collections.ObjectModel;
-using System.Linq.Expressions;
 using System.Windows.Input;
-using System.Xml.Linq;
-using BLL;
-using Models.Responses;
-using ApiDAL;
 
 namespace InventoryMobile.ViewModels
 {
@@ -197,7 +192,6 @@ namespace InventoryMobile.ViewModels
                                     IconUniCode = Icons.Tag;
                                 else
                                     IconUniCode = SubCategoryIconsList.GetIconCode(item.Category.SubCategory.IconName);
-
 
                                 UIItem uIItem = new()
                                 {

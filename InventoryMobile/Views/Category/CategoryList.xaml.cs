@@ -18,6 +18,5 @@ public partial class CategoryList : ContentPage
         var TappedItem = e.Item as UICategory;
 
         Shell.Current.GoToAsync($"{nameof(CategoryDisplay)}?Id={TappedItem.Id}", true);
-
     }
 }

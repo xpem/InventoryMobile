@@ -5,7 +5,7 @@ namespace BLL
 {
     public interface ISubCategoryBLL
     {
-        Task<BLLResponse> AddSubCategory(SubCategory subCategory);
+        Task<BLLResponse> InsertSubCategory(SubCategory subCategory);
         Task<BLLResponse> AltSubCategory(SubCategory subCategory);
         Task<BLLResponse> DelSubCategory(int id);
         Task<BLLResponse> GetSubCategoriesByCategoryId(int categoryId);

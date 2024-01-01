@@ -1,10 +1,11 @@
-﻿using InventoryMobile.Resources.Fonts.Icons;
-using InventoryMobile.Services.Interfaces;
+﻿using BLL;
+using InventoryMobile.Resources.Fonts.Icons;
+using Models.Responses;
 using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels.Category
 {
-    public class CategoryEditVM : ViewModelBase, IQueryAttributable
+    public class CategoryEditVM(ICategoryBLL categoryBLL) : ViewModelBase, IQueryAttributable
     {
         int Id;
 
@@ -90,13 +91,6 @@ namespace InventoryMobile.ViewModels.Category
             ButtonColorVisible = true;
         }
 
-        readonly ICategoryService categoryService;
-
-        public CategoryEditVM(ICategoryService _categoryService)
-        {
-            categoryService = _categoryService;
-        }
-
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
             ColorPickerVisible = false;
@@ -105,7 +99,12 @@ namespace InventoryMobile.ViewModels.Category
             if (query.Count > 0)
             {
                 Id = Convert.ToInt32(query["Id"]);
-                Models.Category category = await categoryService.GetCategoryById(Id);
+                Models.Category category = null;
+
+                BLLResponse resp = await categoryBLL.GetCategoryByIdAsync(Id.ToString());
+
+                if (resp.Success)
+                    category = resp.Content as Models.Category;
 
                 CategoryColor = Color.FromArgb(category.Color);
 
@@ -147,10 +146,18 @@ namespace InventoryMobile.ViewModels.Category
                     {
                         category.Id = Id;
 
-                        (_, message) = await categoryService.AltCategory(category);
+                        BLLResponse resp = await categoryBLL.AltCategoryAsync(category);
+
+                        if (resp.Success)
+                            message = "Categoria Atualizada!";
                     }
                     else
-                        (_, message) = await categoryService.AddCategory(category);
+                    {
+                        BLLResponse resp = await categoryBLL.AddCategoryAsync(category);
+
+                        if (resp.Success)
+                            message = "Categoria Adicionada!";
+                    }
 
                     bool resposta = await Application.Current.MainPage.DisplayAlert("Aviso", message, null, "Ok");
 

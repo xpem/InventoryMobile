@@ -1,7 +1,10 @@
-﻿using CommunityToolkit.Maui;
-using Microsoft.Extensions.Logging;
-using InventoryMobile.Services;
-using InventoryMobile.Services.Interfaces;
+﻿using ApiDAL;
+using ApiDAL.Interfaces;
+using BLL;
+using BLL.Interface;
+using CommunityToolkit.Maui;
+using DbContextDAL;
+using DbContextDAL.Interface;
 using InventoryMobile.ViewModels;
 using InventoryMobile.ViewModels.Category;
 using InventoryMobile.ViewModels.Category.SubCategory;
@@ -12,12 +15,7 @@ using InventoryMobile.Views.Category;
 using InventoryMobile.Views.Category.SubCategory;
 using InventoryMobile.Views.Item;
 using InventoryMobile.Views.Item.Selectors;
-using BLL;
-using DbContextDAL;
-using DbContextDAL.Interface;
-using BLL.Interface;
-using ApiDAL.Interfaces;
-using ApiDAL;
+using Microsoft.Extensions.Logging;
 
 namespace InventoryMobile;
 
@@ -92,15 +90,6 @@ public static class MauiProgram
 
         #endregion
 
-        #region UIServices
-
-        builder.Services.AddScoped<ICategoryService, CategoryService>();
-        builder.Services.AddScoped<ISubCategoryService, SubCategoryService>();
-        builder.Services.AddScoped<IAcquisitionTypeService, AcquisitionTypeService>();
-        builder.Services.AddScoped<IItemService, ItemService>();
-
-        #endregion
-
         builder.Services.AddDbContext<InventoryDbContextDAL>();
 
         #region BLL
@@ -110,13 +99,16 @@ public static class MauiProgram
         builder.Services.AddScoped<ICheckServerBLL, CheckServerBLL>();
         builder.Services.AddScoped<IItemBLL, ItemBLL>();
         builder.Services.AddScoped<IItemSituationBLL, ItemSituationBLL>();
+        builder.Services.AddScoped<ICategoryBLL, CategoryBLL>();
+        builder.Services.AddScoped<ISubCategoryBLL, SubCategoryBLL>();
+        builder.Services.AddScoped<IAcquisitionTypeBLL, AcquisitionTypeBLL>();
+
 
         #endregion
 
         #region DAL
 
         builder.Services.AddScoped<IUserDAL, UserDAL>();
-        builder.Services.AddScoped<IItemSituationDAL, ItemSituationDAL>();
 
         #endregion
 
@@ -124,7 +116,11 @@ public static class MauiProgram
 
         builder.Services.AddScoped<IHttpClientFunctions, HttpClientFunctions>();
         builder.Services.AddScoped<IUserApiDAL, UserApiDAL>();
-        builder.Services.AddScoped<IItemDAL, ItemDAL>();
+        builder.Services.AddScoped<IItemApiDAL, ItemApiDAL>();
+        builder.Services.AddScoped<IItemSituationApiDAL, ItemSituationApiDAL>();
+        builder.Services.AddScoped<ICategoryApiDAL, CategoryApiDAL>();
+        builder.Services.AddScoped<ISubCategoryApiDAL, SubCategoryApiDAL>();
+        builder.Services.AddScoped<IAcquisitionTypeApiDAL, AcquisitionTypeApiDAL>();
 
         #endregion
 

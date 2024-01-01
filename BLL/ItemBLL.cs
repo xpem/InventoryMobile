@@ -6,7 +6,7 @@ using System.Text.Json.Nodes;
 
 namespace BLL
 {
-    public class ItemBLL(IItemDAL itemDAL) : IItemBLL
+    public class ItemBLL(IItemApiDAL itemDAL) : IItemBLL
     {
 
         public async Task<BLLResponse> GetItems() => ApiResponseHandler.Handler<List<Models.Item>>(await itemDAL.GetItems());

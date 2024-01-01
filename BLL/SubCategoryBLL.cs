@@ -1,4 +1,5 @@
 ﻿using ApiDAL;
+using ApiDAL.Interfaces;
 using BLL.Handlers;
 using Models;
 using Models.Responses;
@@ -6,7 +7,7 @@ using System.Text.Json.Nodes;
 
 namespace BLL
 {
-    public class SubCategoryBLL(SubCategoryApiDAL subCategoryApiDAL) : ISubCategoryBLL
+    public class SubCategoryBLL(ISubCategoryApiDAL subCategoryApiDAL) : ISubCategoryBLL
     {
         public async Task<BLLResponse> GetSubCategoriesByCategoryId(int categoryId)
         {
@@ -22,7 +23,7 @@ namespace BLL
             return ApiResponseHandler.Handler<SubCategory>(resp);
         }
 
-        public async Task<BLLResponse> AddSubCategory(SubCategory subCategory)
+        public async Task<BLLResponse> InsertSubCategory(SubCategory subCategory)
         {
             var resp = await subCategoryApiDAL.AddSubCategory(subCategory);
 

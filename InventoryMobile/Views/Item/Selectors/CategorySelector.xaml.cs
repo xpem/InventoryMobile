@@ -21,7 +21,7 @@ public partial class CategorySelector : ContentPage
         var TappedItem = e.Item as UICategory;
         if (TappedItem.HaveSubcategories)
         {
-            var categoryObj = categorySelectorVM.Categorylist.FirstOrDefault(c => c.Id == TappedItem.Id);
+            var categoryObj = categorySelectorVM.CategoriesObsList.FirstOrDefault(c => c.Id == TappedItem.Id);
             Shell.Current.GoToAsync($"{nameof(SubCategorySelector)}", true, new Dictionary<string, object> { { "Category", categoryObj } });
         }
     }

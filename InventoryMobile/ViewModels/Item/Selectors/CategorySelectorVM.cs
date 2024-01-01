@@ -1,25 +1,25 @@
-﻿using InventoryMobile.Services.Interfaces;
+﻿using BLL;
 using InventoryMobile.UIModels;
-using InventoryMobile.ViewModels.Category;
+using Models.Responses;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels.Item.Selectors
 {
-    public class CategorySelectorVM : ViewModelBase
+    public class CategorySelectorVM(ICategoryBLL categoryBLL) : ViewModelBase
     {
-        readonly ICategoryService categoryService;
-
-        public CategorySelectorVM(ICategoryService _categoryService) { categoryService = _categoryService; }
-
         public ObservableCollection<UICategory> CategoriesObsList { get; set; }
-
-        public List<Models.Category> Categorylist { get; set; }
 
         public ICommand OnAppearingCommand => new Command(async (e) =>
         {
-            CategoriesObsList = new();
-            Categorylist = await categoryService.GetCategoriesWithSubCategories();
+            CategoriesObsList = [];
+            List<Models.Category> Categorylist = [];
+
+            BLLResponse resp = await categoryBLL.GetCategoriesWithSubCategoriesAsync();
+
+            if (resp is not null && resp.Success)
+                Categorylist = resp.Content as List<Models.Category>;
+
             CategoriesObsList.Add(new UICategory() { Id = -1, Name = "[Sem Categoria]", Color = Color.FromArgb("#2F9300"), HaveSubcategories = false });
 
             if (Categorylist != null && Categorylist.Count > 0)

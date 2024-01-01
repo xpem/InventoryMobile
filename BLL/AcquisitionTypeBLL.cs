@@ -10,11 +10,11 @@ namespace BLL
         Task<BLLResponse> GetAcquisitionType();
     }
 
-    public class AcquisitionTypeBLL(IAcquisitionTypeDAL acquisitionTypeDAL) : IAcquisitionTypeBLL
+    public class AcquisitionTypeBLL(IAcquisitionTypeApiDAL acquisitionTypeApiDAL) : IAcquisitionTypeBLL
     {
         public async Task<BLLResponse> GetAcquisitionType()
         {
-            var resp = await acquisitionTypeDAL.GetAcquisitionType();
+            var resp = await acquisitionTypeApiDAL.GetAcquisitionType();
 
             return ApiResponseHandler.Handler<List<AcquisitionType>>(resp);
         }

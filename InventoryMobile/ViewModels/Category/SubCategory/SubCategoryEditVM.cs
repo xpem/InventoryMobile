@@ -1,19 +1,12 @@
-﻿using InventoryMobile.Resources.Fonts.Icons;
-using InventoryMobile.Services.Interfaces;
+﻿using BLL;
+using InventoryMobile.Resources.Fonts.Icons;
 using InventoryMobile.Utils;
 using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels.Category.SubCategory
 {
-    public class SubCategoryEditVM : ViewModelBase, IQueryAttributable
+    public class SubCategoryEditVM(ISubCategoryBLL subCategoryBLL) : ViewModelBase, IQueryAttributable
     {
-        readonly ISubCategoryService subCategoryService;
-
-        public SubCategoryEditVM(ISubCategoryService subCategoryService)
-        {
-            this.subCategoryService = subCategoryService;
-        }
-
         int CategoryId, Id;
 
         //Color categoryColor;
@@ -153,11 +146,18 @@ namespace InventoryMobile.ViewModels.Category.SubCategory
                     {
                         subCategory.Id = Id;
 
-                        (_, message) = await subCategoryService.AltSubCategory(subCategory);
+                        var resp = await subCategoryBLL.AltSubCategory(subCategory);
+
+                        if (resp.Success)
+                            message = "Sub Categoria Adicionada!";
                     }
                     else
-                        (_, message) = await subCategoryService.AddSubcategory(subCategory);
+                    {
+                        var resp = await subCategoryBLL.InsertSubCategory(subCategory);
 
+                        if (resp.Success)
+                            message = "Sub Categoria Adicionada!";
+                    }
                     bool resposta = await Application.Current.MainPage.DisplayAlert("Aviso", message, null, "Ok");
 
                     if (!resposta)
@@ -215,12 +215,18 @@ namespace InventoryMobile.ViewModels.Category.SubCategory
 
             if (Id != 0)
             {
-                Models.SubCategory subcategory = await subCategoryService.GetSubCategoryById(Id);
+                Models.SubCategory subCategory;
 
-                Name = subcategory.Name;
-                CategoryId = subcategory.CategoryId;
-                Icon = subcategory.IconName;
+                var resp = await subCategoryBLL.GetSubCategoryById(Id.ToString());
 
+                if (resp.Success)
+                {
+                    subCategory = resp.Content as Models.SubCategory;
+
+                    Name = subCategory.Name;
+                    CategoryId = subCategory.CategoryId;
+                    Icon = subCategory.IconName;
+                }
                 BtnConfirmationText = "Alterar";
                 BtnConfirmationIcon = Icons.Pen;
             }

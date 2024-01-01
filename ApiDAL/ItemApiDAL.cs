@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace ApiDAL
 {
-    public interface IItemDAL
+    public interface IItemApiDAL
     {
         Task<ApiResponse> AddItem(Item item);
         Task<ApiResponse> AltItem(Item item);
@@ -14,13 +14,13 @@ namespace ApiDAL
         Task<ApiResponse> GetItems();
     }
 
-    public class ItemDAL(IHttpClientFunctions httpClientFunctions) : IItemDAL
+    public class ItemApiDAL(IHttpClientFunctions httpClientFunctions) : IItemApiDAL
     {
         public async Task<ApiResponse> GetItems() =>
-            await httpClientFunctions.AuthRequest(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item");
+            await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item");
 
         public async Task<ApiResponse> GetItemById(string id) =>
-           await httpClientFunctions.AuthRequest(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item/" + id);
+           await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item/" + id);
 
         public async Task<ApiResponse> AddItem(Models.Item item)
         {
@@ -40,7 +40,7 @@ namespace ApiDAL
                     Category = new { item.Category?.Id, SubCategory = item.Category?.SubCategory is not null ? new { item.Category.SubCategory.Id } : null }
                 });
 
-                return await httpClientFunctions.AuthRequest(Models.RequestsTypes.Post, ApiKeys.ApiAddress + "/Inventory/item", json);
+                return await httpClientFunctions.AuthRequestAsync(Models.RequestsTypes.Post, ApiKeys.ApiAddress + "/Inventory/item", json);
             }
             catch (Exception ex) { throw ex; }
         }
@@ -63,7 +63,7 @@ namespace ApiDAL
                     Category = new { item.Category?.Id, SubCategory = item.Category?.SubCategory is not null ? new { item.Category.SubCategory.Id } : null }
                 });
 
-                return await httpClientFunctions.AuthRequest(Models.RequestsTypes.Put, ApiKeys.ApiAddress + "/Inventory/item/" + item.Id, json);
+                return await httpClientFunctions.AuthRequestAsync(Models.RequestsTypes.Put, ApiKeys.ApiAddress + "/Inventory/item/" + item.Id, json);
             }
             catch (Exception ex) { throw; }
         }
@@ -72,7 +72,7 @@ namespace ApiDAL
         {
             try
             {
-                return await httpClientFunctions.AuthRequest(RequestsTypes.Delete, ApiKeys.ApiAddress + "/Inventory/item/" + id);
+                return await httpClientFunctions.AuthRequestAsync(RequestsTypes.Delete, ApiKeys.ApiAddress + "/Inventory/item/" + id);
             }
             catch (Exception ex) { throw; }
         }

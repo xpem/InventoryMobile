@@ -1,8 +1,5 @@
-﻿using BLL;
-using BLL.Interface;
-using InventoryMobile.Services;
+﻿using BLL.Interface;
 using InventoryMobile.Views;
-using Plugin.Connectivity;
 using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels

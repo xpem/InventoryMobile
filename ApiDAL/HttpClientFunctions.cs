@@ -10,14 +10,14 @@ namespace ApiDAL
 {
     public interface IHttpClientFunctions
     {
-        Task<ApiResponse> AuthRequest(RequestsTypes requestsType, string url, string? jsonContent = null);
-        Task<bool> CheckServer();
-        Task<ApiResponse> Request(RequestsTypes requestsType, string url, string? userToken = null, string? jsonContent = null);
+        Task<ApiResponse> AuthRequestAsync(RequestsTypes requestsType, string url, string? jsonContent = null);
+        Task<bool> CheckServerAsync();
+        Task<ApiResponse> RequestAsync(RequestsTypes requestsType, string url, string? userToken = null, string? jsonContent = null);
     }
 
     public class HttpClientFunctions(InventoryDbContextDAL inventoryDbContextDAL) : HttpClient, IHttpClientFunctions
     {
-        public async Task<bool> CheckServer()
+        public async Task<bool> CheckServerAsync()
         {
             try
             {
@@ -29,10 +29,10 @@ namespace ApiDAL
 
                 return false;
             }
-            catch (Exception ex) { throw; }// return false; }
+            catch (Exception) { throw; }// return false; }
         }
 
-        public async Task<ApiResponse> Request(RequestsTypes requestsType, string url, string? userToken = null, string? jsonContent = null)
+        public async Task<ApiResponse> RequestAsync(RequestsTypes requestsType, string url, string? userToken = null, string? jsonContent = null)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace ApiDAL
             }
         }
 
-        public async Task<ApiResponse> AuthRequest(RequestsTypes requestsType, string url, string? jsonContent = null)
+        public async Task<ApiResponse> AuthRequestAsync(RequestsTypes requestsType, string url, string? jsonContent = null)
         {
             bool retry = true;
             ApiResponse? resp = null;
@@ -112,7 +112,7 @@ namespace ApiDAL
                     if (userToken is null) throw new ArgumentNullException(nameof(userToken));
                 }
 
-                resp = await Request(requestsType, url, userToken, jsonContent);
+                resp = await RequestAsync(requestsType, url, userToken, jsonContent);
 
                 if (!resp.TryRefreshToken || !retry) return resp;
             }
