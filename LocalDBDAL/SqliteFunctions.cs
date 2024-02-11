@@ -10,7 +10,7 @@ namespace LocalDbDAL
         /// <summary>
         /// version upgrade of a table force his recreation
         /// </summary>
-        public static readonly VersionsDbTables ActualVersionsDbTables = new() { USER = 1 };
+        public static readonly VersionDbTables ActualVersionsDbTables;
 
         /// <summary>
         /// Need additional package Microsoft.EntityFrameworkCore.Sqlite to work

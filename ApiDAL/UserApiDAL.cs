@@ -1,64 +1,47 @@
-﻿using Models;
+﻿using ApiDAL.Interfaces;
 using ApiRepos;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using Models.Responses;
 
 namespace ApiDAL
 {
-    public static class UserApiDAl
+    public class UserApiDAL : IUserApiDAL
     {
-        public static async Task<ApiResponse> AddUser(string name, string email, string password)
+        private readonly UsersManagement.UserService userService = new(ApiKeys.ApiAddress);
+
+        public async Task<ApiResponse> AddUserAsync(string name, string email, string password)
         {
             try
             {
-                string json = JsonSerializer.Serialize(new { name, email, password });
+                UsersManagement.Model.ApiResponse resp = await userService.AddUserAsync(name, email, password);
 
-                return await HttpClientFunctions.PostAsync(ApiKeys.ApiBookshelfUri + "/user", json);
+                return new() { Success = resp.Success, Content = resp.Content, Error = (ErrorTypes?)resp.Error };
             }
-            catch (Exception ex) { throw ex; }
+            catch { throw; }
         }
 
-        public static async Task<ApiResponse> RecoverPassword(string email)
+        public async Task<ApiResponse> RecoverPasswordAsync(string email)
         {
-            string json = JsonSerializer.Serialize(new { email });
-            return await HttpClientFunctions.PostAsync(ApiKeys.ApiBookshelfUri + "/user/recoverpassword", json);
+            UsersManagement.Model.ApiResponse resp = await userService.RecoverPasswordAsync(email);
+
+            return new() { Success = resp.Success, Content = resp.Content, Error = (ErrorTypes?)resp.Error };
         }
 
-        public static async Task<(bool, string?)> GetUserToken(string email, string password)
+        public async Task<(bool, string?)> GetUserTokenAsync(string email, string password)
         {
-            try
-            {
-                string json = JsonSerializer.Serialize(new { email, password });
+            UsersManagement.Model.ApiResponse resp = await userService.GetUserTokenAsync(email, password);
 
-                var resp = await HttpClientFunctions.Request(RequestsTypes.Post, ApiKeys.ApiBookshelfUri + "/user/session", null, json);
-
-                if (resp is not null && resp.Content is not null)
-                {
-                    JsonNode? jResp = JsonNode.Parse(resp.Content);
-
-                    if (resp.Success && jResp is not null && jResp["token"]?.GetValue<string>() is not null)
-                        return (true, jResp["token"]?.GetValue<string>());
-                    else if (!resp.Success && jResp is not null && jResp["error"]?.GetValue<string>() is not null)
-                        return (false, jResp["error"]?.GetValue<string>());
-                    else throw new Exception("Response nao mapeado: " + resp.Content);
-                }
-
-                return (false, null);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return (resp.Success, resp.Content);
         }
 
-        public static async Task<ApiResponse> GetUser(string token)
+        public async Task<ApiResponse> GetUserAsync(string token)
         {
             try
             {
-                return await HttpClientFunctions.GetAsync(ApiKeys.ApiBookshelfUri + "/user", token);
+                UsersManagement.Model.ApiResponse resp = await userService.GetUserAsync(token);
+
+                return new() { Success = resp.Success, Content = resp.Content, Error = (ErrorTypes?)resp.Error };
             }
-            catch (Exception ex) { throw ex; }
+            catch { throw; }
         }
     }
 }

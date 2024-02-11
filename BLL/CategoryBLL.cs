@@ -1,27 +1,22 @@
-﻿using ApiDAL;
+﻿using ApiDAL.Interfaces;
 using BLL.Handlers;
 using Models;
+using Models.Responses;
 using System.Text.Json.Nodes;
 
 namespace BLL
 {
-    public class CategoryBLL
+    public class CategoryBLL(ICategoryApiDAL categoryApiDAL) : ICategoryBLL
     {
-        public static async Task<BLLResponse> GetCategories() =>
-            ApiResponseHandler.Handler<List<Models.Category>>(await CategoryApiDAL.GetCategories());
+        public async Task<BLLResponse> GetCategoriesAsync() => ApiResponseHandler.Handler<List<Models.Category>>(await categoryApiDAL.GetCategoriesAsync());
 
+        public async Task<BLLResponse> GetCategoriesWithSubCategoriesAsync() => ApiResponseHandler.Handler<List<Models.Category>>(await categoryApiDAL.GetCategoriesWithSubCategoriesAsync());
 
-        public static async Task<BLLResponse> GetCategoriesWithSubCategories() =>
-            ApiResponseHandler.Handler<List<Models.Category>>(await CategoryApiDAL.GetCategoriesWithSubCategories());
+        public async Task<BLLResponse> GetCategoryByIdAsync(string id) => ApiResponseHandler.Handler<Models.Category>(await categoryApiDAL.GetCategoryByIdAsync(id));
 
-
-        public static async Task<BLLResponse> GetCategoryById(string id) =>
-            ApiResponseHandler.Handler<Models.Category>(await CategoryApiDAL.GetCategoryById(id));
-
-
-        public static async Task<BLLResponse> AddCategory(Category category)
+        public async Task<BLLResponse> AddCategoryAsync(Category category)
         {
-            var resp = await CategoryApiDAL.AddCategory(category);
+            var resp = await categoryApiDAL.AddCategoryAsync(category);
 
             if (resp is not null && resp.Content is not null)
             {
@@ -33,7 +28,7 @@ namespace BLL
                         Id = jResp["Id"]?.GetValue<int>() ?? 0,
                         Name = jResp["Name"]?.GetValue<string>(),
                         Color = jResp["Color"]?.GetValue<string>(),
-                        SystemDefault = jResp["SystemDefault"]?.GetValue<int>()
+                        SystemDefault = jResp["SystemDefault"]?.GetValue<bool>()
                     };
 
                     return new BLLResponse() { Success = resp.Success, Content = categoryResp };
@@ -44,9 +39,9 @@ namespace BLL
             return new BLLResponse() { Success = false, Content = null };
         }
 
-        public static async Task<BLLResponse> AltCategory(Category category)
+        public async Task<BLLResponse> AltCategoryAsync(Category category)
         {
-            var resp = await CategoryApiDAL.AltCategory(category);
+            var resp = await categoryApiDAL.AltCategoryAsync(category);
 
             if (resp is not null && resp.Content is not null)
             {
@@ -60,7 +55,7 @@ namespace BLL
                             Id = jResp["Id"]?.GetValue<int>() ?? 0,
                             Name = jResp["Name"]?.GetValue<string>(),
                             Color = jResp["Color"]?.GetValue<string>(),
-                            SystemDefault = jResp["SystemDefault"]?.GetValue<int>()
+                            SystemDefault = jResp["SystemDefault"]?.GetValue<bool>()
                         };
 
                         return new BLLResponse() { Success = resp.Success, Content = categoryResp };
@@ -72,9 +67,9 @@ namespace BLL
             return new BLLResponse() { Success = false, Content = null };
         }
 
-        public static async Task<BLLResponse> DelCategory(int id)
+        public async Task<BLLResponse> DelCategoryAsync(int id)
         {
-            var resp = await CategoryApiDAL.DelCategory(id);
+            var resp = await categoryApiDAL.DelCategoryAsync(id);
 
             if (resp is not null && resp.Content is not null)
                 return new BLLResponse() { Success = resp.Success, Content = resp.Content };

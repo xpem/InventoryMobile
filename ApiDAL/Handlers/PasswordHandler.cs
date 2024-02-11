@@ -1,18 +1,16 @@
-﻿using System.Security.Cryptography;
+﻿using ApiRepos;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace ApiDAL.Handlers
 {
     public static class PasswordHandler
     {
-        private const string PASSWORDHASH = "FJDSKLF45D6";
-        private const string SALTKEY = "FJDSHUTEH21";
-        private const string VIKEY = "@1B2c3D4e5F6g7H8";
 
         public static string Encrypt(string password)
         {
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(password);
-            byte[] keyBytes = new Rfc2898DeriveBytes(PASSWORDHASH, Encoding.ASCII.GetBytes(SALTKEY)).GetBytes(256 / 8);
+            byte[] keyBytes = new Rfc2898DeriveBytes(ApiKeys.PASSWORDHASH, Encoding.ASCII.GetBytes(ApiKeys.SALTKEY)).GetBytes(256 / 8);
             byte[] cipherTextBytes;
 
             using (Aes aes = Aes.Create())
@@ -20,7 +18,7 @@ namespace ApiDAL.Handlers
                 aes.Mode = CipherMode.CBC;
                 aes.Padding = PaddingMode.Zeros;
 
-                ICryptoTransform encryptor = aes.CreateEncryptor(keyBytes, Encoding.ASCII.GetBytes(VIKEY));
+                ICryptoTransform encryptor = aes.CreateEncryptor(keyBytes, Encoding.ASCII.GetBytes(ApiKeys.VIKEY));
 
                 using MemoryStream memoryStream = new();
                 using (CryptoStream cryptoStream = new(memoryStream, encryptor, CryptoStreamMode.Write))
@@ -38,13 +36,13 @@ namespace ApiDAL.Handlers
         public static string Decrypt(string senha)
         {
             byte[] cipherTextBytes = Convert.FromBase64String(senha);
-            byte[] keyBytes = new Rfc2898DeriveBytes(PASSWORDHASH, Encoding.ASCII.GetBytes(SALTKEY)).GetBytes(256 / 8);
+            byte[] keyBytes = new Rfc2898DeriveBytes(ApiKeys.PASSWORDHASH, Encoding.ASCII.GetBytes(ApiKeys.SALTKEY)).GetBytes(256 / 8);
 
             using Aes aes = Aes.Create();
             aes.Mode = CipherMode.CBC;
             aes.Padding = PaddingMode.Zeros;
 
-            ICryptoTransform decryptor = aes.CreateDecryptor(keyBytes, Encoding.ASCII.GetBytes(VIKEY));
+            ICryptoTransform decryptor = aes.CreateDecryptor(keyBytes, Encoding.ASCII.GetBytes(ApiKeys.VIKEY));
 
             using MemoryStream memoryStream = new(cipherTextBytes);
             using CryptoStream cryptoStream = new(memoryStream, decryptor, CryptoStreamMode.Read);

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="InventoryMobile.Views.Item.CategorySelector"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:Icons="clr-namespace:InventoryMobile.Resources.Fonts.Icons"
+    xmlns:model="clr-namespace:InventoryMobile.UIModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:InventoryMobile.ViewModels.Item.Selectors"
+    Title="Selecione a categoria"
+    x:DataType="vm:CategorySelectorVM"
+    Style="{StaticResource ContentPage}">
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior Command="{Binding OnAppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Resources>
+        <Style x:Key="Icon" TargetType="Label">
+            <Setter Property="TextColor" Value="Black" />
+            <Setter Property="HorizontalOptions" Value="Start" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontFamily" Value="Icons" />
+            <Setter Property="Padding" Value="0,0,0,0" />
+        </Style>
+    </ContentPage.Resources>
+    <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <ListView
+            CachingStrategy="RecycleElement"
+            HasUnevenRows="True"
+            ItemTapped="ListView_ItemTapped"
+            ItemsSource="{Binding CategoriesObsList}"
+            SelectionMode="None"
+            VerticalOptions="Start">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:UICategory">
+                    <ViewCell>
+                        <Frame
+                            Margin="5,0,5,5"
+                            Padding="0"
+                            Background="{StaticResource Gray100}"
+                            CornerRadius="10">
+                            <Grid
+                                BackgroundColor="{StaticResource Gray100}"
+                                ColumnDefinitions="40,*,40"
+                                RowDefinitions="*">
+                                <Ellipse
+                                    Fill="{Binding Color}"
+                                    HeightRequest="30"
+                                    WidthRequest="30" />
+                                <FlexLayout
+                                    Grid.Column="1"
+                                    Margin="5"
+                                    HeightRequest="40"
+                                    HorizontalOptions="Start"
+                                    VerticalOptions="Center">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="15"
+                                        Text="{Binding Name}"
+                                        TextColor="{StaticResource Black}"
+                                        VerticalOptions="Center" />
+                                </FlexLayout>
+                                <Label
+                                    Grid.Column="2"
+                                    IsVisible="{Binding HaveSubcategories}"
+                                    Style="{StaticResource Icon}"
+                                    Text="{x:Static Icons:Icons.AngleRight}" />
+                            </Grid>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Footer>
+                <Grid Padding="6" IsVisible="{Binding IsBusy}">
+                    <Grid.Triggers>
+                        <Trigger TargetType="Grid" Property="IsVisible" Value="False">
+                            <Setter Property="HeightRequest" Value="0" />
+                        </Trigger>
+                    </Grid.Triggers>
+                    <ActivityIndicator
+                        HorizontalOptions="Center"
+                        IsRunning="{Binding IsBusy}"
+                        IsVisible="{Binding IsBusy}"
+                        VerticalOptions="Center"
+                        Color="#2196F3" />
+                </Grid>
+            </ListView.Footer>
+        </ListView>
+    </StackLayout>
+</ContentPage>

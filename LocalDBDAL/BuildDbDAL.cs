@@ -25,57 +25,59 @@ namespace LocalDbDAL
         /// </summary>
         private static async Task UpdateSQLiteTablesByVersions()
         {
-            try
-            {
-                await SqliteFunctions.RunSqliteCommand("create table if not exists VERSIONSTABLES (id integer, USER integer);");
-                
-                VersionsDbTables versionsDbTables;
+            throw new NotImplementedException();
+            //try
+            //{
+            //    await SqliteFunctions.RunSqliteCommand("create table if not exists VERSIONSTABLES (id integer, USER integer);");
 
-                using (SqliteDataReader Retorno = await SqliteFunctions.RunSqliteCommand("select USER from VERSIONSTABLES"))
-                {
-                    Retorno.Read();
+            //    VersionDbTables versionsDbTables;
 
-                    if (Retorno.HasRows)
-                    {
-                        versionsDbTables = new VersionsDbTables() { USER = Retorno.GetWithNullableInt(0) };
-                    }
-                    else
-                    {
-                        versionsDbTables = new VersionsDbTables() { USER = 0 };
-                        AddorUpdateVersionDb(false, versionsDbTables);
-                    }
-                }
+            //    using (SqliteDataReader Retorno = await SqliteFunctions.RunSqliteCommand("select USER from VERSIONSTABLES"))
+            //    {
+            //        Retorno.Read();
 
-                bool updateVersionDb = false;
+            //        if (Retorno.HasRows)
+            //        {
+            //            versionsDbTables = new VersionDbTables() { USER = Retorno.GetWithNullableInt(0) };
+            //        }
+            //        else
+            //        {
+            //            versionsDbTables = new VersionDbTables() { USER = 0 };
+            //            AddorUpdateVersionDb(false, versionsDbTables);
+            //        }
+            //    }
 
-                if (versionsDbTables.USER < SqliteFunctions.ActualVersionsDbTables.USER)
-                {
-                    _ = SqliteFunctions.RunSqliteCommand("drop table if exists USER");
+            //    bool updateVersionDb = false;
 
-                    updateVersionDb = true;
-                }
+            //    if (versionsDbTables.USER < SqliteFunctions.ActualVersionsDbTables.USER)
+            //    {
+            //        _ = SqliteFunctions.RunSqliteCommand("drop table if exists USER");
 
-                if (updateVersionDb)
-                    AddorUpdateVersionDb(true, SqliteFunctions.ActualVersionsDbTables);
-            }
-            catch (Exception ex) { throw ex; }
+            //        updateVersionDb = true;
+            //    }
+
+            //    if (updateVersionDb)
+            //        AddorUpdateVersionDb(true, SqliteFunctions.ActualVersionsDbTables);
+            //}
+            //catch (Exception ex) { throw ex; }
         }
 
-        private static void AddorUpdateVersionDb(bool isUpdate, VersionsDbTables versionsDbTables)
+        private static void AddorUpdateVersionDb(bool isUpdate, VersionDbTables versionsDbTables)
         {
-            string command;
+            throw new NotImplementedException();
+            //string command;
 
-            if (!isUpdate)
-                command = "insert into VERSIONSTABLES(id,USER) values ('1',@USER)";
-            else
-                command = "update VERSIONSTABLES set USER = @USER where id = '1'";
+            //if (!isUpdate)
+            //    command = "insert into VERSIONSTABLES(id,USER) values ('1',@USER)";
+            //else
+            //    command = "update VERSIONSTABLES set USER = @USER where id = '1'";
 
-            List<SqliteParameter> parameters = new()
-            {
-                new SqliteParameter("@USER", versionsDbTables.USER)
-            };
+            //List<SqliteParameter> parameters = new()
+            //{
+            //    new SqliteParameter("@USER", versionsDbTables.USER)
+            //};
 
-            _ = SqliteFunctions.RunSqliteCommand(command, parameters);
+            //_ = SqliteFunctions.RunSqliteCommand(command, parameters);
         }
     }
 }

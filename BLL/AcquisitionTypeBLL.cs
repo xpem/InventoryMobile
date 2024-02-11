@@ -1,14 +1,20 @@
 ﻿using ApiDAL;
 using BLL.Handlers;
 using Models;
+using Models.Responses;
 
 namespace BLL
 {
-    public class AcquisitionTypeBLL
+    public interface IAcquisitionTypeBLL
     {
-        public static async Task<BLLResponse> GetAcquisitionType()
+        Task<BLLResponse> GetAcquisitionType();
+    }
+
+    public class AcquisitionTypeBLL(IAcquisitionTypeApiDAL acquisitionTypeApiDAL) : IAcquisitionTypeBLL
+    {
+        public async Task<BLLResponse> GetAcquisitionType()
         {
-            var resp = await AcquisitionTypeDAL.GetAcquisitionType();
+            var resp = await acquisitionTypeApiDAL.GetAcquisitionType();
 
             return ApiResponseHandler.Handler<List<AcquisitionType>>(resp);
         }

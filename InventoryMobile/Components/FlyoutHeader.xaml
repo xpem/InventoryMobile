@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="InventoryMobile.Components.FlyoutHeader" 
+             x:Name="this"
+             >
+    <FlexLayout HeightRequest="100" JustifyContent="Center">
+        <FlexLayout.Background>
+            <LinearGradientBrush>
+                <GradientStop Color="{StaticResource TitleBarBackGroudColor}"
+                          Offset="0.1" />
+                <GradientStop Color="Green"
+                          Offset="1.0" />
+            </LinearGradientBrush>
+        </FlexLayout.Background>
+        <Label 
+            Text="{Binding Source={x:Reference this},Path=Email}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+            TextColor="White"/>
+    </FlexLayout>
+</ContentView>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="InventoryMobile.Components.BorderedCurrencyEntry"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="this"
+    Margin="0,5,0,0">
+    <ContentView.Content>
+        <VerticalStackLayout>
+            <Label Style="{StaticResource LblHEntry}" Text="{Binding Source={x:Reference this}, Path=LabelText}" />
+            <Frame Style="{StaticResource EntryBorders}">
+                <Entry
+                    x:Name="EntryCurrency"
+                    HorizontalOptions="FillAndExpand"
+                    Keyboard="Numeric"
+                    Style="{StaticResource Entry}"
+                    Text="{Binding Source={x:Reference this}, Path=Text}"
+                    TextChanged="EntryCurrency_TextChanged" />
+            </Frame>
+        </VerticalStackLayout>
+    </ContentView.Content>
+</ContentView>

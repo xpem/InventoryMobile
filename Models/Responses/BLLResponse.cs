@@ -1,6 +1,6 @@
 ﻿using Models.Responses;
 
-namespace Models
+namespace Models.Responses
 {
     public class BLLResponse
     {

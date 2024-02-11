@@ -9,24 +9,24 @@ using System.Threading.Tasks;
 
 namespace LocalDbDAL
 {
-    public static class UserLocalDAl
+    public class UserLocalDAl
     {
         public static void AddUser(User user)
         {
             SqliteFunctions.OpenIfClosed();
 
-            List<SqliteParameter> parameters = new()
-            {
+            List<SqliteParameter> parameters =
+            [
                 new SqliteParameter("@TOKEN", user.Token),
                 new SqliteParameter("@NAME", user.Name),
                 new SqliteParameter("@EMAIL", user.Email),
                 new SqliteParameter("@PASSWORD", user.Password),
                 new SqliteParameter("@LASTUPDATE", DateTime.MinValue),
-            };
+            ];
 
-            _ = SqliteFunctions.RunSqliteCommand("delete from USER");
+            SqliteFunctions.RunSqliteCommand("delete from USER").Wait();
 
-            _ = SqliteFunctions.RunSqliteCommand("insert into USER (TOKEN,NAME,EMAIL,PASSWORD,LASTUPDATE) values (@TOKEN,@NAME,@EMAIL,@PASSWORD,@LASTUPDATE)", parameters);
+            SqliteFunctions.RunSqliteCommand("insert into USER (TOKEN,NAME,EMAIL,PASSWORD,LASTUPDATE) values (@TOKEN,@NAME,@EMAIL,@PASSWORD,@LASTUPDATE)", parameters).Wait();
 
             SqliteFunctions.CloseIfOpen();
         }
@@ -95,15 +95,15 @@ namespace LocalDbDAL
             }
         }
 
-        public static void UpdateToken(int id, string token)
+        public async Task UpdateTokenAsync(int id, string token)
         {
             try
             {
                 SqliteFunctions.OpenIfClosed();
 
-                List<SqliteParameter> parameters = new() { new SqliteParameter("@Id", id), new SqliteParameter("@token", token) };
+                List<SqliteParameter> parameters = [new SqliteParameter("@Id", id), new SqliteParameter("@token", token)];
 
-                _ = SqliteFunctions.RunSqliteCommand("update USER set TOKEN = @token where ID = @Id", parameters);
+                await SqliteFunctions.RunSqliteCommand("update USER set TOKEN = @token where ID = @Id", parameters);
 
                 SqliteFunctions.CloseIfOpen();
             }

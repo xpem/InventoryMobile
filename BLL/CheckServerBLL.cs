@@ -2,8 +2,13 @@
 
 namespace BLL
 {
-    public static class CheckServerBLL
+    public interface ICheckServerBLL
     {
-        public static async Task<bool> CheckServer() => await HttpClientFunctions.CheckServer();
+        Task<bool> CheckServer();
+    }
+
+    public class CheckServerBLL(IHttpClientFunctions httpClientFunctions) : ICheckServerBLL
+    {
+        public async Task<bool> CheckServer() => await httpClientFunctions.CheckServerAsync();
     }
 }
