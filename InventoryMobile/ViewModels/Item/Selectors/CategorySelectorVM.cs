@@ -24,8 +24,7 @@ namespace InventoryMobile.ViewModels.Item.Selectors
 
             if (Categorylist != null && Categorylist.Count > 0)
                 foreach (var i in Categorylist)
-                    CategoriesObsList.Add(new UICategory() { Id = i.Id, Name = i.Name, Color = Color.FromArgb(i.Color), HaveSubcategories = i.SubCategories.Count > 0 });
-
+                    CategoriesObsList.Add(new UICategory() { Id = i.Id, Name = i.Name, Color = Color.FromArgb(i.Color), HaveSubcategories = i.SubCategories.Count > 0, SubCategories = i.SubCategories });
 
             OnPropertyChanged(nameof(CategoriesObsList));
         });

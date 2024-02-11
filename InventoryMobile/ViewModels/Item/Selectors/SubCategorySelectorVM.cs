@@ -26,19 +26,19 @@ namespace InventoryMobile.ViewModels.Item.Selectors
 
         public ObservableCollection<UISubCategory> SubCategoryObsList { get; set; }
 
-        public Models.Category Category { get; set; }
+        public UIModels.UICategory Category { get; set; }
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
             if (query.TryGetValue("Category", out object value))
             {
-                Category = value as Models.Category;
+                Category = value as UIModels.UICategory;
 
                 CategoryName = Category.Name;
-                CategoryColor = Color.FromArgb(Category.Color);
+                CategoryColor = Category.Color;
                 CategoryId = Category.Id;
 
-                SubCategoryObsList = new();
+                SubCategoryObsList = [];
 
                 if (Category.SubCategories != null && Category.SubCategories.Count > 0)
                     foreach (var subCategory in Category.SubCategories)

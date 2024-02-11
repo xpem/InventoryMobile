@@ -40,9 +40,9 @@ namespace InventoryMobile.ViewModels.Item
             get => categoryName; set { if (categoryName != value) { categoryName = value; OnPropertyChanged(nameof(CategoryName)); } }
         }
 
-        DateTime acquisitionDate;
+        DateOnly acquisitionDate;
 
-        public DateTime AcquisitionDate
+        public DateOnly AcquisitionDate
         {
             get => acquisitionDate; set { if (acquisitionDate != value) { acquisitionDate = value; OnPropertyChanged(nameof(AcquisitionDate)); } }
         }
@@ -163,7 +163,7 @@ namespace InventoryMobile.ViewModels.Item
             }
             else
             {
-                DateTime acquisitionDate = DateTime.Now;
+                DateOnly acquisitionDate = DateOnly.FromDateTime(DateTime.Now);
 
                 ItemsSituationObsList = [];
                 List<ItemSituation> itemSituationList = [];
@@ -201,7 +201,7 @@ namespace InventoryMobile.ViewModels.Item
                     ItemId = Convert.ToInt32(itemId);
                     Models.Item item;
 
-                    BLLResponse resp = await itemBLL.GetItemById(ItemId.ToString());
+                    BLLResponse resp = await itemBLL.GetItemByIdAsync(ItemId.ToString());
 
                     if (resp is not null && resp.Success)
                     {
@@ -248,7 +248,7 @@ namespace InventoryMobile.ViewModels.Item
 
                     PkrAcquisitionTypeSelectedIndex = 0;
                 }
-                AcquisitionDate = new DateTime(acquisitionDate.Year, acquisitionDate.Month, acquisitionDate.Day);
+                AcquisitionDate = new DateOnly(acquisitionDate.Year, acquisitionDate.Month, acquisitionDate.Day);
             }
         }
 

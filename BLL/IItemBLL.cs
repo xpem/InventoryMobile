@@ -10,7 +10,7 @@ namespace BLL
         Task<BLLResponse> AltItem(Item item);
         Item BuildItemResponse(JsonNode jResp);
         Task<BLLResponse> DelItem(int id);
-        Task<BLLResponse> GetItemById(string id);
-        Task<BLLResponse> GetItems();
+        Task<BLLResponse> GetItemByIdAsync(string id);
+        Task<BLLResponse> GetItemsAsync();
     }
 }

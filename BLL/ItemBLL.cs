@@ -9,14 +9,14 @@ namespace BLL
     public class ItemBLL(IItemApiDAL itemDAL) : IItemBLL
     {
 
-        public async Task<BLLResponse> GetItems() => ApiResponseHandler.Handler<List<Models.Item>>(await itemDAL.GetItems());
+        public async Task<BLLResponse> GetItemsAsync() => ApiResponseHandler.Handler<List<Models.Item>>(await itemDAL.GetItemsAsync());
 
-        public async Task<BLLResponse> GetItemById(string id) =>
-            ApiResponseHandler.Handler<Item>(await itemDAL.GetItemById(id));
+        public async Task<BLLResponse> GetItemByIdAsync(string id) =>
+            ApiResponseHandler.Handler<Item>(await itemDAL.GetItemByIdAsync(id));
 
         public async Task<BLLResponse> AddItem(Models.Item item)
         {
-            var resp = await itemDAL.AddItem(item);
+            var resp = await itemDAL.AddItemAsync(item);
 
             if (resp is not null && resp.Success && resp.Content is not null)
             {
@@ -29,7 +29,7 @@ namespace BLL
                         Id = jResp["Id"]?.GetValue<int>() ?? 0,
                         Name = jResp["Name"]?.GetValue<string>(),
                         TechnicalDescription = jResp["TechnicalDescription"]?.GetValue<string>(),
-                        AcquisitionDate = jResp["AcquisitionDate"]?.GetValue<DateTime>() ?? DateTime.MinValue,
+                        AcquisitionDate = jResp["AcquisitionDate"]?.GetValue<DateOnly>() ?? DateOnly.MinValue,
                         AcquisitionType = jResp["AcquisitionType"]?.GetValue<Int32>() ?? Int32.MinValue,
                         PurchaseStore = jResp["PurchaseStore"]?.GetValue<string>(),
                         PurchaseValue = jResp["PurchaseValue"]?.GetValue<decimal>(),
@@ -50,7 +50,7 @@ namespace BLL
 
         public async Task<BLLResponse> AltItem(Models.Item item)
         {
-            var resp = await itemDAL.AltItem(item);
+            var resp = await itemDAL.AltItemAsync(item);
 
             if (resp is not null && resp.Success && resp.Content is not null)
             {
@@ -66,7 +66,7 @@ namespace BLL
 
         public async Task<BLLResponse> DelItem(int id)
         {
-            var resp = await itemDAL.DelItem(id);
+            var resp = await itemDAL.DelItemAsync(id);
 
             if (resp is not null && resp.Content is not null)
                 return new BLLResponse() { Success = resp.Success, Content = resp.Content };
@@ -79,7 +79,7 @@ namespace BLL
             Id = jResp["Id"]?.GetValue<int>() ?? 0,
             Name = jResp["Name"]?.GetValue<string>(),
             TechnicalDescription = jResp["TechnicalDescription"]?.GetValue<string>(),
-            AcquisitionDate = jResp["AcquisitionDate"]?.GetValue<DateTime>() ?? DateTime.MinValue,
+            AcquisitionDate = jResp["AcquisitionDate"]?.GetValue<DateOnly>() ?? DateOnly.MinValue,
             AcquisitionType = jResp["AcquisitionType"]?.GetValue<Int32>() ?? Int32.MinValue,
             PurchaseStore = jResp["PurchaseStore"]?.GetValue<string>(),
             PurchaseValue = jResp["PurchaseValue"]?.GetValue<decimal>(),

@@ -36,7 +36,7 @@ namespace InventoryMobile.ViewModels
             }
             else
             {
-                userBLL.RecoverPassword(Email);
+                _ = userBLL.RecoverPasswordAsync(Email);
 
                 await Application.Current.MainPage.DisplayAlert("Aviso", "Email de alteração de senha enviado!", null, "Ok");
 

@@ -131,7 +131,7 @@ namespace InventoryMobile.ViewModels
                     if (respItemSituation is not null && respItemSituation.Success)
                         itemSituationList = respItemSituation.Content as List<ItemSituation>;
 
-                    var respItems = await itemBLL.GetItems();
+                    var respItems = await itemBLL.GetItemsAsync();
 
                     List<Models.Item> itemList = [];
                     if (respItems is not null && respItems.Success)
@@ -142,23 +142,23 @@ namespace InventoryMobile.ViewModels
 
                     if (itemSituationList is not null && itemSituationList.Count > 0)
                     {
+                        ItemsSituationObsList = [];
+                        string textSituationItem;
+
+                        for (int i = 0; i < itemSituationList.Count; i++)
+                        {
+                            if (itemSituationList[i].Sequence is 1)
+                                backgoundColor = Color.FromArgb("#29A0B1");
+                            else
+                                backgoundColor = Color.FromArgb("#919191");
+
+                            textSituationItem = $"{itemSituationList[i].Name} ({itemList.Where(x => x.Situation.Id == itemSituationList[i].Id).Count()})";
+
+                            ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituationList[i].Id, Name = textSituationItem, BackgoundColor = backgoundColor });
+                        }
+
                         if (SelectedUIItemsStatus is null)
                         {
-                            ItemsSituationObsList = [];
-                            string textSituationItem;
-
-                            for (int i = 0; i < itemSituationList.Count; i++)
-                            {
-                                if (itemSituationList[i].Sequence is 1)
-                                    backgoundColor = Color.FromArgb("#29A0B1");
-                                else
-                                    backgoundColor = Color.FromArgb("#919191");
-
-                                textSituationItem = $"{itemSituationList[i].Name} ({itemList.Where(x => x.Situation.Id == itemSituationList[i].Id).Count()})";
-
-                                ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituationList[i].Id, Name = textSituationItem, BackgoundColor = backgoundColor });
-                            }
-
                             OnPropertyChanged(nameof(ItemsSituationObsList));
 
                             SelectedUIItemsStatus = ItemsSituationObsList.First();

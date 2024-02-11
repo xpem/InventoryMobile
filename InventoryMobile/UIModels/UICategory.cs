@@ -1,4 +1,6 @@
-﻿namespace InventoryMobile.UIModels
+﻿using Models;
+
+namespace InventoryMobile.UIModels
 {
     public class UICategory : BindableObject
     {
@@ -49,7 +51,8 @@
 
         public Color Color { get; set; }
 
-
         public bool HaveSubcategories { get; set; }
+
+        public List<SubCategory> SubCategories { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace BLL.Interface
         Task<BLLResponse> SignIn(string email, string password);
         User? GetUserLocal();
         Task<(bool, string?)> GetUserTokenAsync(string email, string password);
-        string? RecoverPassword(string email);
+        Task<string?> RecoverPasswordAsync(string email);
         void UpdateLocalUserLastUpdate(int uid);
     }
 }

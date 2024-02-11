@@ -22,10 +22,7 @@ public partial class SubCategorySelector : ContentPage
         {
             var subCategoryObj = subCategorySelectorVM.Category.SubCategories.FirstOrDefault(c => c.Id == TappedItem.Id);
 
-            List<Models.SubCategory> subCategories = new()
-            {
-                subCategoryObj
-            };
+            List<Models.SubCategory> subCategories = [subCategoryObj];
 
             Models.Category category = new()
             {

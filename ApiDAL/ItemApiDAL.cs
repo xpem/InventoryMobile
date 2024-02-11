@@ -7,22 +7,22 @@ namespace ApiDAL
 {
     public interface IItemApiDAL
     {
-        Task<ApiResponse> AddItem(Item item);
-        Task<ApiResponse> AltItem(Item item);
-        Task<ApiResponse> DelItem(int id);
-        Task<ApiResponse> GetItemById(string id);
-        Task<ApiResponse> GetItems();
+        Task<ApiResponse> AddItemAsync(Item item);
+        Task<ApiResponse> AltItemAsync(Item item);
+        Task<ApiResponse> DelItemAsync(int id);
+        Task<ApiResponse> GetItemByIdAsync(string id);
+        Task<ApiResponse> GetItemsAsync();
     }
 
     public class ItemApiDAL(IHttpClientFunctions httpClientFunctions) : IItemApiDAL
     {
-        public async Task<ApiResponse> GetItems() =>
+        public async Task<ApiResponse> GetItemsAsync() =>
             await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item");
 
-        public async Task<ApiResponse> GetItemById(string id) =>
+        public async Task<ApiResponse> GetItemByIdAsync(string id) =>
            await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item/" + id);
 
-        public async Task<ApiResponse> AddItem(Models.Item item)
+        public async Task<ApiResponse> AddItemAsync(Models.Item item)
         {
             try
             {
@@ -34,10 +34,10 @@ namespace ApiDAL
                     item.PurchaseValue,
                     item.PurchaseStore,
                     item.ResaleValue,
-                    Situation = new { Id = item.Situation },
+                    Situation = item.Situation?.Id,
                     item.Comment,
                     item.AcquisitionType,
-                    Category = new { item.Category?.Id, SubCategory = item.Category?.SubCategory is not null ? new { item.Category.SubCategory.Id } : null }
+                    Category = new { CategoryId = item.Category?.Id, SubCategoryId = item.Category?.SubCategory is not null ? (int?)item.Category.SubCategory.Id : null }
                 });
 
                 return await httpClientFunctions.AuthRequestAsync(Models.RequestsTypes.Post, ApiKeys.ApiAddress + "/Inventory/item", json);
@@ -45,7 +45,7 @@ namespace ApiDAL
             catch (Exception ex) { throw ex; }
         }
 
-        public async Task<ApiResponse> AltItem(Models.Item item)
+        public async Task<ApiResponse> AltItemAsync(Models.Item item)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace ApiDAL
             catch (Exception ex) { throw; }
         }
 
-        public async Task<ApiResponse> DelItem(int id)
+        public async Task<ApiResponse> DelItemAsync(int id)
         {
             try
             {

@@ -37,10 +37,10 @@ namespace BLL
             return new BLLResponse() { Success = false, Content = null };
         }
 
-        public string? RecoverPassword(string email)
+        public async Task<string?> RecoverPasswordAsync(string email)
         {
             email = email.ToLower();
-            ApiResponse? resp = userApiDAL.RecoverPasswordAsync(email).Result;
+            ApiResponse? resp = await userApiDAL.RecoverPasswordAsync(email);
 
             if (resp is not null && resp.Content is not null)
             {
