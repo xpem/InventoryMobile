@@ -12,7 +12,6 @@ namespace InventoryMobile.ViewModels.Item
 {
     public class ItemEditVM(IItemBLL itemBLL, IItemSituationBLL itemSituationBLL, IAcquisitionTypeBLL acquisitionTypeBLL) : ViewModelBase, IQueryAttributable
     {
-        #region fields
 
         int ItemId { get; set; }
 
@@ -21,14 +20,17 @@ namespace InventoryMobile.ViewModels.Item
         int? SubCategoryId { get; set; }
 
         const int resaleStatusId = 5;
+        readonly int[] outSituations = [4, 5, 3, 7];
 
-        string name;
-        string description;
-        string categoryName;
-        string acquisitionStore;
-        string commentary;
+        #region fields
 
-        public string Name { get => name; set { if (name != value) { name = value; OnPropertyChanged(nameof(Name)); } } }
+        string name, description, categoryName, acquisitionStore, commentary;
+
+        public string Name
+        {
+            get => name;
+            set { if (name != value) { name = value; OnPropertyChanged(nameof(Name)); } }
+        }
 
         public string Description
         {
@@ -40,11 +42,18 @@ namespace InventoryMobile.ViewModels.Item
             get => categoryName; set { if (categoryName != value) { categoryName = value; OnPropertyChanged(nameof(CategoryName)); } }
         }
 
-        DateOnly acquisitionDate;
+        DateTime acquisitionDate, withdrawalDate;
 
-        public DateOnly AcquisitionDate
+        public DateTime AcquisitionDate
         {
-            get => acquisitionDate; set { if (acquisitionDate != value) { acquisitionDate = value; OnPropertyChanged(nameof(AcquisitionDate)); } }
+            get => acquisitionDate;
+            set { if (acquisitionDate != value) { acquisitionDate = value; OnPropertyChanged(nameof(AcquisitionDate)); } }
+        }
+
+        public DateTime WithdrawalDate
+        {
+            get => withdrawalDate;
+            set { if (withdrawalDate != value) { withdrawalDate = value; OnPropertyChanged(nameof(WithdrawalDate)); } }
         }
 
         string acquisitionValue, resaleValue;
@@ -80,6 +89,7 @@ namespace InventoryMobile.ViewModels.Item
                 {
                     pkrItemSituationSelectedIndex = value;
                     if (pkrItemSituationSelectedIndex > 0)
+                    {
                         if (ItemsSituationObsList[pkrItemSituationSelectedIndex].Id == resaleStatusId)
                         {
                             StlResaleValueIsVisible = true;
@@ -87,6 +97,15 @@ namespace InventoryMobile.ViewModels.Item
                             OnPropertyChanged(nameof(ResaleValue));
                         }
                         else StlResaleValueIsVisible = false;
+
+                        if (outSituations.Contains(ItemsSituationObsList[pkrItemSituationSelectedIndex].Id))
+                        {
+                            StlWithdrawalDateIsVisible = true;
+                            WithdrawalDate = DateTime.Now;
+                            OnPropertyChanged(nameof(ResaleValue));
+                        }
+                        else StlWithdrawalDateIsVisible = false;
+                    }
                 }
                 OnPropertyChanged(nameof(PkrItemSituationSelectedIndex));
             }
@@ -114,13 +133,15 @@ namespace InventoryMobile.ViewModels.Item
 
         public string BtnInsertIcon { get => btnInsertIcon; set { if (value != btnInsertIcon) { btnInsertIcon = value; OnPropertyChanged(nameof(BtnInsertIcon)); } } }
 
-        bool btnInsertIsEnabled = true, btnDeleteIsVisible, stlResaleValueIsVisible;
+        bool btnInsertIsEnabled = true, btnDeleteIsVisible, stlResaleValueIsVisible, stlWithdrawalDateIsVisible;
 
         public bool BtnInsertIsEnabled { get => btnInsertIsEnabled; set { if (value != btnInsertIsEnabled) { btnInsertIsEnabled = value; OnPropertyChanged(nameof(BtnInsertIsEnabled)); } } }
 
         public bool BtnDeleteIsVisible { get => btnDeleteIsVisible; set { if (value != btnDeleteIsVisible) { btnDeleteIsVisible = value; OnPropertyChanged(nameof(BtnDeleteIsVisible)); } } }
 
         public bool StlResaleValueIsVisible { get => stlResaleValueIsVisible; set { if (value != stlResaleValueIsVisible) { stlResaleValueIsVisible = value; OnPropertyChanged(nameof(StlResaleValueIsVisible)); } } }
+
+        public bool StlWithdrawalDateIsVisible { get => stlWithdrawalDateIsVisible; set { if (value != stlWithdrawalDateIsVisible) { stlWithdrawalDateIsVisible = value; OnPropertyChanged(nameof(StlWithdrawalDateIsVisible)); } } }
 
         #endregion
 
@@ -163,7 +184,7 @@ namespace InventoryMobile.ViewModels.Item
             }
             else
             {
-                DateOnly acquisitionDate = DateOnly.FromDateTime(DateTime.Now);
+                DateOnly itemAcquisitionDate = DateOnly.FromDateTime(DateTime.Now);
 
                 ItemsSituationObsList = [];
                 List<ItemSituation> itemSituationList = [];
@@ -207,7 +228,7 @@ namespace InventoryMobile.ViewModels.Item
                     {
                         item = resp.Content as Models.Item;
 
-                        acquisitionDate = item.AcquisitionDate;
+                        itemAcquisitionDate = item.AcquisitionDate;
                         Name = item.Name;
                         AcquisitionValue = item.PurchaseValue.ToString();
 
@@ -226,7 +247,6 @@ namespace InventoryMobile.ViewModels.Item
 
                         PkrItemSituationSelectedIndex = ItemsSituationObsList.IndexOf(ItemsSituationObsList.Where(s => s.Id == item.Situation.Id).FirstOrDefault());
                         PkrAcquisitionTypeSelectedIndex = AcquisitionTypeObsList.IndexOf(AcquisitionTypeObsList.Where(s => s.Id == item.AcquisitionType).FirstOrDefault());
-
                         ResaleValue = item.ResaleValue.ToString();
                         AcquisitionStore = item.PurchaseStore;
                     }
@@ -248,7 +268,7 @@ namespace InventoryMobile.ViewModels.Item
 
                     PkrAcquisitionTypeSelectedIndex = 0;
                 }
-                AcquisitionDate = new DateOnly(acquisitionDate.Year, acquisitionDate.Month, acquisitionDate.Day);
+                AcquisitionDate = new DateTime(itemAcquisitionDate.Year, itemAcquisitionDate.Month, itemAcquisitionDate.Day);
             }
         }
 
@@ -281,7 +301,7 @@ namespace InventoryMobile.ViewModels.Item
                     Models.Item item = new()
                     {
                         Name = Name.Trim(),
-                        AcquisitionDate = AcquisitionDate,
+                        AcquisitionDate = new DateOnly(AcquisitionDate.Year, AcquisitionDate.Month, AcquisitionDate.Day),
                         AcquisitionType = AcquisitionTypeObsList[pkrAcquisitionTypeSelectedIndex].Id,
                         Comment = Commentary?.Trim(),
                         PurchaseStore = AcquisitionStore?.Trim(),

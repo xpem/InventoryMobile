@@ -479,7 +479,6 @@
         <Setter Property="FontFamily" Value="OpenSansRegular" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="PlaceholderColor" Value="{StaticResource Gray200}" />
-        <Setter Property="MinimumHeightRequest" Value="44" />
         <!--<Setter Property="MinimumWidthRequest" Value="250"/>-->
         <Setter Property="Margin" Value="5,0,0,0" />
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -551,7 +550,7 @@
         <Setter Property="BackgroundColor" Value="{StaticResource White}" />
         <Setter Property="FontFamily" Value="OpenSansRegular" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="MinimumHeightRequest" Value="44" />
+        <!--<Setter Property="MinimumHeightRequest" Value="44" />-->
         <Setter Property="MinimumWidthRequest" Value="120" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
@@ -581,6 +580,7 @@
 
     <Style TargetType="Picker">
         <Setter Property="TextColor" Value="{StaticResource White}" />
+        <Setter Property="HorizontalTextAlignment" Value="Start" />
         <Setter Property="TitleColor" Value="{StaticResource Gray100}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="FontFamily" Value="OpenSansSemibold" />

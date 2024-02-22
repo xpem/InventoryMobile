@@ -24,44 +24,31 @@ namespace ApiDAL
 
         public async Task<ApiResponse> AddItemAsync(Models.Item item)
         {
-            try
-            {
-                string json = JsonSerializer.Serialize(new
-                {
-                    item.Name,
-                    item.TechnicalDescription,
-                    item.AcquisitionDate,
-                    item.PurchaseValue,
-                    item.PurchaseStore,
-                    item.ResaleValue,
-                    Situation = item.Situation?.Id,
-                    item.Comment,
-                    item.AcquisitionType,
-                    Category = new { CategoryId = item.Category?.Id, SubCategoryId = item.Category?.SubCategory is not null ? (int?)item.Category.SubCategory.Id : null }
-                });
+            string json = BuildItemJson(item);
 
-                return await httpClientFunctions.AuthRequestAsync(Models.RequestsTypes.Post, ApiKeys.ApiAddress + "/Inventory/item", json);
-            }
-            catch (Exception ex) { throw ex; }
+            return await httpClientFunctions.AuthRequestAsync(Models.RequestsTypes.Post, ApiKeys.ApiAddress + "/Inventory/item", json);
         }
+
+        private static string BuildItemJson(Models.Item item) =>
+            JsonSerializer.Serialize(new
+            {
+                item.Name,
+                item.TechnicalDescription,
+                item.AcquisitionDate,
+                item.PurchaseValue,
+                item.PurchaseStore,
+                item.ResaleValue,
+                SituationId = item.Situation?.Id,
+                item.Comment,
+                item.AcquisitionType,
+                Category = new { CategoryId = item.Category?.Id, SubCategoryId = item.Category?.SubCategory is not null ? (int?)item.Category.SubCategory.Id : null }
+            });
 
         public async Task<ApiResponse> AltItemAsync(Models.Item item)
         {
             try
             {
-                string json = JsonSerializer.Serialize(new
-                {
-                    item.Name,
-                    item.TechnicalDescription,
-                    item.AcquisitionDate,
-                    item.PurchaseValue,
-                    item.PurchaseStore,
-                    item.ResaleValue,
-                    Situation = new { Id = item.Situation },
-                    item.Comment,
-                    item.AcquisitionType,
-                    Category = new { item.Category?.Id, SubCategory = item.Category?.SubCategory is not null ? new { item.Category.SubCategory.Id } : null }
-                });
+                string json = BuildItemJson(item);
 
                 return await httpClientFunctions.AuthRequestAsync(Models.RequestsTypes.Put, ApiKeys.ApiAddress + "/Inventory/item/" + item.Id, json);
             }
