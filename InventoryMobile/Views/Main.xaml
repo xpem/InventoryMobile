@@ -87,6 +87,7 @@
                                                 FontAttributes="Bold"
                                                 FontSize="15"
                                                 LineBreakMode="TailTruncation"
+                                                MaxLines="1"
                                                 Text="{Binding Name}"
                                                 TextColor="{StaticResource Black}" />
                                             <Label
