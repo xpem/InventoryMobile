@@ -6,7 +6,7 @@
 
         public string? TechnicalDescription { get; set; }
 
-        public DateOnly AcquisitionDate { get; set; }
+        public DateTime AcquisitionDate { get; set; }
 
         public int AcquisitionType { get; set; }
         

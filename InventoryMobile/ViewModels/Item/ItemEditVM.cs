@@ -184,7 +184,7 @@ namespace InventoryMobile.ViewModels.Item
             }
             else
             {
-                DateOnly itemAcquisitionDate = DateOnly.FromDateTime(DateTime.Now);
+                DateTime itemAcquisitionDate = DateTime.Now;
 
                 ItemsSituationObsList = [];
                 List<ItemSituation> itemSituationList = [];
@@ -278,7 +278,7 @@ namespace InventoryMobile.ViewModels.Item
             {
                 IsBusy = true;
 
-                await itemBLL.DelItem(ItemId);
+                await itemBLL.DelItemAsync(ItemId);
 
                 IsBusy = false;
 
@@ -286,6 +286,10 @@ namespace InventoryMobile.ViewModels.Item
                     await Shell.Current.GoToAsync("..");
             }
         }
+
+
+        private static decimal CurrencyValueParse(string currencyValue) =>
+             decimal.Parse(currencyValue.Replace(".", ""), NumberStyles.Number, new NumberFormatInfo() { NumberDecimalSeparator = "," });
 
         private async Task AltItem()
         {
@@ -295,13 +299,13 @@ namespace InventoryMobile.ViewModels.Item
                 {
                     BtnInsertIsEnabled = false;
 
-                    decimal decAquisitionValue = decimal.Parse(AcquisitionValue, NumberStyles.AllowCurrencySymbol | NumberStyles.Number);
-                    decimal decResaleValue = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id == resaleStatusId ? decimal.Parse(ResaleValue, NumberStyles.AllowCurrencySymbol | NumberStyles.Number) : 0;
+                    decimal decAquisitionValue = CurrencyValueParse(AcquisitionValue);
+                    decimal decResaleValue = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id == resaleStatusId ? CurrencyValueParse(ResaleValue) : 0;
 
                     Models.Item item = new()
                     {
                         Name = Name.Trim(),
-                        AcquisitionDate = new DateOnly(AcquisitionDate.Year, AcquisitionDate.Month, AcquisitionDate.Day),
+                        AcquisitionDate = new DateTime(AcquisitionDate.Year, AcquisitionDate.Month, AcquisitionDate.Day).Date,
                         AcquisitionType = AcquisitionTypeObsList[pkrAcquisitionTypeSelectedIndex].Id,
                         Comment = Commentary?.Trim(),
                         PurchaseStore = AcquisitionStore?.Trim(),
@@ -313,22 +317,28 @@ namespace InventoryMobile.ViewModels.Item
                     };
 
                     string message = "";
+                    BLLResponse resp;
 
                     if (ItemId > 0)
                     {
                         item.Id = ItemId;
 
-                        var resp = await itemBLL.AltItem(item);
-                        if (resp.Success)
-                            message = "Item Atualizada!";
+                        resp = await itemBLL.AltItemAsync(item);
                     }
                     else
-                    {
-                        var resp = await itemBLL.AddItem(item);
+                        resp = await itemBLL.AddItemAsync(item);
 
-                        if (resp.Success)
+
+                    if (resp.Success)
+                    {
+                        if (ItemId > 0)
+                            message = "Item Atualizada!";
+                        else
                             message = "Item Adicionado!";
                     }
+                    else if (resp.Content != null)
+                        message = resp.Content as string;
+
                     bool resposta = await Application.Current.MainPage.DisplayAlert("Aviso", message, null, "Ok");
 
                     if (!resposta)

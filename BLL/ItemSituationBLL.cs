@@ -14,7 +14,7 @@ namespace BLL
     {
         public async Task<BLLResponse> GetItemSituation()
         {
-            var resp = await itemSituationDAL.GetItemSituation();
+            ApiResponse resp = await itemSituationDAL.GetItemSituation();
 
             return ApiResponseHandler.Handler<List<ItemSituation>>(resp);
         }

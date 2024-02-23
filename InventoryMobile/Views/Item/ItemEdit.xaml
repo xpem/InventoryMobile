@@ -49,10 +49,7 @@
                                 Color="#fff" />
                         </Button.ImageSource>
                     </Button>
-                    <VerticalStackLayout
-                        Margin="0,5,0,0"
-                        HorizontalOptions="Start"
-                        WidthRequest="200">
+                    <VerticalStackLayout Margin="1,5,0,0" HorizontalOptions="FillAndExpand">
                         <Label
                             FontAttributes="Bold"
                             Style="{StaticResource LblHEntry}"
@@ -62,8 +59,7 @@
                                 ItemDisplayBinding="{Binding Name}"
                                 ItemsSource="{Binding ItemsSituationObsList}"
                                 SelectedIndex="{Binding PkrItemSituationSelectedIndex}"
-                                TextColor="White"
-                                WidthRequest="200" />
+                                TextColor="White" />
                         </Frame>
                     </VerticalStackLayout>
                     <!--    -->
@@ -81,7 +77,7 @@
                     </StackLayout>
                     <StackLayout Orientation="Horizontal">
                         <StackLayout
-                            Margin="5,0,0,0"
+                            Margin="0,0,0,0"
                             Padding="2,0,0,0"
                             IsVisible="{Binding StlResaleValueIsVisible}">
                             <components:BorderedCurrencyEntry LabelText="Valor de revenda" Text="{Binding ResaleValue}" />
@@ -146,7 +142,7 @@
                             <Frame
                                 Margin="0,0,0,0"
                                 Padding="2,0,0,0"
-                                HorizontalOptions="Start"
+                                HorizontalOptions="FillAndExpand"
                                 Style="{StaticResource EntryBorders}">
                                 <DatePicker
                                     Margin="0,0,5,0"
@@ -169,7 +165,7 @@
                         </VerticalStackLayout>
                         <VerticalStackLayout Grid.Row="1" Grid.Column="1">
                             <components:BorderedEntry
-                                Margin="0,0,5,0"
+                                Margin="0,0,0,0"
                                 HorizontalOptions="FillAndExpand"
                                 LabelText="Loja"
                                 Text="{Binding AcquisitionStore}" />

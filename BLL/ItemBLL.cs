@@ -6,88 +6,70 @@ using System.Text.Json.Nodes;
 
 namespace BLL
 {
-    public class ItemBLL(IItemApiDAL itemDAL) : IItemBLL
+    public interface IItemBLL
     {
+        Task<BLLResponse> AddItemAsync(Item item);
+        Task<BLLResponse> AltItemAsync(Item item);
+        Task<BLLResponse> DelItemAsync(int id);
+        Task<BLLResponse> GetItemByIdAsync(string id);
+        Task<BLLResponse> GetItemsAsync();
+    }
 
-        public async Task<BLLResponse> GetItemsAsync() => ApiResponseHandler.Handler<List<Models.Item>>(await itemDAL.GetItemsAsync());
-
-        public async Task<BLLResponse> GetItemByIdAsync(string id) =>
-            ApiResponseHandler.Handler<Item>(await itemDAL.GetItemByIdAsync(id));
-
-        public async Task<BLLResponse> AddItem(Models.Item item)
+    public class ItemBLL(IItemApiDAL itemApiDAL) : IItemBLL
+    {
+        public async Task<BLLResponse> GetItemsAsync()
         {
-            var resp = await itemDAL.AddItemAsync(item);
-
-            if (resp is not null && resp.Success && resp.Content is not null)
-            {
-                var jResp = JsonNode.Parse(resp.Content);
-
-                if (jResp is not null)
-                {
-                    Item itemResp = new()
-                    {
-                        Id = jResp["Id"]?.GetValue<int>() ?? 0,
-                        Name = jResp["Name"]?.GetValue<string>(),
-                        TechnicalDescription = jResp["TechnicalDescription"]?.GetValue<string>(),
-                        AcquisitionDate = jResp["AcquisitionDate"]?.GetValue<DateOnly>() ?? DateOnly.MinValue,
-                        AcquisitionType = jResp["AcquisitionType"]?.GetValue<Int32>() ?? Int32.MinValue,
-                        PurchaseStore = jResp["PurchaseStore"]?.GetValue<string>(),
-                        PurchaseValue = jResp["PurchaseValue"]?.GetValue<decimal>(),
-                        ResaleValue = jResp["ResaleValue"]?.GetValue<decimal>(),
-                        //CreatedAt = jResp["CreatedAt"]?.GetValue<DateTime>(),
-                        //UpdatedAt = jResp["UpdatedAt"]?.GetValue<DateTime>(),
-                        Comment = jResp["Comment"]?.GetValue<string>(),
-                        Situation = new ItemSituation() { Id = jResp["Situation"]?.GetValue<int>() ?? 0 },
-                    };
-
-                    return new BLLResponse() { Success = resp.Success, Content = itemResp };
-                }
-                else return new BLLResponse() { Success = false, Content = resp.Content };
-            }
-
-            return new BLLResponse() { Success = false, Content = null };
+            ApiResponse resp = await itemApiDAL.GetItemsAsync();
+            return ApiResponseHandler.Handler<List<Models.Item>>(resp);
         }
 
-        public async Task<BLLResponse> AltItem(Models.Item item)
+        public async Task<BLLResponse> GetItemByIdAsync(string id)
         {
-            var resp = await itemDAL.AltItemAsync(item);
+            ApiResponse resp = await itemApiDAL.GetItemByIdAsync(id);
+            return ApiResponseHandler.Handler<Item>(resp);
+        }
+
+        public async Task<BLLResponse> AddItemAsync(Models.Item item)
+        {
+            ApiResponse? resp = await itemApiDAL.AddItemAsync(item);
 
             if (resp is not null && resp.Success && resp.Content is not null)
             {
                 JsonNode? jResp = JsonNode.Parse(resp.Content);
 
                 if (jResp is not null)
-                    return new BLLResponse() { Success = resp.Success, Content = BuildItemResponse(jResp) };
+                    return new BLLResponse() { Success = resp.Success, Content = null };
                 else return new BLLResponse() { Success = false, Content = resp.Content };
             }
 
             return new BLLResponse() { Success = false, Content = null };
         }
 
-        public async Task<BLLResponse> DelItem(int id)
+        public async Task<BLLResponse> AltItemAsync(Models.Item item)
         {
-            var resp = await itemDAL.DelItemAsync(id);
+            ApiResponse? resp = await itemApiDAL.AltItemAsync(item);
 
-            if (resp is not null && resp.Content is not null)
-                return new BLLResponse() { Success = resp.Success, Content = resp.Content };
+            if (resp is not null && resp.Success && resp.Content is not null)
+            {
+                JsonNode? jResp = JsonNode.Parse(resp.Content);
+
+                if (jResp is not null)
+                    return new BLLResponse() { Success = resp.Success, Content = null };
+                else return new BLLResponse() { Success = false, Content = resp.Content };
+            }
 
             return new BLLResponse() { Success = false, Content = null };
         }
 
-        public Item BuildItemResponse(JsonNode jResp) => new()
+        public async Task<BLLResponse> DelItemAsync(int id)
         {
-            Id = jResp["Id"]?.GetValue<int>() ?? 0,
-            Name = jResp["Name"]?.GetValue<string>(),
-            TechnicalDescription = jResp["TechnicalDescription"]?.GetValue<string>(),
-            AcquisitionDate = jResp["AcquisitionDate"]?.GetValue<DateOnly>() ?? DateOnly.MinValue,
-            AcquisitionType = jResp["AcquisitionType"]?.GetValue<Int32>() ?? Int32.MinValue,
-            PurchaseStore = jResp["PurchaseStore"]?.GetValue<string>(),
-            PurchaseValue = jResp["PurchaseValue"]?.GetValue<decimal>(),
-            ResaleValue = jResp["ResaleValue"]?.GetValue<decimal>(),
-            //CreatedAt = jResp["CreatedAt"]?.GetValue<DateTime>(),
-            //UpdatedAt = jResp["UpdatedAt"]?.GetValue<DateTime>(),
-            Comment = jResp["Comment"]?.GetValue<string>(),
-            Situation = new ItemSituation() { Id = jResp["Situation"]?.GetValue<int>() ?? 0 }
-        };
+            ApiResponse? resp = await itemApiDAL.DelItemAsync(id);
+
+            if (resp is not null && !resp.Success && !string.IsNullOrEmpty(resp.Content))
+                return new BLLResponse() { Success = false, Content = resp.Content };
+
+            return new BLLResponse() { Success = true, Content = null };
+        }
+
     }
 }

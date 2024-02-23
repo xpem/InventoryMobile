@@ -34,7 +34,7 @@ namespace ApiDAL
             {
                 item.Name,
                 item.TechnicalDescription,
-                item.AcquisitionDate,
+                AcquisitionDate = DateOnly.FromDateTime(item.AcquisitionDate),
                 item.PurchaseValue,
                 item.PurchaseStore,
                 item.ResaleValue,
