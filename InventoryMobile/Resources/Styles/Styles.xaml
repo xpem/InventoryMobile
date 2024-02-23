@@ -418,7 +418,6 @@
         <Setter Property="BackgroundColor" Value="{StaticResource DarkBackgroud}" />
         <Setter Property="BorderColor" Value="{StaticResource ActiveColor}" />
         <Setter Property="CornerRadius" Value="5" />
-        <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
