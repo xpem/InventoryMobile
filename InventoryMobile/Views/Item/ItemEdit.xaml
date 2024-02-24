@@ -75,24 +75,15 @@
                             HeightRequest="1"
                             Color="{StaticResource Gray200}" />
                     </StackLayout>
-                    <StackLayout Orientation="Horizontal">
-                        <StackLayout
-                            Margin="0,0,0,0"
-                            Padding="2,0,0,0"
-                            IsVisible="{Binding StlResaleValueIsVisible}">
-                            <components:BorderedCurrencyEntry LabelText="Valor de revenda" Text="{Binding ResaleValue}" />
-                        </StackLayout>
-                        <StackLayout
-                            Margin="5,5,0,0"
-                            HorizontalOptions="EndAndExpand"
-                            IsVisible="{Binding StlWithdrawalDateIsVisible}">
+                    <Grid ColumnDefinitions="*,*" HorizontalOptions="FillAndExpand">
+                        <StackLayout Margin="0" IsVisible="{Binding StlWithdrawalDateIsVisible}">
                             <Label Style="{StaticResource LblHEntry}" Text="Data" />
                             <Frame
-                                Padding="2,0,0,0"
+                                Margin="0"
                                 HorizontalOptions="Start"
                                 Style="{StaticResource EntryBorders}">
                                 <DatePicker
-                                    Margin="0,0,5,0"
+                                    Margin="0,0,0,0"
                                     BackgroundColor="Transparent"
                                     Date="{Binding WithdrawalDate}"
                                     FontFamily="OpenSansRegular"
@@ -102,7 +93,14 @@
                                 <!--<BoxView HeightRequest="1" Color="#fff" Margin="0,0,0,5" />-->
                             </Frame>
                         </StackLayout>
-                    </StackLayout>
+                        <StackLayout
+                            Grid.Column="1"
+                            Margin="0,0,0,0"
+                            HorizontalOptions="Start"
+                            IsVisible="{Binding StlResaleValueIsVisible}">
+                            <components:BorderedCurrencyEntry LabelText="Valor de revenda" Text="{Binding ResaleValue}" />
+                        </StackLayout>
+                    </Grid>
                     <Label
                         Margin="0,10,0,0"
                         FontAttributes="Bold"
@@ -140,12 +138,11 @@
                         <VerticalStackLayout Grid.Column="1">
                             <Label Style="{StaticResource LblHEntry}" Text="Data" />
                             <Frame
-                                Margin="0,0,0,0"
-                                Padding="2,0,0,0"
-                                HorizontalOptions="FillAndExpand"
+                                Margin="0"
+                                HorizontalOptions="Start"
                                 Style="{StaticResource EntryBorders}">
                                 <DatePicker
-                                    Margin="0,0,5,0"
+                                    Margin="0,0,0,0"
                                     BackgroundColor="Transparent"
                                     Date="{Binding AcquisitionDate}"
                                     FontFamily="OpenSansRegular"
