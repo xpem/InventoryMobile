@@ -248,8 +248,10 @@ namespace InventoryMobile.ViewModels.Item
                         PkrItemSituationSelectedIndex = ItemsSituationObsList.IndexOf(ItemsSituationObsList.Where(s => s.Id == item.Situation.Id).FirstOrDefault());
                         PkrAcquisitionTypeSelectedIndex = AcquisitionTypeObsList.IndexOf(AcquisitionTypeObsList.Where(s => s.Id == item.AcquisitionType).FirstOrDefault());
                         ResaleValue = item.ResaleValue.ToString();
+                        WithdrawalDate = item.WithdrawalDate != null ? item.WithdrawalDate.Value : DateTime.Now;
                         AcquisitionStore = item.PurchaseStore;
                     }
+
                     BtnInsertIcon = Icons.Pen;
                     BtnInsertText = "Atualizar";
                     BtnDeleteIsVisible = true;
@@ -268,7 +270,8 @@ namespace InventoryMobile.ViewModels.Item
 
                     PkrAcquisitionTypeSelectedIndex = 0;
                 }
-                AcquisitionDate = new DateTime(itemAcquisitionDate.Year, itemAcquisitionDate.Month, itemAcquisitionDate.Day);
+
+                AcquisitionDate = itemAcquisitionDate;
             }
         }
 
@@ -287,9 +290,8 @@ namespace InventoryMobile.ViewModels.Item
             }
         }
 
-
         private static decimal CurrencyValueParse(string currencyValue) =>
-             decimal.Parse(currencyValue.Replace(".", ""), NumberStyles.Number, new NumberFormatInfo() { NumberDecimalSeparator = "," });
+            decimal.Parse(currencyValue.Replace(".", ""), NumberStyles.Number, new NumberFormatInfo() { NumberDecimalSeparator = "," });
 
         private async Task AltItem()
         {
@@ -311,9 +313,11 @@ namespace InventoryMobile.ViewModels.Item
                         PurchaseStore = AcquisitionStore?.Trim(),
                         PurchaseValue = decAquisitionValue,
                         Situation = new ItemSituation() { Id = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id },
-                        ResaleValue = decResaleValue,
+                        ResaleValue = StlResaleValueIsVisible ? decResaleValue : null,
                         TechnicalDescription = Description.Trim(),
                         Category = new Models.Category() { Id = CategoryId, SubCategory = SubCategoryId is not null ? new Models.SubCategory() { Id = SubCategoryId.Value } : null },
+                        WithdrawalDate = StlWithdrawalDateIsVisible ? WithdrawalDate : null
+
                     };
 
                     string message = "";

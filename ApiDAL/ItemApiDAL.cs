@@ -41,7 +41,8 @@ namespace ApiDAL
                 SituationId = item.Situation?.Id,
                 item.Comment,
                 item.AcquisitionType,
-                Category = new { CategoryId = item.Category?.Id, SubCategoryId = item.Category?.SubCategory is not null ? (int?)item.Category.SubCategory.Id : null }
+                Category = new { CategoryId = item.Category?.Id, SubCategoryId = item.Category?.SubCategory is not null ? (int?)item.Category.SubCategory.Id : null },
+                WithdrawalDate = item.WithdrawalDate != null ? (DateOnly?)DateOnly.FromDateTime(item.WithdrawalDate.Value) : null,
             });
 
         public async Task<ApiResponse> AltItemAsync(Models.Item item)
