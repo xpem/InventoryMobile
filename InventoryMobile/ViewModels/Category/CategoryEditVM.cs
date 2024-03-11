@@ -93,6 +93,7 @@ namespace InventoryMobile.ViewModels.Category
 
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
+            IsBusy = true;
             ColorPickerVisible = false;
             ButtonColorVisible = true;
 
@@ -122,6 +123,8 @@ namespace InventoryMobile.ViewModels.Category
                 BtnInsertIcon = Icons.Plus;
                 BtnInsertText = "Cadastrar";
             }
+
+            IsBusy = false;
         }
 
         public ICommand InsertCommand => new Command(async (e) => { await InsertCategory(); });

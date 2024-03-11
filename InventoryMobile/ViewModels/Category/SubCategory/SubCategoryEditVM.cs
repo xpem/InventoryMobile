@@ -200,6 +200,7 @@ namespace InventoryMobile.ViewModels.Category.SubCategory
 
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
+            IsBusy = true;
             IconPickerVisible = false;
             ButtonIconVisible = true;
 
@@ -237,6 +238,7 @@ namespace InventoryMobile.ViewModels.Category.SubCategory
             }
 
             Icon ??= Icons.Tag;
+            IsBusy = false;
         }
     }
 }

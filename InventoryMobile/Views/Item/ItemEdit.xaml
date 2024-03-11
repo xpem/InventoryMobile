@@ -11,212 +11,221 @@
     x:DataType="viewmodels:ItemEditVM"
     Style="{StaticResource ContentPage}">
     <!--  Shell.NavBarIsVisible="False"  -->
-    <ScrollView VerticalOptions="StartAndExpand">
-        <StackLayout Style="{StaticResource VerticalStackLayoutPrimary}">
-            <Frame IsEnabled="{Binding IsNotBusy}" Style="{StaticResource FramePrimary}">
-                <VerticalStackLayout>
-                    <components:BorderedEntry LabelText="Nome" Text="{Binding Name}" />
-                    <VerticalStackLayout Margin="0,5,0,0">
-                        <Label Style="{StaticResource LblHEntry}" Text="Descrição técnica" />
-                        <Frame Style="{StaticResource EntryBorders}">
-                            <Editor
-                                AutoSize="TextChanges"
-                                Keyboard="Chat"
-                                MaxLength="200"
-                                Style="{StaticResource Entry}"
-                                Text="{Binding Description}" />
-                        </Frame>
-                    </VerticalStackLayout>
-                    <Label
-                        Padding="0,5,0,0"
-                        FontAttributes="Bold"
-                        Style="{StaticResource LblHEntry}"
-                        Text="Categoria" />
-                    <Button
-                        Padding="0,10,0,10"
-                        BackgroundColor="#29A0B1"
-                        Command="{Binding CategorySelectorCommand}"
-                        ContentLayout="Right,20"
-                        FontFamily="OpenSansSemibold"
-                        FontSize="14"
-                        Text="{Binding CategoryName}"
-                        TextColor="{StaticResource White}">
-                        <Button.ImageSource>
-                            <FontImageSource
-                                FontFamily="Icons"
-                                Glyph="{x:Static Icons:Icons.AngleRight}"
-                                Size="14"
-                                Color="#fff" />
-                        </Button.ImageSource>
-                    </Button>
-                    <VerticalStackLayout Margin="1,5,0,0" HorizontalOptions="FillAndExpand">
+    <Grid RowDefinitions="*">
+        <ScrollView IsEnabled="{Binding IsNotBusy}" VerticalOptions="StartAndExpand">
+            <StackLayout Style="{StaticResource VerticalStackLayoutPrimary}">
+                <Frame Style="{StaticResource FramePrimary}">
+                    <VerticalStackLayout>
+                        <components:BorderedEntry LabelText="Nome" Text="{Binding Name}" />
+                        <VerticalStackLayout Margin="0,5,0,0">
+                            <Label Style="{StaticResource LblHEntry}" Text="Descrição técnica" />
+                            <Frame Style="{StaticResource EntryBorders}">
+                                <Editor
+                                    AutoSize="TextChanges"
+                                    Keyboard="Chat"
+                                    MaxLength="200"
+                                    Style="{StaticResource Entry}"
+                                    Text="{Binding Description}" />
+                            </Frame>
+                        </VerticalStackLayout>
                         <Label
+                            Padding="0,5,0,0"
                             FontAttributes="Bold"
                             Style="{StaticResource LblHEntry}"
-                            Text="Situação" />
-                        <Frame Style="{StaticResource FramePickerBordered}">
-                            <Picker
-                                ItemDisplayBinding="{Binding Name}"
-                                ItemsSource="{Binding ItemsSituationObsList}"
-                                SelectedIndex="{Binding PkrItemSituationSelectedIndex}"
-                                TextColor="White" />
-                        </Frame>
-                    </VerticalStackLayout>
-                    <!--    -->
-                    <StackLayout IsVisible="{Binding StlResaleValueIsVisible}">
+                            Text="Categoria" />
+                        <Button
+                            Padding="0,10,0,10"
+                            BackgroundColor="#29A0B1"
+                            Command="{Binding CategorySelectorCommand}"
+                            ContentLayout="Right,20"
+                            FontFamily="OpenSansSemibold"
+                            FontSize="14"
+                            Text="{Binding CategoryName}"
+                            TextColor="{StaticResource White}">
+                            <Button.ImageSource>
+                                <FontImageSource
+                                    FontFamily="Icons"
+                                    Glyph="{x:Static Icons:Icons.AngleRight}"
+                                    Size="14"
+                                    Color="#fff" />
+                            </Button.ImageSource>
+                        </Button>
+                        <VerticalStackLayout Margin="1,5,0,0" HorizontalOptions="FillAndExpand">
+                            <Label
+                                FontAttributes="Bold"
+                                Style="{StaticResource LblHEntry}"
+                                Text="Situação" />
+                            <Frame Style="{StaticResource FramePickerBordered}">
+                                <Picker
+                                    ItemDisplayBinding="{Binding Name}"
+                                    ItemsSource="{Binding ItemsSituationObsList}"
+                                    SelectedIndex="{Binding PkrItemSituationSelectedIndex}"
+                                    TextColor="White" />
+                            </Frame>
+                        </VerticalStackLayout>
+                        <!--    -->
+                        <StackLayout IsVisible="{Binding StlResaleValueIsVisible}">
+                            <Label
+                                Margin="0,10,0,0"
+                                FontAttributes="Bold"
+                                FontSize="15"
+                                Style="{StaticResource LblHEntry}"
+                                Text="Revenda" />
+                            <BoxView
+                                Margin="0,0,0,5"
+                                HeightRequest="1"
+                                Color="{StaticResource Gray200}" />
+                        </StackLayout>
+                        <Grid ColumnDefinitions="*,*" HorizontalOptions="FillAndExpand">
+                            <StackLayout Margin="0" IsVisible="{Binding StlWithdrawalDateIsVisible}">
+                                <Label Style="{StaticResource LblHEntry}" Text="Data" />
+                                <Frame
+                                    Margin="0"
+                                    HorizontalOptions="Start"
+                                    Style="{StaticResource EntryBorders}">
+                                    <DatePicker
+                                        Margin="0,0,0,0"
+                                        BackgroundColor="Transparent"
+                                        Date="{Binding WithdrawalDate}"
+                                        FontFamily="OpenSansRegular"
+                                        FontSize="14"
+                                        Format="dd/MM/yyyy"
+                                        TextColor="{StaticResource White}" />
+                                    <!--<BoxView HeightRequest="1" Color="#fff" Margin="0,0,0,5" />-->
+                                </Frame>
+                            </StackLayout>
+                            <StackLayout
+                                Grid.Column="1"
+                                Margin="0,0,0,0"
+                                HorizontalOptions="Start"
+                                IsVisible="{Binding StlResaleValueIsVisible}">
+                                <components:BorderedCurrencyEntry LabelText="Valor de revenda" Text="{Binding ResaleValue}" />
+                            </StackLayout>
+                        </Grid>
                         <Label
                             Margin="0,10,0,0"
                             FontAttributes="Bold"
                             FontSize="15"
                             Style="{StaticResource LblHEntry}"
-                            Text="Revenda" />
+                            Text="Aquisição" />
                         <BoxView
                             Margin="0,0,0,5"
                             HeightRequest="1"
                             Color="{StaticResource Gray200}" />
-                    </StackLayout>
-                    <Grid ColumnDefinitions="*,*" HorizontalOptions="FillAndExpand">
-                        <StackLayout Margin="0" IsVisible="{Binding StlWithdrawalDateIsVisible}">
-                            <Label Style="{StaticResource LblHEntry}" Text="Data" />
-                            <Frame
-                                Margin="0"
-                                HorizontalOptions="Start"
-                                Style="{StaticResource EntryBorders}">
-                                <DatePicker
-                                    Margin="0,0,0,0"
-                                    BackgroundColor="Transparent"
-                                    Date="{Binding WithdrawalDate}"
-                                    FontFamily="OpenSansRegular"
-                                    FontSize="14"
-                                    Format="dd/MM/yyyy"
-                                    TextColor="{StaticResource White}" />
-                                <!--<BoxView HeightRequest="1" Color="#fff" Margin="0,0,0,5" />-->
-                            </Frame>
-                        </StackLayout>
-                        <StackLayout
-                            Grid.Column="1"
-                            Margin="0,0,0,0"
-                            HorizontalOptions="Start"
-                            IsVisible="{Binding StlResaleValueIsVisible}">
-                            <components:BorderedCurrencyEntry LabelText="Valor de revenda" Text="{Binding ResaleValue}" />
-                        </StackLayout>
-                    </Grid>
-                    <Label
-                        Margin="0,10,0,0"
-                        FontAttributes="Bold"
-                        FontSize="15"
-                        Style="{StaticResource LblHEntry}"
-                        Text="Aquisição" />
-                    <BoxView
-                        Margin="0,0,0,5"
-                        HeightRequest="1"
-                        Color="{StaticResource Gray200}" />
 
-                    <Grid
-                        Margin="0"
-                        ColumnDefinitions="5*,5*"
-                        HorizontalOptions="FillAndExpand"
-                        RowDefinitions="*,*">
-                        <VerticalStackLayout HorizontalOptions="FillAndExpand">
-                            <Label
-                                FontAttributes="Bold"
-                                Style="{StaticResource LblHEntry}"
-                                Text="Tipo" />
-                            <Frame
-                                Margin="0,0,5,0"
-                                HorizontalOptions="FillAndExpand"
-                                Style="{StaticResource FramePickerBordered}">
-                                <Picker
-                                    HorizontalOptions="FillAndExpand"
-                                    ItemDisplayBinding="{Binding Name}"
-                                    ItemsSource="{Binding AcquisitionTypeObsList}"
-                                    SelectedIndex="{Binding PkrAcquisitionTypeSelectedIndex}"
-                                    Style="{StaticResource Picker}"
-                                    TextColor="White" />
-                            </Frame>
-                        </VerticalStackLayout>
-                        <VerticalStackLayout Grid.Column="1">
-                            <Label Style="{StaticResource LblHEntry}" Text="Data" />
-                            <Frame
-                                Margin="0"
-                                HorizontalOptions="Start"
-                                Style="{StaticResource EntryBorders}">
-                                <DatePicker
-                                    Margin="0,0,0,0"
-                                    BackgroundColor="Transparent"
-                                    Date="{Binding AcquisitionDate}"
-                                    FontFamily="OpenSansRegular"
-                                    FontSize="14"
-                                    Format="dd/MM/yyyy"
-                                    HorizontalOptions="FillAndExpand"
-                                    TextColor="{StaticResource White}" />
-                                <!--<BoxView HeightRequest="1" Color="#fff" Margin="0,0,0,5" />-->
-                            </Frame>
-                        </VerticalStackLayout>
-                        <VerticalStackLayout Grid.Row="1">
-                            <components:BorderedCurrencyEntry
-                                Margin="0,0,5,0"
-                                HorizontalOptions="FillAndExpand"
-                                LabelText="Valor"
-                                Text="{Binding AcquisitionValue}" />
-                        </VerticalStackLayout>
-                        <VerticalStackLayout Grid.Row="1" Grid.Column="1">
-                            <components:BorderedEntry
-                                Margin="0,0,0,0"
-                                HorizontalOptions="FillAndExpand"
-                                LabelText="Loja"
-                                Text="{Binding AcquisitionStore}" />
-                        </VerticalStackLayout>
-                    </Grid>
-                    <VerticalStackLayout Margin="0,5,0,0">
-                        <Label Style="{StaticResource LblHEntry}" Text="Comentários" />
-                        <Frame Style="{StaticResource EntryBorders}">
-                            <Editor
-                                AutoSize="TextChanges"
-                                Keyboard="Chat"
-                                MaxLength="200"
-                                Style="{StaticResource Entry}"
-                                Text="{Binding Commentary}" />
-                        </Frame>
-                    </VerticalStackLayout>
-                    <StackLayout Orientation="Horizontal">
-                        <Button
-                            Margin="0,10,0,20"
-                            Command="{Binding AddItemCommand}"
-                            ContentLayout="Left,10"
-                            FontSize="20"
+                        <Grid
+                            Margin="0"
+                            ColumnDefinitions="5*,5*"
                             HorizontalOptions="FillAndExpand"
-                            IsEnabled="{Binding BtnInsertIsEnabled}"
-                            Style="{StaticResource ButtonPrimary}"
-                            Text="{Binding BtnInsertText}">
-                            <Button.ImageSource>
-                                <FontImageSource
-                                    FontFamily="Icons"
-                                    Glyph="{Binding BtnInsertIcon}"
-                                    Size="15"
-                                    Color="#fff" />
-                            </Button.ImageSource>
-                        </Button>
-                        <Button
-                            Margin="10,10,0,20"
-                            Command="{Binding DelItemCommand}"
-                            ContentLayout="Left,10"
-                            FontSize="20"
-                            IsVisible="{Binding BtnDeleteIsVisible}"
-                            Style="{StaticResource ButtonDanger}"
-                            Text="Excluir"
-                            WidthRequest="150">
-                            <Button.ImageSource>
-                                <FontImageSource
-                                    FontFamily="Icons"
-                                    Glyph="{x:Static Icons:Icons.Trash}"
-                                    Size="15"
-                                    Color="#fff" />
-                            </Button.ImageSource>
-                        </Button>
-                    </StackLayout>
-                </VerticalStackLayout>
-            </Frame>
-        </StackLayout>
-    </ScrollView>
+                            RowDefinitions="*,*">
+                            <VerticalStackLayout HorizontalOptions="FillAndExpand">
+                                <Label
+                                    FontAttributes="Bold"
+                                    Style="{StaticResource LblHEntry}"
+                                    Text="Tipo" />
+                                <Frame
+                                    Margin="0,0,5,0"
+                                    HorizontalOptions="FillAndExpand"
+                                    Style="{StaticResource FramePickerBordered}">
+                                    <Picker
+                                        HorizontalOptions="FillAndExpand"
+                                        ItemDisplayBinding="{Binding Name}"
+                                        ItemsSource="{Binding AcquisitionTypeObsList}"
+                                        SelectedIndex="{Binding PkrAcquisitionTypeSelectedIndex}"
+                                        Style="{StaticResource Picker}"
+                                        TextColor="White" />
+                                </Frame>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Style="{StaticResource LblHEntry}" Text="Data" />
+                                <Frame
+                                    Margin="0"
+                                    HorizontalOptions="Start"
+                                    Style="{StaticResource EntryBorders}">
+                                    <DatePicker
+                                        Margin="0,0,0,0"
+                                        BackgroundColor="Transparent"
+                                        Date="{Binding AcquisitionDate}"
+                                        FontFamily="OpenSansRegular"
+                                        FontSize="14"
+                                        Format="dd/MM/yyyy"
+                                        HorizontalOptions="FillAndExpand"
+                                        TextColor="{StaticResource White}" />
+                                    <!--<BoxView HeightRequest="1" Color="#fff" Margin="0,0,0,5" />-->
+                                </Frame>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Row="1">
+                                <components:BorderedCurrencyEntry
+                                    Margin="0,0,5,0"
+                                    HorizontalOptions="FillAndExpand"
+                                    LabelText="Valor"
+                                    Text="{Binding AcquisitionValue}" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                                <components:BorderedEntry
+                                    Margin="0,0,0,0"
+                                    HorizontalOptions="FillAndExpand"
+                                    LabelText="Loja"
+                                    Text="{Binding AcquisitionStore}" />
+                            </VerticalStackLayout>
+                        </Grid>
+                        <VerticalStackLayout Margin="0,5,0,0">
+                            <Label Style="{StaticResource LblHEntry}" Text="Comentários" />
+                            <Frame Style="{StaticResource EntryBorders}">
+                                <Editor
+                                    AutoSize="TextChanges"
+                                    Keyboard="Chat"
+                                    MaxLength="200"
+                                    Style="{StaticResource Entry}"
+                                    Text="{Binding Commentary}" />
+                            </Frame>
+                        </VerticalStackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Button
+                                Margin="0,10,0,20"
+                                Command="{Binding AddItemCommand}"
+                                ContentLayout="Left,10"
+                                FontSize="20"
+                                HorizontalOptions="FillAndExpand"
+                                IsEnabled="{Binding BtnInsertIsEnabled}"
+                                Style="{StaticResource ButtonPrimary}"
+                                Text="{Binding BtnInsertText}">
+                                <Button.ImageSource>
+                                    <FontImageSource
+                                        FontFamily="Icons"
+                                        Glyph="{Binding BtnInsertIcon}"
+                                        Size="15"
+                                        Color="#fff" />
+                                </Button.ImageSource>
+                            </Button>
+                            <Button
+                                Margin="10,10,0,20"
+                                Command="{Binding DelItemCommand}"
+                                ContentLayout="Left,10"
+                                FontSize="20"
+                                IsVisible="{Binding BtnDeleteIsVisible}"
+                                Style="{StaticResource ButtonDanger}"
+                                Text="Excluir"
+                                WidthRequest="150">
+                                <Button.ImageSource>
+                                    <FontImageSource
+                                        FontFamily="Icons"
+                                        Glyph="{x:Static Icons:Icons.Trash}"
+                                        Size="15"
+                                        Color="#fff" />
+                                </Button.ImageSource>
+                            </Button>
+                        </StackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+        <ActivityIndicator
+            HeightRequest="100"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            VerticalOptions="Center"
+            WidthRequest="100"
+            Color="White" />
+    </Grid>
 </ContentPage>

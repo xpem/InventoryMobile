@@ -10,11 +10,22 @@ namespace InventoryMobile.ViewModels
 
         public bool isOn = true;
 
+        public bool IsNotBusy => !isBusy;
+
         public bool IsBusy
         {
-            get => isBusy; set { if (isBusy != value) { isBusy = value; OnPropertyChanged(nameof(IsBusy)); } }
+            get => isBusy; set
+            {
+                if (isBusy != value)
+                {
+                    isBusy = value;
+                    OnPropertyChanged(nameof(IsBusy));
+                    OnPropertyChanged(nameof(IsNotBusy));
+                }
+            }
         }
 
-        public bool IsNotBusy => !isBusy;
+
+
     }
 }
