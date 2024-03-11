@@ -166,6 +166,7 @@ namespace InventoryMobile.ViewModels.Item
 
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
+
             //backing of Category Selection Function
             if (query.ContainsKey("SelectedCategory") && query.TryGetValue("SelectedCategory", out object selectedCategory))
             {
@@ -184,6 +185,7 @@ namespace InventoryMobile.ViewModels.Item
             }
             else
             {
+                IsBusy = true;
                 DateTime itemAcquisitionDate = DateTime.Now;
 
                 ItemsSituationObsList = [];
@@ -272,7 +274,9 @@ namespace InventoryMobile.ViewModels.Item
                 }
 
                 AcquisitionDate = itemAcquisitionDate;
+                IsBusy = false;
             }
+
         }
 
         private async Task DeleteItem()
