@@ -12,7 +12,6 @@ namespace InventoryMobile.ViewModels.Item
 {
     public class ItemEditVM(IItemBLL itemBLL, IItemSituationBLL itemSituationBLL, IAcquisitionTypeBLL acquisitionTypeBLL) : ViewModelBase, IQueryAttributable
     {
-
         int ItemId { get; set; }
 
         int CategoryId { get; set; }

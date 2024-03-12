@@ -64,6 +64,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\Item\ItemDisplay.xaml.cs">
+	    <DependentUpon>ItemDisplay.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\Item\ItemEdit.xaml.cs">
 	    <DependentUpon>ItemEdit.xaml</DependentUpon>
 	  </Compile>
@@ -79,6 +82,9 @@
 	  <MauiXaml Update="Components\BorderedEntry.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Components\BorderedLabel.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Components\FlyoutHeader.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -92,6 +98,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Category\SubCategory\SubCategoryEdit.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Item\ItemDisplay.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Item\Selectors\CategorySelector.xaml">
