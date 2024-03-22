@@ -2,6 +2,7 @@
 using ApiRepos;
 using DbContextDAL;
 using Models;
+using Models.Exceptions;
 using Models.Responses;
 using System.Net;
 using System.Text;
@@ -132,16 +133,21 @@ namespace ApiDAL
 
                 UsersManagement.Model.ApiResponse resp = await userService.GetUserTokenAsync(user.Email, password);
 
-                if (resp.Success && resp.Content is not null)
+                if (resp.Content is not null)
                 {
-                    string newToken = resp.Content;
+                    if (resp.Success)
+                    {
+                        string newToken = resp.Content;
 
-                    user.Token = newToken;
+                        user.Token = newToken;
 
-                    inventoryDbContextDAL.Update(user);
-                    await inventoryDbContextDAL.SaveChangesAsync();
+                        inventoryDbContextDAL.Update(user);
+                        await inventoryDbContextDAL.SaveChangesAsync();
 
-                    return (true, newToken);
+                        return (true, newToken);
+                    }
+                    else
+                        throw new SignInFailException(resp.Content);
                 }
             }
 

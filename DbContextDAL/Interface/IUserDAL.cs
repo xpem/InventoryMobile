@@ -11,5 +11,7 @@ namespace DbContextDAL.Interface
         int? GetUid();
 
         User? GetUserLocal();
+
+        void RemoveUserLocal();
     }
 }
