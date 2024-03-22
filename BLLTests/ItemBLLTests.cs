@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models.Responses;
 using Moq;
 using Models;
+using Models.ItemModels;
 
 namespace BLL.Tests
 {
@@ -14,7 +15,7 @@ namespace BLL.Tests
         [TestMethod()]
         public void AddItemTest()
         {
-            Models.Item item = new()
+            Item item = new()
             {
                 Name = "Water Cooler Corsair H100 RGB",
                 TechnicalDescription = "240mm, intel/Amd, preto - cw - 9060053- WW",
@@ -22,9 +23,9 @@ namespace BLL.Tests
                 PurchaseValue = 529.99M,
                 PurchaseStore = "Kabum",
                 ResaleValue = 0,
-                Situation = new Models.ItemSituation() { Id = 1 },
+                Situation = new Models.ItemModels.ItemSituation() { Id = 1 },
                 Comment = "Teste comment",
-                AcquisitionType = 1,
+                AcquisitionType = new AcquisitionType() { Id = 1, Name = "Compra"},
                 Category = new Models.Category()
                 {
                     Id = 1,
@@ -78,7 +79,7 @@ namespace BLL.Tests
         [TestMethod()]
         public void AltItemAsyncTest()
         {
-            Models.Item item = new()
+            Item item = new()
             {
                 Id = 1,
                 Name = "Water Cooler Corsair H100 RGB",
@@ -87,9 +88,9 @@ namespace BLL.Tests
                 PurchaseValue = 529.99M,
                 PurchaseStore = "Kabum",
                 ResaleValue = 0,
-                Situation = new Models.ItemSituation() { Id = 2 },
+                Situation = new Models.ItemModels.ItemSituation() { Id = 2 },
                 Comment = "Teste comment",
-                AcquisitionType = 1,
+                AcquisitionType = new AcquisitionType() { Id = 1, Name = "Compra" },
                 Category = new Models.Category()
                 {
                     Id = 1,
@@ -163,6 +164,7 @@ namespace BLL.Tests
         [TestMethod()]
         public void GetItemsAsyncTest()
         {
+            //atualizar esse json com um mais novo por causa do acquitition type atualizado.
             ApiResponse? mockResp = new()
             {
                 Success = true,
@@ -177,11 +179,11 @@ namespace BLL.Tests
 
             ItemBLL itemBLL = new(itemApiDAL);
 
-            var resp = itemBLL.GetItemsAsync().Result;
+            var resp = itemBLL.GetItemsAllAsync().Result;
 
-            if (resp != null && resp.Success)
+            if (resp != null)
             {
-                if (resp.Content is List<Item> items && items.Count == 4)
+                if (resp is List<Item> items && items.Count == 4)
                 {
                     Assert.IsTrue(true);
                     return;
