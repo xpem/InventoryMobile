@@ -1,4 +1,4 @@
-﻿namespace Models
+﻿namespace Models.ItemModels
 {
     public class Item : ModelBase
     {
@@ -8,8 +8,8 @@
 
         public DateTime AcquisitionDate { get; set; }
 
-        public int AcquisitionType { get; set; }
-        
+        public AcquisitionType? AcquisitionType { get; set; }
+
         public decimal? PurchaseValue { get; set; }
 
         public string? PurchaseStore { get; set; }

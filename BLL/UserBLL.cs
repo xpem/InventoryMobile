@@ -56,6 +56,8 @@ namespace BLL
 
         public Models.User? GetUserLocal() => userDAL.GetUserLocal();
 
+        public void RemoveUserLocal() => userDAL.RemoveUserLocal();
+
         public async Task<BLLResponse> SignIn(string email, string password)
         {
             try

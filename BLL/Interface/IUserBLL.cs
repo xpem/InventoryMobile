@@ -11,5 +11,7 @@ namespace BLL.Interface
         Task<(bool, string?)> GetUserTokenAsync(string email, string password);
         Task<string?> RecoverPasswordAsync(string email);
         void UpdateLocalUserLastUpdate(int uid);
+
+        void RemoveUserLocal();
     }
 }

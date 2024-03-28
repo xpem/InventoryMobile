@@ -1,6 +1,6 @@
 ﻿using ApiDAL;
 using BLL.Handlers;
-using Models;
+using Models.ItemModels;
 using Models.Responses;
 
 namespace BLL

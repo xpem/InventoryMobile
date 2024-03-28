@@ -7,6 +7,8 @@ namespace InventoryMobile.ViewModels
 {
     public class AppShellVM : BindableObject//: ViewModelBase
     {
+        IUserBLL UserBLL { get; set; }
+
         string email;
 
         public string Email { get => email; set { if (email != value) { email = value; OnPropertyChanged(nameof(Email)); } } }
@@ -14,14 +16,15 @@ namespace InventoryMobile.ViewModels
         public ICommand SignOutCommand => new Command(async (e) =>
         {
             //clean user info stored info.
-            Preferences.Default.Clear();
-            SecureStorage.Default.RemoveAll();
+            UserBLL.RemoveUserLocal();
 
             await Shell.Current.GoToAsync($"//{nameof(SignIn)}");
         });
 
-        public AppShellVM(User user)
+        public AppShellVM(IUserBLL userBLL,User user)
         {
+            UserBLL = userBLL;
+
             if (user is not null)
                 Email = user.Email;
         }

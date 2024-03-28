@@ -8,6 +8,8 @@ namespace DbContextDAL
     {
         public Models.User? GetUserLocal() => inventoryDbContextDAL.User.FirstOrDefault();
 
+        public void RemoveUserLocal() => _ = inventoryDbContextDAL.Set<User>().ExecuteDeleteAsync();
+
         public int? GetUid() => inventoryDbContextDAL.User.Select(x => x.Id).FirstOrDefault();
 
         public async Task<int> ExecuteAddUserAsync(User user)

@@ -50,61 +50,11 @@ public static class MauiProgram
 
         #region Dependency injections
 
-        #region front
-
-        builder.Services.AddTransient<AppShell>();
-        builder.Services.AddTransient<AppShellVM>();
-
-        builder.Services.AddTransient<SignIn>();
-        builder.Services.AddTransient<SignInVM>();
-
-        builder.Services.AddTransient<SignUp>();
-        builder.Services.AddTransient<SignUpVM>();
-
-        builder.Services.AddTransient<UpdatePassword>();
-        builder.Services.AddTransient<UpdatePasswordVM>();
-
-        builder.Services.AddTransient<Main>();
-        builder.Services.AddTransient<MainVM>();
-
-        builder.Services.AddTransient<CategoryList>();
-        builder.Services.AddTransient<CategoryListVM>();
-
-        builder.Services.AddTransient<CategoryEdit>();
-        builder.Services.AddTransient<CategoryEditVM>();
-
-        builder.Services.AddTransient<CategoryDisplay>();
-        builder.Services.AddTransient<CategoryDisplayVM>();
-
-        builder.Services.AddTransient<SubCategoryEdit>();
-        builder.Services.AddTransient<SubCategoryEditVM>();
-
-        builder.Services.AddTransient<ItemEdit>();
-        builder.Services.AddTransient<ItemEditVM>();
-
-        builder.Services.AddTransient<CategorySelector>();
-        builder.Services.AddTransient<CategorySelectorVM>();
-
-        builder.Services.AddTransient<SubCategorySelector>();
-        builder.Services.AddTransient<SubCategorySelectorVM>();
-
-        #endregion
+        builder.Services.AddFrontServices();
 
         builder.Services.AddDbContext<InventoryDbContextDAL>();
 
-        #region BLL
-
-        builder.Services.AddScoped<IBuildDbBLL, BuildDbBLL>();
-        builder.Services.AddScoped<IUserBLL, UserBLL>();
-        builder.Services.AddScoped<ICheckServerBLL, CheckServerBLL>();
-        builder.Services.AddScoped<IItemBLL, ItemBLL>();
-        builder.Services.AddScoped<IItemSituationBLL, ItemSituationBLL>();
-        builder.Services.AddScoped<ICategoryBLL, CategoryBLL>();
-        builder.Services.AddScoped<ISubCategoryBLL, SubCategoryBLL>();
-        builder.Services.AddScoped<IAcquisitionTypeBLL, AcquisitionTypeBLL>();
-
-
-        #endregion
+        builder.Services.AddBLLServices();
 
         #region DAL
 
@@ -112,21 +62,84 @@ public static class MauiProgram
 
         #endregion
 
-        #region ApiDAL
-
-        builder.Services.AddScoped<IHttpClientFunctions, HttpClientFunctions>();
-        builder.Services.AddScoped<IUserApiDAL, UserApiDAL>();
-        builder.Services.AddScoped<IItemApiDAL, ItemApiDAL>();
-        builder.Services.AddScoped<IItemSituationApiDAL, ItemSituationApiDAL>();
-        builder.Services.AddScoped<ICategoryApiDAL, CategoryApiDAL>();
-        builder.Services.AddScoped<ISubCategoryApiDAL, SubCategoryApiDAL>();
-        builder.Services.AddScoped<IAcquisitionTypeApiDAL, AcquisitionTypeApiDAL>();
-
-        #endregion
+        builder.Services.AddApiDALServices();
 
         #endregion
 
 
         return builder.Build();
     }
+
+    public static IServiceCollection AddFrontServices(this IServiceCollection services)
+    {
+        services.AddTransient<AppShell>();
+        services.AddTransient<AppShellVM>();
+
+        services.AddTransient<SignIn>();
+        services.AddTransient<SignInVM>();
+
+        services.AddTransient<SignUp>();
+        services.AddTransient<SignUpVM>();
+
+        services.AddTransient<UpdatePassword>();
+        services.AddTransient<UpdatePasswordVM>();
+
+        services.AddTransient<Main>();
+        services.AddTransient<MainVM>();
+
+        services.AddTransient<CategoryList>();
+        services.AddTransient<CategoryListVM>();
+
+        services.AddTransient<CategoryEdit>();
+        services.AddTransient<CategoryEditVM>();
+
+        services.AddTransient<CategoryDisplay>();
+        services.AddTransient<CategoryDisplayVM>();
+
+        services.AddTransient<SubCategoryEdit>();
+        services.AddTransient<SubCategoryEditVM>();
+
+        services.AddTransient<ItemEdit>();
+        services.AddTransient<ItemEditVM>();
+
+        services.AddTransient<CategorySelector>();
+        services.AddTransient<CategorySelectorVM>();
+
+        services.AddTransient<SubCategorySelector>();
+        services.AddTransient<SubCategorySelectorVM>();
+
+        services.AddTransient<ItemDisplay>();
+        services.AddTransient<ItemDisplayVM>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddApiDALServices(this IServiceCollection services)
+    {
+        services.AddScoped<IHttpClientFunctions, HttpClientFunctions>();
+        services.AddScoped<IUserApiDAL, UserApiDAL>();
+        services.AddScoped<IItemApiDAL, ItemApiDAL>();
+        services.AddScoped<IItemSituationApiDAL, ItemSituationApiDAL>();
+        services.AddScoped<ICategoryApiDAL, CategoryApiDAL>();
+        services.AddScoped<ISubCategoryApiDAL, SubCategoryApiDAL>();
+        services.AddScoped<IAcquisitionTypeApiDAL, AcquisitionTypeApiDAL>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddBLLServices(this IServiceCollection services)
+    {
+        services.AddScoped<IBuildDbBLL, BuildDbBLL>();
+        services.AddScoped<IUserBLL, UserBLL>();
+        services.AddScoped<ICheckServerBLL, CheckServerBLL>();
+        services.AddScoped<IItemBLL, ItemBLL>();
+        services.AddScoped<IItemSituationBLL, ItemSituationBLL>();
+        services.AddScoped<ICategoryBLL, CategoryBLL>();
+        services.AddScoped<ISubCategoryBLL, SubCategoryBLL>();
+        services.AddScoped<IAcquisitionTypeBLL, AcquisitionTypeBLL>();
+
+        return services;
+    }
+
+
 }

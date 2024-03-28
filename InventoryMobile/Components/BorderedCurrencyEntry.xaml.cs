@@ -82,43 +82,45 @@ public partial class BorderedCurrencyEntry : ContentView
 
     private void EntryCurrency_TextChanged(object sender, TextChangedEventArgs e)
     {
-
-        string valueFromString = OnlyDigits().Replace(this.EntryCurrency.Text.ToString(), "");
-        string _value;
-
-        if (valueFromString.Length <= 0)
-        { _value = "0"; }
-        else
+        if (this.EntryCurrency != null)
         {
-            if (string.IsNullOrEmpty(valueFromString)) _value = "0";
-            //if (!long.TryParse(valueFromString, out long valueLong))
-            //{
-            //    _value = "0";
-            //}
+            string valueFromString = OnlyDigits().Replace(this.EntryCurrency.Text.ToString(), "");
+            string _value;
+
+            if (valueFromString.Length <= 0)
+            { _value = "0"; }
             else
             {
-                if (Convert.ToDecimal(valueFromString) <= 0)
-                {
-                    _value = "0";
-                }
+                if (string.IsNullOrEmpty(valueFromString)) _value = "0";
+                //if (!long.TryParse(valueFromString, out long valueLong))
+                //{
+                //    _value = "0";
+                //}
                 else
                 {
+                    if (Convert.ToDecimal(valueFromString) <= 0)
+                    {
+                        _value = "0";
+                    }
+                    else
+                    {
 
-                    var decValue = (Convert.ToDecimal(valueFromString) / 100m);
-                    var currencyFormatValue = decValue.ToString("N2", new CultureInfo("pt-BR", false));
+                        var decValue = (Convert.ToDecimal(valueFromString) / 100m);
+                        var currencyFormatValue = decValue.ToString("N2", new CultureInfo("pt-BR", false));
 
-                    //if (valueFromString.Length > 2)
-                    //{
-                    _value = currencyFormatValue;
-                    //}else
-                    //{
-                    //    _value = valueFromString;
-                    //}
+                        //if (valueFromString.Length > 2)
+                        //{
+                        _value = currencyFormatValue;
+                        //}else
+                        //{
+                        //    _value = valueFromString;
+                        //}
+                    }
                 }
             }
+            this.EntryCurrency.Text = _value;
+            this.EntryCurrency.CursorPosition = this.EntryCurrency.Text?.Length ?? 0;
         }
-        this.EntryCurrency.Text = _value;
-        this.EntryCurrency.CursorPosition = this.EntryCurrency.Text?.Length ?? 0;
     }
 
 }

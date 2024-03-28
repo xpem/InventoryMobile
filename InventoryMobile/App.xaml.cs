@@ -17,7 +17,7 @@ public partial class App : Application
 
             Models.User user = userBLL.GetUserLocal();
 
-            MainPage = new AppShell(new ViewModels.AppShellVM(user));
+            MainPage = new AppShell(new ViewModels.AppShellVM(userBLL,user));
 
             bool isOn = false;
 

@@ -1,15 +1,18 @@
 ﻿using BLL;
+using BLL.Interface;
 using InventoryMobile.Resources.Fonts.Icons;
 using InventoryMobile.UIModels;
 using InventoryMobile.Utils;
+using InventoryMobile.Views;
 using InventoryMobile.Views.Item;
-using Models;
+using Models.Exceptions;
+using Models.ItemModels;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels
 {
-    public class MainVM(IItemBLL itemBLL, IItemSituationBLL itemSituationBLL) : ViewModelBase
+    public class MainVM(IItemBLL itemBLL, IItemSituationBLL itemSituationBLL, IUserBLL userBLL) : ViewModelBase
     {
         //  public ObservableCollection<ItemGroup> Items { get; } = new();
         readonly Color BgButtonSelectedColor = Color.FromArgb("#29A0B1");
@@ -124,19 +127,19 @@ namespace InventoryMobile.ViewModels
                 {
                     Color backgoundColor;
 
-                    List<Models.ItemSituation> itemSituationList = [];
+                    List<ItemSituation> itemSituationList = [];
 
                     var respItemSituation = await itemSituationBLL.GetItemSituation();
 
                     if (respItemSituation is not null && respItemSituation.Success)
                         itemSituationList = respItemSituation.Content as List<ItemSituation>;
 
-                    var respItems = await itemBLL.GetItemsAsync();
+                    var respItems = await itemBLL.GetItemsAllAsync();
 
-                    List<Models.Item> itemList = [];
-                    if (respItems is not null && respItems.Success)
+                    List<Models.ItemModels.Item> itemList = [];
+                    if (respItems is not null)
                     {
-                        itemList = respItems.Content as List<Models.Item>;
+                        itemList = respItems;
                         itemList = [.. (from item in itemList orderby item.CreatedAt descending select item)];
                     }
 
@@ -214,6 +217,12 @@ namespace InventoryMobile.ViewModels
 
                         IsBusy = false;
                     }
+                }
+                catch (SignInFailException ex)
+                {
+                    userBLL.RemoveUserLocal();
+
+                    await Shell.Current.GoToAsync($"//{nameof(SignIn)}");
                 }
                 catch (Exception ex) { throw ex; }
             }

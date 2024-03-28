@@ -3,6 +3,7 @@ using InventoryMobile.Resources.Fonts.Icons;
 using InventoryMobile.UIModels;
 using InventoryMobile.Views.Item;
 using Models;
+using Models.ItemModels;
 using Models.Responses;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -12,7 +13,6 @@ namespace InventoryMobile.ViewModels.Item
 {
     public class ItemEditVM(IItemBLL itemBLL, IItemSituationBLL itemSituationBLL, IAcquisitionTypeBLL acquisitionTypeBLL) : ViewModelBase, IQueryAttributable
     {
-
         int ItemId { get; set; }
 
         int CategoryId { get; set; }
@@ -121,7 +121,6 @@ namespace InventoryMobile.ViewModels.Item
 
         public ICommand AddItemCommand => new Command(async () => await AltItem());
 
-        public ICommand DelItemCommand => new Command(async () => await DeleteItem());
 
         #endregion
 
@@ -198,7 +197,7 @@ namespace InventoryMobile.ViewModels.Item
 
                 ItemsSituationObsList.Add(new UIItemSituation() { Id = -1, Name = "Selecione" });
 
-                foreach (Models.ItemSituation itemSituation in itemSituationList)
+                foreach (ItemSituation itemSituation in itemSituationList)
                     ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituation.Id, Name = itemSituation.Name });
 
                 OnPropertyChanged(nameof(ItemsSituationObsList));
@@ -222,13 +221,13 @@ namespace InventoryMobile.ViewModels.Item
                 if (query.ContainsKey("Id") && query.TryGetValue("Id", out object itemId))
                 {
                     ItemId = Convert.ToInt32(itemId);
-                    Models.Item item;
+                    Models.ItemModels.Item item;
 
                     BLLResponse resp = await itemBLL.GetItemByIdAsync(ItemId.ToString());
 
                     if (resp is not null && resp.Success)
                     {
-                        item = resp.Content as Models.Item;
+                        item = resp.Content as Models.ItemModels.Item;
 
                         itemAcquisitionDate = item.AcquisitionDate;
                         Name = item.Name;
@@ -248,7 +247,7 @@ namespace InventoryMobile.ViewModels.Item
                         Commentary = item.Comment;
 
                         PkrItemSituationSelectedIndex = ItemsSituationObsList.IndexOf(ItemsSituationObsList.Where(s => s.Id == item.Situation.Id).FirstOrDefault());
-                        PkrAcquisitionTypeSelectedIndex = AcquisitionTypeObsList.IndexOf(AcquisitionTypeObsList.Where(s => s.Id == item.AcquisitionType).FirstOrDefault());
+                        PkrAcquisitionTypeSelectedIndex = AcquisitionTypeObsList.IndexOf(AcquisitionTypeObsList.Where(s => s.Id == item.AcquisitionType.Id).FirstOrDefault());
                         ResaleValue = item.ResaleValue.ToString();
                         WithdrawalDate = item.WithdrawalDate != null ? item.WithdrawalDate.Value : DateTime.Now;
                         AcquisitionStore = item.PurchaseStore;
@@ -279,20 +278,6 @@ namespace InventoryMobile.ViewModels.Item
 
         }
 
-        private async Task DeleteItem()
-        {
-            if (await Application.Current.MainPage.DisplayAlert("Confirmação", "Deseja excluir este Item?", "Sim", "Cancelar"))
-            {
-                IsBusy = true;
-
-                await itemBLL.DelItemAsync(ItemId);
-
-                IsBusy = false;
-
-                if (!await Application.Current.MainPage.DisplayAlert("Aviso", "Item excluído!", null, "Ok"))
-                    await Shell.Current.GoToAsync("..");
-            }
-        }
 
         private static decimal CurrencyValueParse(string currencyValue) =>
             decimal.Parse(currencyValue.Replace(".", ""), NumberStyles.Number, new NumberFormatInfo() { NumberDecimalSeparator = "," });
@@ -308,11 +293,11 @@ namespace InventoryMobile.ViewModels.Item
                     decimal decAquisitionValue = CurrencyValueParse(AcquisitionValue);
                     decimal decResaleValue = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id == resaleStatusId ? CurrencyValueParse(ResaleValue) : 0;
 
-                    Models.Item item = new()
+                    Models.ItemModels.Item item = new()
                     {
                         Name = Name.Trim(),
                         AcquisitionDate = new DateTime(AcquisitionDate.Year, AcquisitionDate.Month, AcquisitionDate.Day).Date,
-                        AcquisitionType = AcquisitionTypeObsList[pkrAcquisitionTypeSelectedIndex].Id,
+                        AcquisitionType = new AcquisitionType() { Id = AcquisitionTypeObsList[pkrAcquisitionTypeSelectedIndex].Id },
                         Comment = Commentary?.Trim(),
                         PurchaseStore = AcquisitionStore?.Trim(),
                         PurchaseValue = decAquisitionValue,
@@ -335,7 +320,6 @@ namespace InventoryMobile.ViewModels.Item
                     }
                     else
                         resp = await itemBLL.AddItemAsync(item);
-
 
                     if (resp.Success)
                     {
