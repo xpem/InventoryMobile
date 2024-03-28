@@ -121,7 +121,6 @@ namespace InventoryMobile.ViewModels.Item
 
         public ICommand AddItemCommand => new Command(async () => await AltItem());
 
-        public ICommand DelItemCommand => new Command(async () => await DeleteItem());
 
         #endregion
 
@@ -279,20 +278,6 @@ namespace InventoryMobile.ViewModels.Item
 
         }
 
-        private async Task DeleteItem()
-        {
-            if (await Application.Current.MainPage.DisplayAlert("Confirmação", "Deseja excluir este Item?", "Sim", "Cancelar"))
-            {
-                IsBusy = true;
-
-                await itemBLL.DelItemAsync(ItemId);
-
-                IsBusy = false;
-
-                if (!await Application.Current.MainPage.DisplayAlert("Aviso", "Item excluído!", null, "Ok"))
-                    await Shell.Current.GoToAsync("..");
-            }
-        }
 
         private static decimal CurrencyValueParse(string currencyValue) =>
             decimal.Parse(currencyValue.Replace(".", ""), NumberStyles.Number, new NumberFormatInfo() { NumberDecimalSeparator = "," });
@@ -335,7 +320,6 @@ namespace InventoryMobile.ViewModels.Item
                     }
                     else
                         resp = await itemBLL.AddItemAsync(item);
-
 
                     if (resp.Success)
                     {

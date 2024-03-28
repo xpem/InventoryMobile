@@ -18,7 +18,6 @@ namespace BLL
 
     public class ItemBLL(IItemApiDAL itemApiDAL) : IItemBLL
     {
-
         public async Task<List<Item>> GetItemsAllAsync()
         {
             ApiResponse totalsResp = await itemApiDAL.GetTotalItensAsync();

@@ -6,7 +6,7 @@
     x:Name="this"
     Margin="0,5,0,0">
     <Label Style="{StaticResource LblHEntry}" Text="{Binding Source={x:Reference this}, Path=LabelText}" />
-    <Frame Style="{StaticResource EntryBorders}">
+    <Frame Style="{StaticResource LabelBorders}">
         <Label Style="{StaticResource LabelDisplay}"  Text="{Binding Source={x:Reference this}, Path=Text}" />
     </Frame>
 </VerticalStackLayout>

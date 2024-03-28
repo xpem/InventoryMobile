@@ -3,89 +3,190 @@
     x:Class="InventoryMobile.Views.Item.ItemDisplay"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:Icons="clr-namespace:InventoryMobile.Resources.Fonts.Icons"
     xmlns:components="clr-namespace:InventoryMobile.Components"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:InventoryMobile.ViewModels.Item"
     Title="Item"
     x:DataType="viewmodels:ItemDisplayVM"
     Style="{StaticResource ContentPage}">
-    <VerticalStackLayout>
-        <components:BorderedLabel LabelText="Nome" Text="{Binding Name}" />
-        <components:BorderedLabel LabelText="Descrição técnica" Text="{Binding Description}" />
-        <Grid
-            Margin="0"
-            ColumnDefinitions="5*,5*"
-            HorizontalOptions="FillAndExpand"
-            RowDefinitions="*,*">
-            <StackLayout Margin="0,0,0,0" Padding="2,0,0,0">
-                <Label
-                    FontAttributes="Bold"
-                    Style="{StaticResource LblHEntry}"
-                    Text="Categoria" />
-                <Label
-                    FontAttributes="Bold"
-                    FontSize="20"
-                    Style="{StaticResource LabelDisplay}"
-                    Text="{Binding CategoryAndSubCategory}" />
+    <Grid RowDefinitions="*">
+        <ScrollView IsEnabled="{Binding IsNotBusy}" VerticalOptions="StartAndExpand">
+            <StackLayout Style="{StaticResource VerticalStackLayoutPrimary}">
+                <Frame Style="{StaticResource FramePrimary}">
+                    <VerticalStackLayout>
+                        <VerticalStackLayout Margin="5,0,5,0">
+                            <components:BorderedLabel LabelText="Nome" Text="{Binding Name}" />
+                            <components:BorderedLabel LabelText="Descrição técnica" Text="{Binding Description}" />
+                            <Grid
+                                Margin="0"
+                                ColumnDefinitions="5*,5*"
+                                HorizontalOptions="FillAndExpand"
+                                RowDefinitions="*,*">
+                                <StackLayout Margin="0,5,0,0" Padding="2,0,0,0">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        Style="{StaticResource LblHEntry}"
+                                        Text="Categoria" />
+                                    <Label
+                                        Margin="0"
+                                        FontAttributes="Bold"
+                                        FontSize="20"
+                                        Style="{StaticResource LabelDisplay}"
+                                        Text="{Binding CategoryAndSubCategory}" />
+                                </StackLayout>
+                                <StackLayout
+                                    Grid.Column="1"
+                                    Margin="0,5,0,0"
+                                    Padding="5,0,0,0"
+                                    HorizontalOptions="Start">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        Style="{StaticResource LblHEntry}"
+                                        Text="Situação" />
+                                    <Label
+                                        Margin="0"
+                                        FontAttributes="Bold"
+                                        FontSize="20"
+                                        Style="{StaticResource LabelDisplay}"
+                                        Text="{Binding Situation}" />
+                                </StackLayout>
+                            </Grid>
+                            <StackLayout IsVisible="{Binding ResaleSituation}">
+                                <Label
+                                    Margin="0,10,0,0"
+                                    FontAttributes="Bold"
+                                    FontSize="15"
+                                    Style="{StaticResource LblHEntry}"
+                                    Text="Revenda" />
+                                <BoxView
+                                    Margin="0,0,0,5"
+                                    HeightRequest="1"
+                                    Color="{StaticResource Gray200}" />
+                            </StackLayout>
+                            <Grid
+                                Margin="0"
+                                ColumnDefinitions="5*,5*"
+                                HorizontalOptions="FillAndExpand"
+                                RowDefinitions="*,*">
+                                <StackLayout
+                                    Margin="0,0,0,0"
+                                    Padding="2,0,0,0"
+                                    IsVisible="{Binding WithdrawalDateIsVisible}">
+                                    <components:BorderedLabel
+                                        Grid.Column="1"
+                                        Margin="0,5,0,0"
+                                        HorizontalOptions="Start"
+                                        LabelText="Valor de revenda"
+                                        Text="{Binding WithdrawalDate}" />
+                                </StackLayout>
+                                <StackLayout
+                                    Grid.Column="1"
+                                    Margin="5,0,0,0"
+                                    HorizontalOptions="FillAndExpand"
+                                    IsVisible="{Binding ResaleSituation}">
+                                    <components:BorderedLabel
+                                        Grid.Column="1"
+                                        Margin="0,5,0,0"
+                                        HorizontalOptions="Start"
+                                        LabelText="Valor de revenda"
+                                        Text="{Binding ResaleValue}" />
+                                </StackLayout>
+                            </Grid>
+                            <Label
+                                Margin="0,10,0,0"
+                                FontAttributes="Bold"
+                                FontSize="15"
+                                Style="{StaticResource LblHEntry}"
+                                Text="Aquisição" />
+                            <BoxView
+                                Margin="0,0,0,5"
+                                HeightRequest="1"
+                                Color="{StaticResource Gray200}" />
+                            <Grid
+                                Margin="0"
+                                ColumnDefinitions="5*,5*"
+                                HorizontalOptions="FillAndExpand"
+                                RowDefinitions="*,*">
+                                <StackLayout Margin="0,5,0,0" Padding="2,0,0,0">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        Style="{StaticResource LblHEntry}"
+                                        Text="Tipo" />
+                                    <Label
+                                        Margin="0"
+                                        FontAttributes="Bold"
+                                        FontSize="20"
+                                        Style="{StaticResource LabelDisplay}"
+                                        Text="{Binding AcquisitionTypeName}" />
+                                </StackLayout>
+                                <components:BorderedLabel
+                                    Grid.Column="1"
+                                    Margin="5,5,0,0"
+                                    HorizontalOptions="Start"
+                                    LabelText="Data"
+                                    Text="{Binding AcquisitionDate}" />
+                                <components:BorderedLabel
+                                    Grid.Row="1"
+                                    LabelText="Valor"
+                                    Text="{Binding AcquisitionValue}" />
+                                <components:BorderedLabel
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Margin="5,5,0,0"
+                                    LabelText="Loja"
+                                    Text="{Binding AcquisitionStore}" />
+                            </Grid>
+                            <components:BorderedLabel
+                                Grid.Row="1"
+                                Margin="0,5,0,0"
+                                LabelText="Comentários"
+                                Text="{Binding Commentary}" />
+                        </VerticalStackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Button
+                                Margin="0,10,0,20"
+                                Command="{Binding EditCommand}"
+                                ContentLayout="Left,10"
+                                FontSize="20"
+                                HorizontalOptions="FillAndExpand"
+                                Style="{StaticResource ButtonWarning}"
+                                Text="Editar">
+                                <Button.ImageSource>
+                                    <FontImageSource
+                                        FontFamily="Icons"
+                                        Glyph="{x:Static Icons:Icons.Pen}"
+                                        Size="15"
+                                        Color="#000" />
+                                </Button.ImageSource>
+                            </Button>
+                            <Button
+                                Margin="10,10,0,20"
+                                Command="{Binding DelItemCommand}"
+                                ContentLayout="Left,10"
+                                FontSize="20"
+                                HorizontalOptions="FillAndExpand"
+                                Style="{StaticResource ButtonDanger}"
+                                Text="Excluir">
+                                <Button.ImageSource>
+                                    <FontImageSource
+                                        FontFamily="Icons"
+                                        Glyph="{x:Static Icons:Icons.Trash}"
+                                        Size="15"
+                                        Color="#fff" />
+                                </Button.ImageSource>
+                            </Button>
+                        </StackLayout>
+                    </VerticalStackLayout>
+                </Frame>
             </StackLayout>
-            <StackLayout
-                Grid.Column="1"
-                Margin="0"
-                HorizontalOptions="Start">
-                <Label
-                    FontAttributes="Bold"
-                    Style="{StaticResource LblHEntry}"
-                    Text="Situação" />
-                <Label
-                    FontAttributes="Bold"
-                    FontSize="20"
-                    Style="{StaticResource LabelDisplay}"
-                    Text="{Binding Situation}" />
-            </StackLayout>
-        </Grid>
-        <StackLayout>
-            <Label
-                Margin="0,10,0,0"
-                FontAttributes="Bold"
-                FontSize="15"
-                Style="{StaticResource LblHEntry}"
-                Text="Revenda" />
-            <BoxView
-                Margin="0,0,0,5"
-                HeightRequest="1"
-                Color="{StaticResource Gray200}" />
-        </StackLayout>
-        <Grid
-            Margin="0"
-            ColumnDefinitions="5*,5*"
-            HorizontalOptions="FillAndExpand"
-            RowDefinitions="*,*">
-            <StackLayout Margin="0,0,0,0" Padding="2,0,0,0">
-                <VerticalStackLayout Margin="0,5,0,0">
-                    <Label Style="{StaticResource LblHEntry}" Text="Data" />
-                    <Frame Style="{StaticResource EntryBorders}">
-                        <Label Style="{StaticResource LabelDisplay}" Text="12/02/2023" />
-                    </Frame>
-                </VerticalStackLayout>
-            </StackLayout>
-            <StackLayout
-                Grid.Column="1"
-                Margin="5,0,0,0"
-                HorizontalOptions="FillAndExpand">
-                <VerticalStackLayout Margin="0,5,0,0">
-                    <Label Style="{StaticResource LblHEntry}" Text="Valor de revenda" />
-                    <Frame Style="{StaticResource EntryBorders}">
-                        <Label Style="{StaticResource LabelDisplay}" Text="R$ 43,00" />
-                    </Frame>
-                </VerticalStackLayout>
-            </StackLayout>
-        </Grid>
-        <VerticalStackLayout Margin="0,5,0,0">
-            <!--<Label Style="{StaticResource LblHEntry}" Text="Descrição técnica" />-->
-            <!--<Frame Style="{StaticResource EntryBorders}">-->
-
-            <!--</Frame>-->
-        </VerticalStackLayout>
-        <VerticalStackLayout Margin="1,5,0,0" HorizontalOptions="FillAndExpand" />
-    </VerticalStackLayout>
+        </ScrollView>
+        <ActivityIndicator
+            HeightRequest="100"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            VerticalOptions="Center"
+            WidthRequest="100"
+            Color="White" />
+    </Grid>
 </ContentPage>

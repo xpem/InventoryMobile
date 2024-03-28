@@ -198,23 +198,6 @@
                                         Color="#fff" />
                                 </Button.ImageSource>
                             </Button>
-                            <Button
-                                Margin="10,10,0,20"
-                                Command="{Binding DelItemCommand}"
-                                ContentLayout="Left,10"
-                                FontSize="20"
-                                IsVisible="{Binding BtnDeleteIsVisible}"
-                                Style="{StaticResource ButtonDanger}"
-                                Text="Excluir"
-                                WidthRequest="150">
-                                <Button.ImageSource>
-                                    <FontImageSource
-                                        FontFamily="Icons"
-                                        Glyph="{x:Static Icons:Icons.Trash}"
-                                        Size="15"
-                                        Color="#fff" />
-                                </Button.ImageSource>
-                            </Button>
                         </StackLayout>
                     </VerticalStackLayout>
                 </Frame>

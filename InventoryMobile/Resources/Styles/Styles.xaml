@@ -415,7 +415,7 @@
     <Style x:Key="FramePickerBordered" TargetType="Frame">
         <Setter Property="Margin" Value="0,0,0,5" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="BackgroundColor" Value="{StaticResource DarkBackgroud}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource ColorDarkBackground}" />
         <Setter Property="BorderColor" Value="{StaticResource ActiveColor}" />
         <Setter Property="CornerRadius" Value="5" />
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -435,7 +435,7 @@
     <Style x:Key="EntryBorders" TargetType="Frame">
         <Setter Property="Padding" Value="-5,0,0,0" />
         <Setter Property="HorizontalOptions" Value="FillAndExpand" />
-        <Setter Property="BackgroundColor" Value="{StaticResource DarkBackgroud}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource ColorDarkBackground}" />
         <Setter Property="BorderColor" Value="{StaticResource ActiveColor}" />
         <Setter Property="CornerRadius" Value="5" />
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -450,6 +450,26 @@
                 </VisualStateGroup>
             </VisualStateGroupList>
         </Setter>
+    </Style>
+
+    <Style x:Key="LabelBorders" TargetType="Frame">
+        <Setter Property="Padding" Value="-5,0,0,0" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+        <Setter Property="BackgroundColor" Value="{StaticResource ColorDarkBackground}" />
+        <Setter Property="BorderColor" Value="{StaticResource Gray500}" />
+        <Setter Property="CornerRadius" Value="5" />
+        <!--<Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BorderColor" Value="#2B659B" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>-->
     </Style>
 
     <Style x:Key="LblHEntry" TargetType="Label">
@@ -538,31 +558,21 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
-
+    
+    <Style
+        x:Key="ButtonWarning"
+        BasedOn="{StaticResource ButtonPrimary}"
+        TargetType="Button">
+        <Setter Property="TextColor" Value="{StaticResource Black}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Warning}" />
+    </Style>
+    
     <Style
         x:Key="ButtonDanger"
         BasedOn="{StaticResource ButtonPrimary}"
         TargetType="Button">
         <Setter Property="TextColor" Value="{StaticResource White}" />
         <Setter Property="BackgroundColor" Value="{StaticResource Danger}" />
-        <!--<Setter Property="FontFamily" Value="OpenSansSemibold" />
-        <Setter Property="FontSize" Value="20" />
-        <Setter Property="CornerRadius" Value="8" />
-        <Setter Property="MinimumHeightRequest" Value="44" />
-        <Setter Property="MinimumWidthRequest" Value="44" />
-        <Setter Property="VisualStateManager.VisualStateGroups">
-            <VisualStateGroupList>
-                <VisualStateGroup x:Name="CommonStates">
-                    <VisualState x:Name="Normal" />
-                    <VisualState x:Name="Disabled">
-                        <VisualState.Setters>
-                            <Setter Property="TextColor" Value="{StaticResource Gray950}" />
-                            <Setter Property="BackgroundColor" Value="{StaticResource Gray200}" />
-                        </VisualState.Setters>
-                    </VisualState>
-                </VisualStateGroup>
-            </VisualStateGroupList>
-        </Setter>-->
     </Style>
 
 
