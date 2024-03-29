@@ -558,7 +558,7 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
-    
+
     <Style
         x:Key="ButtonWarning"
         BasedOn="{StaticResource ButtonPrimary}"
@@ -566,7 +566,7 @@
         <Setter Property="TextColor" Value="{StaticResource Black}" />
         <Setter Property="BackgroundColor" Value="{StaticResource Warning}" />
     </Style>
-    
+
     <Style
         x:Key="ButtonDanger"
         BasedOn="{StaticResource ButtonPrimary}"

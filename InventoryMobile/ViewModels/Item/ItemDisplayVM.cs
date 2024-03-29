@@ -106,6 +106,8 @@ namespace InventoryMobile.ViewModels.Item
 
                 BLLResponse resp = await itemBLL.GetItemByIdAsync(ItemId.ToString());
 
+                var resp1 = await itemBLL.GetImageItemAsync(ItemId, 1);
+
                 if (resp is not null && resp.Success)
                 {
                     item = resp.Content as Models.ItemModels.Item;

@@ -33,7 +33,7 @@ namespace ApiDAL
             catch (Exception) { throw; }// return false; }
         }
 
-        public async Task<ApiResponse> RequestAsync(RequestsTypes requestsType, string url, string? userToken = null, string? jsonContent = null)
+        public virtual async Task<ApiResponse> RequestAsync(RequestsTypes requestsType, string url, string? userToken = null, string? jsonContent = null)
         {
             try
             {
@@ -69,7 +69,6 @@ namespace ApiDAL
                         httpResponse = await httpClient.DeleteAsync(url);
                         break;
                 }
-
 
                 return new ApiResponse()
                 {

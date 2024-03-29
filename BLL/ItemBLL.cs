@@ -14,6 +14,7 @@ namespace BLL
         Task<BLLResponse> DelItemAsync(int id);
         Task<BLLResponse> GetItemByIdAsync(string id);
         Task<List<Item>> GetItemsAllAsync();
+        Task<BLLResponse> GetImageItemAsync(int id, int imageIndex);
     }
 
     public class ItemBLL(IItemApiDAL itemApiDAL) : IItemBLL
@@ -92,5 +93,20 @@ namespace BLL
             return new BLLResponse() { Success = true, Content = null };
         }
 
+        public async Task<BLLResponse> GetImageItemAsync(int id, int imageIndex)
+        {
+            ApiResponse resp = await itemApiDAL.GetItemImageAsync(id, imageIndex);
+
+            if (resp is not null && resp.Success && resp.Content is not null)
+            {
+                JsonNode? jResp = JsonNode.Parse(resp.Content);
+
+                if (jResp is not null)
+                    return new BLLResponse() { Success = resp.Success, Content = null };
+                else return new BLLResponse() { Success = false, Content = resp.Content };
+            }
+
+            return new BLLResponse() { Success = false, Content = null };
+        }
     }
 }

@@ -55,9 +55,10 @@ namespace BLL.Tests
             string mockJsonItem = "{\"Name\":\"Water Cooler Corsair H100 RGB\",\"TechnicalDescription\":\"240mm, intel/Amd, preto - cw - 9060053- WW\",\"AcquisitionDate\":\"2024-02-17\",\"PurchaseValue\":529.99,\"PurchaseStore\":\"Kabum\",\"ResaleValue\":0,\"SituationId\":1,\"Comment\":\"Teste comment\",\"AcquisitionType\":1,\"Category\":{\"CategoryId\":1,\"SubCategoryId\":3},\"WithdrawalDate\":null}";
 
             Mock<IHttpClientFunctions> mockHttpClientFunctions = new();
+            Mock<IHttpClientWithFileFunctions> mockHttpClientWithFileFunctions = new();
             mockHttpClientFunctions.Setup(x => x.AuthRequestAsync(Models.RequestsTypes.Post, ApiKeys.ApiAddress + "/Inventory/item", mockJsonItem)).ReturnsAsync(mockResp);
 
-            ItemApiDAL itemApiDAL = new(mockHttpClientFunctions.Object);
+            ItemApiDAL itemApiDAL = new(mockHttpClientFunctions.Object, mockHttpClientWithFileFunctions.Object);
 
             ItemBLL itemBLL = new(itemApiDAL);
 
@@ -128,9 +129,10 @@ namespace BLL.Tests
             };
 
             Mock<IHttpClientFunctions> mockHttpClientFunctions = new();
+            Mock<IHttpClientWithFileFunctions> mockHttpClientWithFileFunctions = new();
             mockHttpClientFunctions.Setup(x => x.AuthRequestAsync(Models.RequestsTypes.Put, ApiKeys.ApiAddress + "/Inventory/item/" + 1, mockJsonItem)).ReturnsAsync(mockResp);
 
-            ItemApiDAL itemApiDAL = new(mockHttpClientFunctions.Object);
+            ItemApiDAL itemApiDAL = new(mockHttpClientFunctions.Object, mockHttpClientWithFileFunctions.Object);
 
             ItemBLL itemBLL = new(itemApiDAL);
 
@@ -155,10 +157,10 @@ namespace BLL.Tests
             };
 
             Mock<IHttpClientFunctions> mockHttpClientFunctions = new();
-
+            Mock<IHttpClientWithFileFunctions> mockHttpClientWithFileFunctions = new();
             mockHttpClientFunctions.Setup(x => x.AuthRequestAsync(RequestsTypes.Delete, ApiKeys.ApiAddress + "/Inventory/item/" + 1, null)).ReturnsAsync(mockResp);
 
-            ItemApiDAL itemApiDAL = new(mockHttpClientFunctions.Object);
+            ItemApiDAL itemApiDAL = new(mockHttpClientFunctions.Object, mockHttpClientWithFileFunctions.Object);
 
             ItemBLL itemBLL = new(itemApiDAL);
 
@@ -193,11 +195,11 @@ namespace BLL.Tests
             };
 
             Mock<IHttpClientFunctions> mockHttpClientFunctions = new();
-
+            Mock<IHttpClientWithFileFunctions> mockHttpClientWithFileFunctions = new();
             mockHttpClientFunctions.Setup(x => x.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item/totals", null)).ReturnsAsync(mockTotalsResp);
             mockHttpClientFunctions.Setup(x => x.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item?page=" + 1, null)).ReturnsAsync(mockResp);
 
-            ItemApiDAL itemApiDAL = new(mockHttpClientFunctions.Object);
+            ItemApiDAL itemApiDAL = new(mockHttpClientFunctions.Object, mockHttpClientWithFileFunctions.Object);
 
             ItemBLL itemBLL = new(itemApiDAL);
 
@@ -225,10 +227,10 @@ namespace BLL.Tests
             };
 
             Mock<IHttpClientFunctions> mockHttpClientFunctions = new();
-
+            Mock<IHttpClientWithFileFunctions> mockHttpClientWithFileFunctions = new();
             mockHttpClientFunctions.Setup(x => x.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item/" + 1, null)).ReturnsAsync(mockResp);
 
-            ItemApiDAL itemApiDAL = new(mockHttpClientFunctions.Object);
+            ItemApiDAL itemApiDAL = new(mockHttpClientFunctions.Object, mockHttpClientWithFileFunctions.Object);
 
             ItemBLL itemBLL = new(itemApiDAL);
 
