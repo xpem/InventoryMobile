@@ -24,7 +24,8 @@ public partial class Main : ContentPage
     {
         var TappedItem = e.Item as UIItem;
 
-        Shell.Current.GoToAsync($"{nameof(ItemEdit)}?Id={TappedItem.Id}", true);
+        //Shell.Current.GoToAsync($"{nameof(ItemEdit)}?Id={TappedItem.Id}", true);
+        Shell.Current.GoToAsync($"{nameof(ItemDisplay)}?Id={TappedItem.Id}", true);
     }
 
     //private void BtnCategorySelected_Clicked(object sender, EventArgs e)

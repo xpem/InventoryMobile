@@ -1,5 +1,6 @@
 ﻿using ApiRepos;
 using Models;
+using Models.ItemModels;
 using Models.Responses;
 using System.Text.Json;
 
@@ -11,25 +12,28 @@ namespace ApiDAL
         Task<ApiResponse> AltItemAsync(Item item);
         Task<ApiResponse> DelItemAsync(int id);
         Task<ApiResponse> GetItemByIdAsync(string id);
-        Task<ApiResponse> GetItemsAsync();
+        Task<ApiResponse> GetPaginatedItemsAsync(int page);
+        Task<ApiResponse> GetTotalItensAsync();
     }
 
     public class ItemApiDAL(IHttpClientFunctions httpClientFunctions) : IItemApiDAL
     {
-        public async Task<ApiResponse> GetItemsAsync() =>
-            await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item");
+        public async Task<ApiResponse> GetTotalItensAsync() => await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item/totals");
+
+        public async Task<ApiResponse> GetPaginatedItemsAsync(int page) =>
+            await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item?page="+page);
 
         public async Task<ApiResponse> GetItemByIdAsync(string id) =>
            await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item/" + id);
 
-        public async Task<ApiResponse> AddItemAsync(Models.Item item)
+        public async Task<ApiResponse> AddItemAsync(Item item)
         {
             string json = BuildItemJson(item);
 
             return await httpClientFunctions.AuthRequestAsync(Models.RequestsTypes.Post, ApiKeys.ApiAddress + "/Inventory/item", json);
         }
 
-        private static string BuildItemJson(Models.Item item) =>
+        private static string BuildItemJson(Item item) =>
             JsonSerializer.Serialize(new
             {
                 item.Name,
@@ -40,12 +44,12 @@ namespace ApiDAL
                 item.ResaleValue,
                 SituationId = item.Situation?.Id,
                 item.Comment,
-                item.AcquisitionType,
+                AcquisitionType = item.AcquisitionType?.Id,
                 Category = new { CategoryId = item.Category?.Id, SubCategoryId = item.Category?.SubCategory is not null ? (int?)item.Category.SubCategory.Id : null },
                 WithdrawalDate = item.WithdrawalDate != null ? (DateOnly?)DateOnly.FromDateTime(item.WithdrawalDate.Value) : null,
             });
 
-        public async Task<ApiResponse> AltItemAsync(Models.Item item)
+        public async Task<ApiResponse> AltItemAsync(Item item)
         {
             try
             {

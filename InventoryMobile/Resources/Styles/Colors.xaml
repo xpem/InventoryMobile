@@ -11,7 +11,7 @@
     <Color x:Key="Warning">#FFF4BD</Color>
     <Color x:Key="Danger">#E2808A</Color>
     <Color x:Key="ActiveColor">#76B947</Color>
-    <Color x:Key="DarkBackgroud">#0C5455</Color>
+    <Color x:Key="ColorDarkBackground">#0C5455</Color>
 
     <Color x:Key="Primary">#512BD4</Color>
     <Color x:Key="Secondary">#DFD8F7</Color>

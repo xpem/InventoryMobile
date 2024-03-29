@@ -1,6 +1,7 @@
 ﻿using ApiDAL;
 using BLL.Handlers;
 using Models;
+using Models.ItemModels;
 using Models.Responses;
 using System.Text.Json.Nodes;
 
@@ -12,15 +13,35 @@ namespace BLL
         Task<BLLResponse> AltItemAsync(Item item);
         Task<BLLResponse> DelItemAsync(int id);
         Task<BLLResponse> GetItemByIdAsync(string id);
-        Task<BLLResponse> GetItemsAsync();
+        Task<List<Item>> GetItemsAllAsync();
     }
 
     public class ItemBLL(IItemApiDAL itemApiDAL) : IItemBLL
     {
-        public async Task<BLLResponse> GetItemsAsync()
+        public async Task<List<Item>> GetItemsAllAsync()
         {
-            ApiResponse resp = await itemApiDAL.GetItemsAsync();
-            return ApiResponseHandler.Handler<List<Models.Item>>(resp);
+            ApiResponse totalsResp = await itemApiDAL.GetTotalItensAsync();
+            List<Item> items = [];
+
+            var itemTotalsBLLResponse = ApiResponseHandler.Handler<ItemTotals>(totalsResp);
+
+            if (itemTotalsBLLResponse.Success)
+            {
+                ItemTotals? itemTotals = itemTotalsBLLResponse.Content as ItemTotals;
+
+                for (int i = 1; i <= itemTotals?.TotalPages; i++)
+                {
+                    ApiResponse resp = await itemApiDAL.GetPaginatedItemsAsync(i);
+                    var paginatedItemsBLLResponse = ApiResponseHandler.Handler<List<Item>>(resp);
+
+                    if (paginatedItemsBLLResponse.Success)
+                        if (paginatedItemsBLLResponse.Content is List<Item> pageItems)
+                            items.AddRange(pageItems);
+                }
+
+                return items;
+            }
+            else throw new Exception("totalsResp success false, error:" + itemTotalsBLLResponse.Error);
         }
 
         public async Task<BLLResponse> GetItemByIdAsync(string id)
@@ -29,7 +50,7 @@ namespace BLL
             return ApiResponseHandler.Handler<Item>(resp);
         }
 
-        public async Task<BLLResponse> AddItemAsync(Models.Item item)
+        public async Task<BLLResponse> AddItemAsync(Item item)
         {
             ApiResponse? resp = await itemApiDAL.AddItemAsync(item);
 
@@ -45,7 +66,7 @@ namespace BLL
             return new BLLResponse() { Success = false, Content = null };
         }
 
-        public async Task<BLLResponse> AltItemAsync(Models.Item item)
+        public async Task<BLLResponse> AltItemAsync(Item item)
         {
             ApiResponse? resp = await itemApiDAL.AltItemAsync(item);
 
