@@ -1,6 +1,6 @@
 ﻿using BLL.Interface;
 using InventoryMobile.Views;
-using Models;
+using Models.DTO;
 using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels

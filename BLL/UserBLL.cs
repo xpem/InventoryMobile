@@ -2,7 +2,7 @@
 using ApiDAL.Interfaces;
 using BLL.Interface;
 using DbContextDAL.Interface;
-using Models;
+using Models.DTO;
 using Models.Responses;
 using System.Text.Json.Nodes;
 
@@ -54,7 +54,7 @@ namespace BLL
 
         public async Task<(bool, string?)> GetUserTokenAsync(string email, string password) => await userApiDAL.GetUserTokenAsync(email.ToLower(), password);
 
-        public Models.User? GetUserLocal() => userDAL.GetUserLocal();
+        public User? GetUserLocal() => userDAL.GetUserLocal();
 
         public void RemoveUserLocal() => userDAL.RemoveUserLocal();
 

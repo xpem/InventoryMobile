@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class SubCategory : ModelBase
+    public record SubCategory : ModelBase
     {
         public string? Name { get; set; }
 

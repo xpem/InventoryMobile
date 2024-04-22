@@ -1,7 +1,9 @@
 ﻿using BLL;
+using InventoryMobile.UIModels;
 using InventoryMobile.Views.Item;
 using Models.ItemModels;
 using Models.Responses;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels.Item
@@ -10,11 +12,33 @@ namespace InventoryMobile.ViewModels.Item
     {
         int ItemId { get; set; }
 
-        string name, description, categoryAndSubCategory, acquisitionStore, acquisitionTypeName, commentary, situation, resaleValue;
-        bool resaleSituation, withdrawalDateIsVisible;
-        string acquisitionDate, withdrawalDate, acquisitionValue;
+        string name, description, categoryAndSubCategory, acquisitionStore, acquisitionTypeName, commentary, situation, resaleValue, acquisitionDate, withdrawalDate, acquisitionValue;
+
+        bool resaleSituation, withdrawalDateIsVisible, crvwIsVisible;
+
+        ObservableCollection<UIImagePath> imagePathsObsCol;
+
+        public ObservableCollection<UIImagePath> ImagePathsObsCol
+        {
+            get => imagePathsObsCol; set
+            {
+                imagePathsObsCol = value;
+                OnPropertyChanged(nameof(ImagePathsObsCol));
+            }
+        }
 
         public bool WithdrawalDateIsVisible { get => withdrawalDateIsVisible; set { if (value != withdrawalDateIsVisible) { withdrawalDateIsVisible = value; OnPropertyChanged(nameof(WithdrawalDateIsVisible)); } } }
+
+        public bool CrvwIsVisible
+        {
+            get => crvwIsVisible; set
+            {
+                if (value != crvwIsVisible)
+                {
+                    crvwIsVisible = value; OnPropertyChanged(nameof(CrvwIsVisible));
+                }
+            }
+        }
 
         public string AcquisitionTypeName
         {
@@ -99,6 +123,7 @@ namespace InventoryMobile.ViewModels.Item
 
         public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
+            IsBusy = true;
             if (query.ContainsKey("Id") && query.TryGetValue("Id", out object itemId))
             {
                 ItemId = Convert.ToInt32(itemId);
@@ -106,10 +131,11 @@ namespace InventoryMobile.ViewModels.Item
 
                 BLLResponse resp = await itemBLL.GetItemByIdAsync(ItemId.ToString());
 
-                var resp1 = await itemBLL.GetImageItemAsync(ItemId, 1);
+                //binding do Imagesource no front p ver se funciona
 
                 if (resp is not null && resp.Success)
                 {
+
                     item = resp.Content as Models.ItemModels.Item;
                     Name = item.Name;
                     //AcquisitionValue = item.PurchaseValue.ToString();
@@ -149,8 +175,24 @@ namespace InventoryMobile.ViewModels.Item
 
                     Commentary = item.Comment;
 
+                    ImagePathsObsCol = [];
+
+                    ItemFiles listImagePaths = await itemBLL.GetItemImages(ItemId, item.Image1, item.Image2);
+
+                    if(listImagePaths != null)
+                    {
+                        if(listImagePaths.Image1 != null)
+                            ImagePathsObsCol.Add(new UIImagePath() { ImageFilePath = listImagePaths.Image1 });
+
+                        if(listImagePaths.Image2 != null)
+                            ImagePathsObsCol.Add(new UIImagePath() { ImageFilePath = listImagePaths.Image2 });
+                    }
+
+                    if (imagePathsObsCol.Count > 0) { CrvwIsVisible = true; }
+                    else { CrvwIsVisible = false; }
                 }
             }
+            IsBusy = false;
         }
 
         private async Task DeleteItem()

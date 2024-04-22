@@ -1,4 +1,4 @@
-﻿using Models;
+﻿using Models.DTO;
 using Models.Responses;
 
 namespace BLL.Interface

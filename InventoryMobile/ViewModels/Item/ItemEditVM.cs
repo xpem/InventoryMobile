@@ -3,6 +3,7 @@ using InventoryMobile.Resources.Fonts.Icons;
 using InventoryMobile.UIModels;
 using InventoryMobile.Views.Item;
 using Models;
+using Models.DTO;
 using Models.ItemModels;
 using Models.Responses;
 using System.Collections.ObjectModel;
@@ -21,6 +22,8 @@ namespace InventoryMobile.ViewModels.Item
 
         const int resaleStatusId = 5;
         readonly int[] outSituations = [4, 5, 3, 7];
+
+        ItemFiles ItemFiles;
 
         #region fields
 
@@ -121,6 +124,7 @@ namespace InventoryMobile.ViewModels.Item
 
         public ICommand AddItemCommand => new Command(async () => await AltItem());
 
+        public ICommand AddImageCommand => new Command(TakePhoto);
 
         #endregion
 
@@ -132,7 +136,7 @@ namespace InventoryMobile.ViewModels.Item
 
         public string BtnInsertIcon { get => btnInsertIcon; set { if (value != btnInsertIcon) { btnInsertIcon = value; OnPropertyChanged(nameof(BtnInsertIcon)); } } }
 
-        bool btnInsertIsEnabled = true, btnDeleteIsVisible, stlResaleValueIsVisible, stlWithdrawalDateIsVisible;
+        bool btnInsertIsEnabled = true, btnDeleteIsVisible, stlResaleValueIsVisible, stlWithdrawalDateIsVisible, crvwIsVisible, vSLAddImageIsVisible;
 
         public bool BtnInsertIsEnabled { get => btnInsertIsEnabled; set { if (value != btnInsertIsEnabled) { btnInsertIsEnabled = value; OnPropertyChanged(nameof(BtnInsertIsEnabled)); } } }
 
@@ -142,7 +146,32 @@ namespace InventoryMobile.ViewModels.Item
 
         public bool StlWithdrawalDateIsVisible { get => stlWithdrawalDateIsVisible; set { if (value != stlWithdrawalDateIsVisible) { stlWithdrawalDateIsVisible = value; OnPropertyChanged(nameof(StlWithdrawalDateIsVisible)); } } }
 
+        public bool VSLAddImageIsVisible { get => vSLAddImageIsVisible; set { if (value != vSLAddImageIsVisible) { vSLAddImageIsVisible = value; OnPropertyChanged(nameof(VSLAddImageIsVisible)); } } }
+
+        public bool CrvwIsVisible
+        {
+            get => crvwIsVisible;
+            set
+            {
+                if (value != crvwIsVisible)
+                {
+                    crvwIsVisible = value; OnPropertyChanged(nameof(CrvwIsVisible));
+                }
+            }
+        }
+
         #endregion
+
+        ObservableCollection<UIImagePath> imagePathsObsCol;
+
+        public ObservableCollection<UIImagePath> ImagePathsObsCol
+        {
+            get => imagePathsObsCol; set
+            {
+                imagePathsObsCol = value;
+                OnPropertyChanged(nameof(ImagePathsObsCol));
+            }
+        }
 
         public ObservableCollection<UIItemSituation> ItemsSituationObsList { get; set; }
 
@@ -213,7 +242,7 @@ namespace InventoryMobile.ViewModels.Item
 
                 AcquisitionTypeObsList.Add(new UIAcquisitionType() { Id = -1, Name = "Selecione" });
 
-                foreach (Models.AcquisitionType acquisitionType in acquisitionTypeList)
+                foreach (AcquisitionType acquisitionType in acquisitionTypeList)
                     AcquisitionTypeObsList.Add(new UIAcquisitionType() { Id = acquisitionType.Id, Name = acquisitionType.Name });
 
                 OnPropertyChanged(nameof(AcquisitionTypeObsList));
@@ -251,7 +280,14 @@ namespace InventoryMobile.ViewModels.Item
                         ResaleValue = item.ResaleValue.ToString();
                         WithdrawalDate = item.WithdrawalDate != null ? item.WithdrawalDate.Value : DateTime.Now;
                         AcquisitionStore = item.PurchaseStore;
+
+                        ImagePathsObsCol = [];
+
+                        ItemFiles listImagePaths = await itemBLL.GetItemImages(ItemId, item.Image1, item.Image2);
+
+                        BuildImagePathsObsColAsync(listImagePaths);
                     }
+
 
                     BtnInsertIcon = Icons.Pen;
                     BtnInsertText = "Atualizar";
@@ -275,9 +311,32 @@ namespace InventoryMobile.ViewModels.Item
                 AcquisitionDate = itemAcquisitionDate;
                 IsBusy = false;
             }
-
         }
 
+        private void BuildImagePathsObsColAsync(ItemFiles listImagePaths)
+        {
+            if (listImagePaths != null)
+            {
+                if (listImagePaths.Image1 != null)
+                    ImagePathsObsCol.Add(new UIImagePath() { ImageFilePath = listImagePaths.Image1 });
+
+                if (listImagePaths.Image2 != null)
+                    ImagePathsObsCol.Add(new UIImagePath() { ImageFilePath = listImagePaths.Image2 });
+            }
+
+            if (imagePathsObsCol.Count > 0)
+            {
+                CrvwIsVisible = true;
+
+                if (imagePathsObsCol.Count == 2)
+                    VSLAddImageIsVisible = false;
+            }
+            else
+            {
+                CrvwIsVisible = false;
+                VSLAddImageIsVisible = true;
+            }
+        }
 
         private static decimal CurrencyValueParse(string currencyValue) =>
             decimal.Parse(currencyValue.Replace(".", ""), NumberStyles.Number, new NumberFormatInfo() { NumberDecimalSeparator = "," });
@@ -304,7 +363,7 @@ namespace InventoryMobile.ViewModels.Item
                         Situation = new ItemSituation() { Id = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id },
                         ResaleValue = StlResaleValueIsVisible ? decResaleValue : null,
                         TechnicalDescription = Description.Trim(),
-                        Category = new Models.Category() { Id = CategoryId, SubCategory = SubCategoryId is not null ? new Models.SubCategory() { Id = SubCategoryId.Value } : null },
+                        Category = new Models.Category() { Id = CategoryId, SubCategory = SubCategoryId is not null ? new SubCategory() { Id = SubCategoryId.Value } : null },
                         WithdrawalDate = StlWithdrawalDateIsVisible ? WithdrawalDate : null
 
                     };
@@ -365,6 +424,46 @@ namespace InventoryMobile.ViewModels.Item
             }
 
             return valid;
+        }
+
+        public async void TakePhoto()
+        {
+            if (MediaPicker.Default.IsCaptureSupported)
+            {
+                FileResult photo = await MediaPicker.Default.PickPhotoAsync();
+
+                if (photo != null)
+                {
+                    using Stream sourceStream = await photo.OpenReadAsync();
+                    await itemBLL.AddItemImage(ItemId, sourceStream, photo.FileName, photo.ContentType);
+
+                    //get image
+                    //retornar o nome da imagem para dar um get nela dps
+
+
+
+                    //// save the file into local storage
+                    //string localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+
+                    //using Stream sourceStream = await photo.OpenReadAsync();
+
+                    //using FileStream localFileStream = File.OpenWrite(localFilePath);
+
+                    //await sourceStream.CopyToAsync(localFileStream);
+
+                    //ItemFiles ??= new();
+
+                    //if (string.IsNullOrEmpty(ItemFiles.Image1))
+                    //    ItemFiles.Image1 = localFilePath;
+                    //else if (string.IsNullOrEmpty(ItemFiles.Image2))
+                    //    ItemFiles.Image2 = localFilePath;
+                    //else throw new Exception("Campos de imagens já preenchidos");
+
+
+                    //BuildImagePathsObsColAsync(ItemFiles);
+
+                }
+            }
         }
     }
 }

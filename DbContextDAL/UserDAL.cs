@@ -1,12 +1,12 @@
 ﻿using DbContextDAL.Interface;
 using Microsoft.EntityFrameworkCore;
-using Models;
+using Models.DTO;
 
 namespace DbContextDAL
 {
     public class UserDAL(InventoryDbContextDAL inventoryDbContextDAL) : IUserDAL
     {
-        public Models.User? GetUserLocal() => inventoryDbContextDAL.User.FirstOrDefault();
+        public User? GetUserLocal() => inventoryDbContextDAL.User.FirstOrDefault();
 
         public void RemoveUserLocal() => _ = inventoryDbContextDAL.Set<User>().ExecuteDeleteAsync();
 

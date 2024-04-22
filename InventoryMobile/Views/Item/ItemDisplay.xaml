@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:Icons="clr-namespace:InventoryMobile.Resources.Fonts.Icons"
     xmlns:components="clr-namespace:InventoryMobile.Components"
+    xmlns:model="clr-namespace:InventoryMobile.UIModels"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:InventoryMobile.ViewModels.Item"
     Title="Item"
@@ -16,6 +17,40 @@
                 <Frame Style="{StaticResource FramePrimary}">
                     <VerticalStackLayout>
                         <VerticalStackLayout Margin="5,0,5,0">
+                            <VerticalStackLayout>
+                                <CarouselView
+                                    Margin="5"
+                                    HeightRequest="300"
+                                    HorizontalOptions="CenterAndExpand"
+                                    IndicatorView="indicatorView"
+                                    IsVisible="{Binding CrvwIsVisible}"
+                                    ItemsSource="{Binding ImagePathsObsCol}"
+                                    Loop="False"
+                                    WidthRequest="350">
+                                    <CarouselView.ItemsLayout>
+                                        <LinearItemsLayout ItemSpacing="20" Orientation="Horizontal" />
+                                    </CarouselView.ItemsLayout>
+                                    <CarouselView.ItemTemplate>
+                                        <DataTemplate x:DataType="model:UIImagePath">
+                                            <Frame
+                                                BackgroundColor="{StaticResource Gray100}"
+                                                BorderColor="{StaticResource Gray500}"
+                                                CornerRadius="8"
+                                                IsClippedToBounds="True">
+                                                <Image
+                                                    Margin="0"
+                                                    Aspect="AspectFit"
+                                                    Source="{Binding ImageFilePath}" />
+                                            </Frame>
+                                        </DataTemplate>
+                                    </CarouselView.ItemTemplate>
+                                </CarouselView>
+                                <IndicatorView
+                                    x:Name="indicatorView"
+                                    HorizontalOptions="Center"
+                                    IndicatorColor="LightGray"
+                                    SelectedIndicatorColor="DarkGray" />
+                            </VerticalStackLayout>
                             <components:BorderedLabel LabelText="Nome" Text="{Binding Name}" />
                             <components:BorderedLabel LabelText="Descrição técnica" Text="{Binding Description}" />
                             <Grid
@@ -145,7 +180,7 @@
                         </VerticalStackLayout>
                         <StackLayout Orientation="Horizontal">
                             <Button
-                                Margin="0,10,0,20"
+                                Margin="5,10,5,20"
                                 Command="{Binding EditCommand}"
                                 ContentLayout="Left,10"
                                 FontSize="20"
@@ -161,7 +196,7 @@
                                 </Button.ImageSource>
                             </Button>
                             <Button
-                                Margin="10,10,0,20"
+                                Margin="5,10,5,20"
                                 Command="{Binding DelItemCommand}"
                                 ContentLayout="Left,10"
                                 FontSize="20"

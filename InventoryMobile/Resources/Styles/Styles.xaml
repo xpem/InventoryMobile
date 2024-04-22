@@ -560,6 +560,14 @@
     </Style>
 
     <Style
+        x:Key="ButtonInfo"
+        BasedOn="{StaticResource ButtonPrimary}"
+        TargetType="Button">
+        <Setter Property="TextColor" Value="{StaticResource Black}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Info}" />
+    </Style>
+
+    <Style
         x:Key="ButtonWarning"
         BasedOn="{StaticResource ButtonPrimary}"
         TargetType="Button">

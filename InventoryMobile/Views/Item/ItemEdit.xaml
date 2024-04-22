@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:Icons="clr-namespace:InventoryMobile.Resources.Fonts.Icons"
     xmlns:components="clr-namespace:InventoryMobile.Components"
+    xmlns:model="clr-namespace:InventoryMobile.UIModels"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:InventoryMobile.ViewModels.Item"
     Title="Item"
@@ -179,6 +180,95 @@
                                     Style="{StaticResource Entry}"
                                     Text="{Binding Commentary}" />
                             </Frame>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Margin="0,5,0,0" IsVisible="{Binding VSLAddImageIsVisible}">
+                            <Button
+                                Margin="0"
+                                Command="{Binding AddImageCommand}"
+                                ContentLayout="Left,10"
+                                FontSize="20"
+                                HorizontalOptions="Center"
+                                IsEnabled="{Binding BtnInsertIsEnabled}"
+                                Style="{StaticResource ButtonInfo}"
+                                Text="">
+                                <Button.ImageSource>
+                                    <FontImageSource
+                                        FontFamily="Icons"
+                                        Glyph="{x:Static Icons:Icons.Camera}"
+                                        Size="15"
+                                        Color="{StaticResource Gray900}" />
+                                </Button.ImageSource>
+                            </Button>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout>
+                            <CarouselView
+                                Margin="5"
+                                HeightRequest="300"
+                                HorizontalOptions="CenterAndExpand"
+                                IndicatorView="indicatorView"
+                                IsVisible="{Binding CrvwIsVisible}"
+                                ItemsSource="{Binding ImagePathsObsCol}"
+                                Loop="False"
+                                WidthRequest="350">
+                                <CarouselView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Horizontal" />
+                                </CarouselView.ItemsLayout>
+                                <CarouselView.ItemTemplate>
+                                    <DataTemplate x:DataType="model:UIImagePath">
+                                        <Border HorizontalOptions="Center">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10" />
+                                            </Border.StrokeShape>
+                                            <Grid RowDefinitions="*,40">
+                                                <Image Aspect="Fill" Source="{Binding ImageFilePath}" />
+                                                <Grid
+                                                    Grid.Row="1"
+                                                    Margin="0"
+                                                    ColumnDefinitions="*,*"
+                                                    ColumnSpacing="0"
+                                                    HorizontalOptions="FillAndExpand">
+                                                    <Button
+                                                        Margin="0"
+                                                        BackgroundColor="{StaticResource Warning}"
+                                                        ContentLayout="Left,10"
+                                                        CornerRadius="0"
+                                                        FontSize="20"
+                                                        HorizontalOptions="FillAndExpand">
+                                                        <Button.ImageSource>
+                                                            <FontImageSource
+                                                                FontFamily="Icons"
+                                                                Glyph="{x:Static Icons:Icons.Pen}"
+                                                                Size="15"
+                                                                Color="#000" />
+                                                        </Button.ImageSource>
+                                                    </Button>
+                                                    <Button
+                                                        Grid.Column="1"
+                                                        Margin="0"
+                                                        BackgroundColor="{StaticResource Danger}"
+                                                        ContentLayout="Left,10"
+                                                        CornerRadius="0"
+                                                        FontSize="20"
+                                                        HorizontalOptions="FillAndExpand">
+                                                        <Button.ImageSource>
+                                                            <FontImageSource
+                                                                FontFamily="Icons"
+                                                                Glyph="{x:Static Icons:Icons.Trash}"
+                                                                Size="15"
+                                                                Color="#fff" />
+                                                        </Button.ImageSource>
+                                                    </Button>
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </CarouselView.ItemTemplate>
+                            </CarouselView>
+                            <IndicatorView
+                                x:Name="indicatorView"
+                                HorizontalOptions="Center"
+                                IndicatorColor="LightGray"
+                                SelectedIndicatorColor="DarkGray" />
                         </VerticalStackLayout>
                         <StackLayout Orientation="Horizontal">
                             <Button

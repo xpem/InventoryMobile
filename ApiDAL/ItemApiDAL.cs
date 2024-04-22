@@ -14,7 +14,8 @@ namespace ApiDAL
         Task<ApiResponse> GetItemByIdAsync(string id);
         Task<ApiResponse> GetPaginatedItemsAsync(int page);
         Task<ApiResponse> GetTotalItensAsync();
-        Task<ApiResponse> GetItemImageAsync(int id, int imageIndex);
+        Task<ApiResponse> GetItemImageAsync(int id, string fileName);
+        Task<ApiResponse> AddItemImage(int id, FileToUpload fileToUpload);
     }
 
     public class ItemApiDAL(IHttpClientFunctions httpClientFunctions, IHttpClientWithFileFunctions httpClientWithFileFunctions) : IItemApiDAL
@@ -27,8 +28,11 @@ namespace ApiDAL
         public async Task<ApiResponse> GetItemByIdAsync(string id) =>
            await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item/" + id);
 
-        public async Task<ApiResponse> GetItemImageAsync(int id, int imageIndex) =>
-            await httpClientWithFileFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item/" + id + "/image/" + imageIndex);
+        public async Task<ApiResponse> GetItemImageAsync(int id, string fileName) =>
+            await httpClientWithFileFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item/" + id + "/image/" + fileName);
+
+        public async Task<ApiResponse> AddItemImage(int id, FileToUpload fileToUpload) =>
+            await httpClientWithFileFunctions.AuthRequestAsync(Models.RequestsTypes.Put, ApiKeys.ApiAddress + "/Inventory/item/" + id + "/image", fileToUpload);
 
         public async Task<ApiResponse> AddItemAsync(Item item)
         {

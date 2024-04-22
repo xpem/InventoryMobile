@@ -1,6 +1,6 @@
 ﻿namespace Models.ItemModels
 {
-    public class ItemSituation : ModelBase
+    public record ItemSituation : ModelBase
     {
         public string? Name { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Models.DTO;
 
 namespace DbContextDAL
 {
@@ -6,7 +7,7 @@ namespace DbContextDAL
     {
         public virtual DbSet<Models.VersionDbTables> VersionDbTables { get; set; }
 
-        public virtual DbSet<Models.User> User { get; set; }
+        public virtual DbSet<User> User { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
