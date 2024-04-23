@@ -3,7 +3,6 @@ using InventoryMobile.Resources.Fonts.Icons;
 using InventoryMobile.UIModels;
 using InventoryMobile.Views.Item;
 using Models;
-using Models.DTO;
 using Models.ItemModels;
 using Models.Responses;
 using System.Collections.ObjectModel;
@@ -23,11 +22,12 @@ namespace InventoryMobile.ViewModels.Item
         const int resaleStatusId = 5;
         readonly int[] outSituations = [4, 5, 3, 7];
 
-        ItemFiles ItemFiles;
 
         #region fields
 
         string name, description, categoryName, acquisitionStore, commentary;
+
+        bool btnPickItemImageIsEnabled;
 
         public string Name
         {
@@ -64,6 +64,11 @@ namespace InventoryMobile.ViewModels.Item
         public string AcquisitionValue
         {
             get => acquisitionValue; set { if (acquisitionValue != value) { acquisitionValue = value; OnPropertyChanged(nameof(AcquisitionValue)); } }
+        }
+
+        public bool BtnPickItemImageIsEnabled
+        {
+            get => btnPickItemImageIsEnabled; set { if (btnPickItemImageIsEnabled != value) { btnPickItemImageIsEnabled = value; OnPropertyChanged(nameof(BtnPickItemImageIsEnabled)); } }
         }
 
         public string ResaleValue
@@ -124,8 +129,9 @@ namespace InventoryMobile.ViewModels.Item
 
         public ICommand AddItemCommand => new Command(async () => await AltItem());
 
-        public ICommand AddImageCommand => new Command(TakePhoto);
+        public ICommand PickItemImageCommand => new Command(async () => await PickItemImage());
 
+        public ICommand DelItemImageCommand => new Command((e) => DelItemImage(Guid.Parse(e as string)));
         #endregion
 
         #region Components Behaviors
@@ -136,7 +142,7 @@ namespace InventoryMobile.ViewModels.Item
 
         public string BtnInsertIcon { get => btnInsertIcon; set { if (value != btnInsertIcon) { btnInsertIcon = value; OnPropertyChanged(nameof(BtnInsertIcon)); } } }
 
-        bool btnInsertIsEnabled = true, btnDeleteIsVisible, stlResaleValueIsVisible, stlWithdrawalDateIsVisible, crvwIsVisible, vSLAddImageIsVisible;
+        bool btnInsertIsEnabled = true, btnDeleteIsVisible, stlResaleValueIsVisible, stlWithdrawalDateIsVisible, crvwIsVisible, vSLAddImageIsVisible = true;
 
         public bool BtnInsertIsEnabled { get => btnInsertIsEnabled; set { if (value != btnInsertIsEnabled) { btnInsertIsEnabled = value; OnPropertyChanged(nameof(BtnInsertIsEnabled)); } } }
 
@@ -161,6 +167,8 @@ namespace InventoryMobile.ViewModels.Item
         }
 
         #endregion
+
+        FixedIndexesImagePaths ImagePaths { get; set; } = new();
 
         ObservableCollection<UIImagePath> imagePathsObsCol;
 
@@ -283,11 +291,26 @@ namespace InventoryMobile.ViewModels.Item
 
                         ImagePathsObsCol = [];
 
-                        ItemFiles listImagePaths = await itemBLL.GetItemImages(ItemId, item.Image1, item.Image2);
+                        var responseItemImages = await itemBLL.GetItemImages(ItemId, item.Image1, item.Image2);
 
-                        BuildImagePathsObsColAsync(listImagePaths);
+                        if (responseItemImages != null)
+                        {
+                            if (responseItemImages.Image1 != null)
+                            {
+                                Guid? image1ExternalId = item.Image1 is not null ? Guid.Parse(item.Image1) : null;
+                                ImagePaths.Image1 = new(responseItemImages.Image1, image1ExternalId);
+                            }
+
+                            if (responseItemImages.Image2 != null)
+                            {
+                                Guid? image2ExternalId = item.Image2 is not null ? Guid.Parse(item.Image2) : null;
+                                ImagePaths.Image2 = new(responseItemImages.Image2, image2ExternalId);
+                            }
+                        }
+
+
+                        BuildImagePathsObsColAsync();
                     }
-
 
                     BtnInsertIcon = Icons.Pen;
                     BtnInsertText = "Atualizar";
@@ -313,28 +336,32 @@ namespace InventoryMobile.ViewModels.Item
             }
         }
 
-        private void BuildImagePathsObsColAsync(ItemFiles listImagePaths)
+        private void BuildImagePathsObsColAsync()
         {
-            if (listImagePaths != null)
-            {
-                if (listImagePaths.Image1 != null)
-                    ImagePathsObsCol.Add(new UIImagePath() { ImageFilePath = listImagePaths.Image1 });
+            ImagePathsObsCol = [];
 
-                if (listImagePaths.Image2 != null)
-                    ImagePathsObsCol.Add(new UIImagePath() { ImageFilePath = listImagePaths.Image2 });
+            if (ImagePaths != null)
+            {
+                if (ImagePaths.Image1 != null)
+                    ImagePathsObsCol.Add(ImagePaths.Image1);
+
+                if (ImagePaths.Image2 != null)
+                    ImagePathsObsCol.Add(ImagePaths.Image2);
             }
 
-            if (imagePathsObsCol.Count > 0)
+            if (ImagePathsObsCol.Count > 0)
             {
                 CrvwIsVisible = true;
 
-                if (imagePathsObsCol.Count == 2)
-                    VSLAddImageIsVisible = false;
+                if (ImagePathsObsCol.Count == 2)
+                    BtnPickItemImageIsEnabled = false;
+                else
+                    BtnPickItemImageIsEnabled = true;
             }
             else
             {
                 CrvwIsVisible = false;
-                VSLAddImageIsVisible = true;
+                BtnPickItemImageIsEnabled = true;
             }
         }
 
@@ -426,7 +453,29 @@ namespace InventoryMobile.ViewModels.Item
             return valid;
         }
 
-        public async void TakePhoto()
+        public void DelItemImage(Guid id)
+        {
+            UIImagePath itemImage;
+
+            if (ImagePaths.Image1.Id == id)
+            {
+                itemImage = ImagePaths.Image1;
+                ImagePaths.Image1 = null;
+                BuildImagePathsObsColAsync();
+                ItemEditVM.DeleteFile(itemImage.ImageFilePath);
+            }
+            else
+            {
+                itemImage = ImagePaths.Image2;
+                ImagePaths.Image2 = null;
+                BuildImagePathsObsColAsync();
+                ItemEditVM.DeleteFile(itemImage.ImageFilePath);
+            }
+        }
+
+        private static void DeleteFile(string imageFilePath) => File.Delete(Path.Combine(imageFilePath));
+
+        public async Task PickItemImage()
         {
             if (MediaPicker.Default.IsCaptureSupported)
             {
@@ -434,13 +483,34 @@ namespace InventoryMobile.ViewModels.Item
 
                 if (photo != null)
                 {
+                    string fileName = "Temp1";
+
+                    if (imagePathsObsCol.Count == 1 && ImagePaths.Image1 is not null)
+                        fileName = "Temp2";
+
+                    fileName += Path.GetExtension(photo.FileName);
+
+                    string tempLocalFilePath = Path.Combine(FileSystem.CacheDirectory, fileName);
+
                     using Stream sourceStream = await photo.OpenReadAsync();
-                    await itemBLL.AddItemImage(ItemId, sourceStream, photo.FileName, photo.ContentType);
+
+                    using FileStream localFileStream = File.OpenWrite(tempLocalFilePath);
+
+                    await sourceStream.CopyToAsync(localFileStream);
+
+                    ImagePaths ??= new();
+
+                    if (fileName.StartsWith("Temp1"))
+                        ImagePaths.Image1 = new(tempLocalFilePath);
+                    else
+                        ImagePaths.Image2 = new(tempLocalFilePath);
+
+                    BuildImagePathsObsColAsync();
+
+                    // await itemBLL.AddItemImage(ItemId, sourceStream, photo.FileName, photo.ContentType);
 
                     //get image
                     //retornar o nome da imagem para dar um get nela dps
-
-
 
                     //// save the file into local storage
                     //string localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
@@ -461,7 +531,6 @@ namespace InventoryMobile.ViewModels.Item
 
 
                     //BuildImagePathsObsColAsync(ItemFiles);
-
                 }
             }
         }

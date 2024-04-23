@@ -20,11 +20,11 @@ namespace BLL.Handlers
                             return new BLLResponse() { Success = false, TryRefreshToken = apiResponse.TryRefreshToken, Content = apiResponse.Content };
                     }
 
-                    if (apiResponse.Content is not null)
+                    if (apiResponse.Content is not null and string)
                         return new BLLResponse()
                         {
                             Success = true,
-                            Content = string.IsNullOrEmpty(apiResponse.Content) ? null : JsonDeserialize<TModel>(apiResponse.Content)
+                            Content = string.IsNullOrEmpty(apiResponse.Content as string) ? null : JsonDeserialize<TModel>(apiResponse.Content as string)
                         };
 
                     throw new Exception("apiResponse.Content nulo");

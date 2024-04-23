@@ -18,9 +18,9 @@ namespace BLL
         {
             var resp = await categoryApiDAL.AddCategoryAsync(category);
 
-            if (resp is not null && resp.Content is not null)
+            if (resp is not null && resp.Content is not null and string)
             {
-                var jResp = JsonNode.Parse(resp.Content);
+                var jResp = JsonNode.Parse(resp.Content as string);
                 if (resp.Success && jResp is not null)
                 {
                     Models.Category categoryResp = new()
@@ -43,11 +43,11 @@ namespace BLL
         {
             var resp = await categoryApiDAL.AltCategoryAsync(category);
 
-            if (resp is not null && resp.Content is not null)
+            if (resp is not null && resp.Content is not null and string)
             {
                 if (resp.Success)
                 {
-                    var jResp = JsonNode.Parse(resp.Content);
+                    var jResp = JsonNode.Parse(resp.Content as string);
                     if (jResp is not null)
                     {
                         Models.Category categoryResp = new()

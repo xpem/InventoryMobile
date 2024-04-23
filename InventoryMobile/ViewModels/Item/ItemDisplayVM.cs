@@ -179,13 +179,13 @@ namespace InventoryMobile.ViewModels.Item
 
                     ItemFiles listImagePaths = await itemBLL.GetItemImages(ItemId, item.Image1, item.Image2);
 
-                    if(listImagePaths != null)
+                    if (listImagePaths != null)
                     {
-                        if(listImagePaths.Image1 != null)
-                            ImagePathsObsCol.Add(new UIImagePath() { ImageFilePath = listImagePaths.Image1 });
+                        if (listImagePaths.Image1 != null)
+                            ImagePathsObsCol.Add(new UIImagePath(listImagePaths.Image1));
 
-                        if(listImagePaths.Image2 != null)
-                            ImagePathsObsCol.Add(new UIImagePath() { ImageFilePath = listImagePaths.Image2 });
+                        if (listImagePaths.Image2 != null)
+                            ImagePathsObsCol.Add(new UIImagePath(listImagePaths.Image2));
                     }
 
                     if (imagePathsObsCol.Count > 0) { CrvwIsVisible = true; }

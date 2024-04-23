@@ -30,26 +30,26 @@ namespace ApiDAL
 
                         var fileName = httpResponse.Content.Headers.ContentDisposition?.FileName ?? throw new ArgumentNullException("filename in headers not found!");
                         //FileSystem.AppDataDirectory
-                        var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Images");
-                        bool exists = System.IO.Directory.Exists(path);
+                        //var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Images");
+                        //bool exists = System.IO.Directory.Exists(path);
 
-                        if (!exists)
-                            System.IO.Directory.CreateDirectory(path);
+                        //if (!exists)
+                        //    System.IO.Directory.CreateDirectory(path);
 
-                        string filePath = Path.Combine(path, fileName);
+                        //string filePath = Path.Combine(path, fileName);
 
                         using (var resultStream = await httpResponse.Content.ReadAsStreamAsync())
                         {
 
-                            using var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                            resultStream.CopyTo(fs);
+                            //using var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                            //resultStream.CopyTo(fs);
 
                             return new ApiResponse()
                             {
                                 Success = httpResponse.IsSuccessStatusCode,
                                 Error = httpResponse.StatusCode == HttpStatusCode.Unauthorized ? ErrorTypes.Unauthorized : null,
                                 TryRefreshToken = httpResponse.StatusCode == HttpStatusCode.Unauthorized,
-                                Content = filePath
+                                Content = resultStream
                             };
                         }
                     //case RequestsTypes.Post:

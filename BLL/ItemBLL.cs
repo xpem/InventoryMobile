@@ -56,9 +56,9 @@ namespace BLL
         {
             ApiResponse? resp = await itemApiDAL.AddItemAsync(item);
 
-            if (resp is not null && resp.Success && resp.Content is not null)
+            if (resp is not null && resp.Success && resp.Content is not null and string)
             {
-                JsonNode? jResp = JsonNode.Parse(resp.Content);
+                JsonNode? jResp = JsonNode.Parse(json: resp.Content as string);
 
                 if (jResp is not null)
                     return new BLLResponse() { Success = resp.Success, Content = null };
@@ -72,9 +72,9 @@ namespace BLL
         {
             ApiResponse? resp = await itemApiDAL.AltItemAsync(item);
 
-            if (resp is not null && resp.Success && resp.Content is not null)
+            if (resp is not null && resp.Success && resp.Content is not null and string)
             {
-                JsonNode? jResp = JsonNode.Parse(resp.Content);
+                JsonNode? jResp = JsonNode.Parse(resp.Content as string);
 
                 if (jResp is not null)
                     return new BLLResponse() { Success = resp.Success, Content = null };
@@ -88,8 +88,8 @@ namespace BLL
         {
             ApiResponse? resp = await itemApiDAL.DelItemAsync(id);
 
-            if (resp is not null && !resp.Success && !string.IsNullOrEmpty(resp.Content))
-                return new BLLResponse() { Success = false, Content = resp.Content };
+            if (resp is not null && !resp.Success && !string.IsNullOrEmpty(resp.Content as string))
+                return new BLLResponse() { Success = false, Content = resp.Content.ToString() };
 
             return new BLLResponse() { Success = true, Content = null };
         }
@@ -121,13 +121,22 @@ namespace BLL
         {
             FileToUpload filesToUpload = new() { FileContentType = fileContentType, FileName = fileName, FileStream = fileStream };
 
-            var teste = await itemApiDAL.AddItemImage(id, filesToUpload);
+            ApiResponse resp = await itemApiDAL.AddItemImage(id, filesToUpload);
+
+            if (resp != null)
+            {
+
+            }
 
         }
 
         private async Task<BLLResponse> GetImageItemAsync(int id, string fileName)
         {
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Images");
+
+            bool exists = System.IO.Directory.Exists(path);
+            if (!exists)
+                System.IO.Directory.CreateDirectory(path);
 
             string filePath = Path.Combine(path, fileName);
 
@@ -136,9 +145,14 @@ namespace BLL
 
             ApiResponse resp = await itemApiDAL.GetItemImageAsync(id, fileName);
 
-            if (resp is not null && resp.Content is not null)
-                return new BLLResponse() { Success = resp.Success, Content = resp.Content };
+            if (resp is not null && resp.Content is not null and Stream)
+            {
+                using var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                ((Stream)resp.Content).CopyTo(fs);
 
+                return new BLLResponse() { Success = resp.Success, Content = filePath };
+
+            }
             return new BLLResponse() { Success = false, Content = null };
         }
     }

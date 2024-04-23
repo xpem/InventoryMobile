@@ -16,9 +16,9 @@ namespace BLL
             email = email.ToLower();
             ApiResponse? resp = userApiDAL.AddUserAsync(name, email, password).Result;
 
-            if (resp is not null && resp.Success && resp.Content is not null)
+            if (resp is not null && resp.Success && resp.Content is not null and string)
             {
-                JsonNode? jResp = JsonNode.Parse(resp.Content);
+                JsonNode? jResp = JsonNode.Parse(resp.Content as string);
 
                 if (jResp is not null)
                 {
@@ -42,9 +42,9 @@ namespace BLL
             email = email.ToLower();
             ApiResponse? resp = await userApiDAL.RecoverPasswordAsync(email);
 
-            if (resp is not null && resp.Content is not null)
+            if (resp is not null && resp.Content is not null and string)
             {
-                JsonNode? jResp = JsonNode.Parse(resp.Content);
+                JsonNode? jResp = JsonNode.Parse(resp.Content as string);
                 if (jResp is not null)
                     return jResp["Mensagem"]?.GetValue<string>();
             }
@@ -70,9 +70,9 @@ namespace BLL
                 {
                     ApiResponse resp = await userApiDAL.GetUserAsync(userTokenRes);
 
-                    if (resp.Success && resp.Content != null)
+                    if (resp.Success && resp.Content is not null and string)
                     {
-                        JsonNode? userResponse = JsonNode.Parse(resp.Content);
+                        JsonNode? userResponse = JsonNode.Parse(resp.Content as string);
 
                         if (userResponse is not null)
                         {
