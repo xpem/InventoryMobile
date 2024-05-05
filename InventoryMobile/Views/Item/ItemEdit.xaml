@@ -113,7 +113,6 @@
                             Margin="0,0,0,5"
                             HeightRequest="1"
                             Color="{StaticResource Gray200}" />
-
                         <Grid
                             Margin="0"
                             ColumnDefinitions="5*,5*"
@@ -181,7 +180,10 @@
                                     Text="{Binding Commentary}" />
                             </Frame>
                         </VerticalStackLayout>
-                        <VerticalStackLayout Margin="0,5,0,0" IsVisible="{Binding VSLAddImageIsVisible}">
+                        <HorizontalStackLayout
+                            Margin="0,5,0,0"
+                            HorizontalOptions="Center"
+                            IsVisible="{Binding VSLAddImageIsVisible}">
                             <Button
                                 Margin="0"
                                 Command="{Binding PickItemImageCommand}"
@@ -199,7 +201,24 @@
                                         Color="{StaticResource Gray900}" />
                                 </Button.ImageSource>
                             </Button>
-                        </VerticalStackLayout>
+                            <Button
+                                Margin="10,0,0,0"
+                                Command="{Binding CaptureItemImageCommand}"
+                                ContentLayout="Left,10"
+                                FontSize="20"
+                                HorizontalOptions="Center"
+                                IsEnabled="{Binding BtnPickItemImageIsEnabled}"
+                                Style="{StaticResource ButtonInfo}"
+                                Text="">
+                                <Button.ImageSource>
+                                    <FontImageSource
+                                        FontFamily="Icons"
+                                        Glyph="{x:Static Icons:Icons.Camera}"
+                                        Size="15"
+                                        Color="{StaticResource Gray900}" />
+                                </Button.ImageSource>
+                            </Button>
+                        </HorizontalStackLayout>
                         <VerticalStackLayout>
                             <CarouselView
                                 x:Name="carouselView"

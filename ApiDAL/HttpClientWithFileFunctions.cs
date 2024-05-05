@@ -29,86 +29,58 @@ namespace ApiDAL
                         httpResponse = await httpClient.GetAsync(url);
 
                         var fileName = httpResponse.Content.Headers.ContentDisposition?.FileName ?? throw new ArgumentNullException("filename in headers not found!");
-                        //FileSystem.AppDataDirectory
-                        //var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Images");
-                        //bool exists = System.IO.Directory.Exists(path);
 
-                        //if (!exists)
-                        //    System.IO.Directory.CreateDirectory(path);
+                        var resultStream = await httpResponse.Content.ReadAsStreamAsync();
 
-                        //string filePath = Path.Combine(path, fileName);
-
-                        using (var resultStream = await httpResponse.Content.ReadAsStreamAsync())
+                        return new ApiResponse()
                         {
-
-                            //using var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                            //resultStream.CopyTo(fs);
-
-                            return new ApiResponse()
-                            {
-                                Success = httpResponse.IsSuccessStatusCode,
-                                Error = httpResponse.StatusCode == HttpStatusCode.Unauthorized ? ErrorTypes.Unauthorized : null,
-                                TryRefreshToken = httpResponse.StatusCode == HttpStatusCode.Unauthorized,
-                                Content = resultStream
-                            };
-                        }
-                    //case RequestsTypes.Post:
-                    //    if (jsonContent is not null)
-                    //    {
-                    //        StringContent bodyContent = new(jsonContent, Encoding.UTF8, "application/json");
-                    //        httpResponse = await httpClient.PostAsync(url, bodyContent);
-                    //    }
-                    //    else return new ApiResponse() { Success = false, Content = null, Error = ErrorTypes.BodyContentNull };
-                    //    break;
+                            Success = httpResponse.IsSuccessStatusCode,
+                            Error = httpResponse.StatusCode == HttpStatusCode.Unauthorized ? ErrorTypes.Unauthorized : null,
+                            TryRefreshToken = httpResponse.StatusCode == HttpStatusCode.Unauthorized,
+                            Content = resultStream
+                        };
                     case RequestsTypes.Put:
                         using (MultipartFormDataContent form = [])
                         {
-                            if (content is not null and FileToUpload)
+                            if (content is not null and ItemFilesToUpload itemFilesToUpload)
                             {
-                                FileToUpload fileToUpload = content as FileToUpload;
+                            
+                                if (itemFilesToUpload.Image1 != null)
+                                {
+                                    string filePath = Path.Combine(FilePaths.ImagesPath, itemFilesToUpload.Image1.FileName);
 
-                                using MemoryStream ms = new();
+                                    using var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                                    using MemoryStream memoryStream = new();
+                                    fs.CopyTo(memoryStream);
 
-                                fileToUpload.FileStream.CopyTo(ms);
-                                ms.ToArray();
+                                    var fileContent = new ByteArrayContent(memoryStream.ToArray());
+                                    //fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(itemFilesToUpload.Image1.FileContentType);
 
-                                using var fileContent = new ByteArrayContent(ms.ToArray());
-                                fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(fileToUpload.FileContentType);
+                                    form.Add(fileContent, "file1", itemFilesToUpload.Image1.FileName);
+                                }
 
-                                form.Add(fileContent, "file1", fileToUpload.FileName);
+                                if (itemFilesToUpload.Image2 != null)
+                                {
+                                    string filePath = Path.Combine(FilePaths.ImagesPath, itemFilesToUpload.Image2.FileName);
+
+                                    using var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                                    using MemoryStream memoryStream = new();
+                                    fs.CopyTo(memoryStream);
+
+                                    var fileContent = new ByteArrayContent(memoryStream.ToArray());
+                                    //fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(itemFilesToUpload.Image2.FileContentType);
+
+                                    form.Add(fileContent, "file2", itemFilesToUpload.Image2.FileName);
+                                }
 
                                 var response = await httpClient.PutAsync(url, form);
                                 response.EnsureSuccessStatusCode();
                                 var responseContent = await response.Content.ReadAsStringAsync();
-                                Console.WriteLine("response :" + responseContent);
-                                return new ApiResponse();
+
+                                return new ApiResponse() { Success = true, Content = responseContent };
                             }
                             else throw new InvalidCastException(nameof(content));
                         }
-                        //using (MultipartFormDataContent form = [])
-                        //{
-                        //    using var fileContent = new ByteArrayContent(await File.ReadAllBytesAsync(content));
-                        //    fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
-
-                        //    form.Add(fileContent, "formFile", Path.GetFileName(content));
-
-                        //    var response = await httpClient.PostAsync(url, form);
-                        //    response.EnsureSuccessStatusCode();
-                        //    var responseContent = await response.Content.ReadAsStringAsync();
-                        //    Console.WriteLine("response :" + responseContent);
-
-                        //    if (content is not null)
-                        //    {
-                        //        StringContent bodyContent = new(content, Encoding.UTF8, "application/json");
-                        //        httpResponse = await httpClient.PutAsync(url, bodyContent);
-
-                        //        return new ApiResponse();
-                        //    }
-                        //    else return new ApiResponse() { Success = false, Content = null, Error = ErrorTypes.BodyContentNull };
-                        //}
-                        //case RequestsTypes.Delete:
-                        //    httpResponse = await httpClient.DeleteAsync(url);
-                        //    break;
                 }
             }
             catch (Exception ex)

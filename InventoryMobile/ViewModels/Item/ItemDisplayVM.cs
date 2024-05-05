@@ -135,7 +135,6 @@ namespace InventoryMobile.ViewModels.Item
 
                 if (resp is not null && resp.Success)
                 {
-
                     item = resp.Content as Models.ItemModels.Item;
                     Name = item.Name;
                     //AcquisitionValue = item.PurchaseValue.ToString();
@@ -177,15 +176,15 @@ namespace InventoryMobile.ViewModels.Item
 
                     ImagePathsObsCol = [];
 
-                    ItemFiles listImagePaths = await itemBLL.GetItemImages(ItemId, item.Image1, item.Image2);
+                    ItemFilesToUpload listImagePaths = await itemBLL.GetItemImages(ItemId, item.Image1, item.Image2);
 
                     if (listImagePaths != null)
                     {
                         if (listImagePaths.Image1 != null)
-                            ImagePathsObsCol.Add(new UIImagePath(listImagePaths.Image1));
+                            ImagePathsObsCol.Add(new UIImagePath(listImagePaths.Image1.ImageFilePath, listImagePaths.Image1.FileName, item.Image1));
 
                         if (listImagePaths.Image2 != null)
-                            ImagePathsObsCol.Add(new UIImagePath(listImagePaths.Image2));
+                            ImagePathsObsCol.Add(new UIImagePath(listImagePaths.Image2.ImageFilePath, listImagePaths.Image2.FileName, item.Image2));
                     }
 
                     if (imagePathsObsCol.Count > 0) { CrvwIsVisible = true; }

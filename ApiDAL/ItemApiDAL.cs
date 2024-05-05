@@ -15,7 +15,8 @@ namespace ApiDAL
         Task<ApiResponse> GetPaginatedItemsAsync(int page);
         Task<ApiResponse> GetTotalItensAsync();
         Task<ApiResponse> GetItemImageAsync(int id, string fileName);
-        Task<ApiResponse> AddItemImage(int id, FileToUpload fileToUpload);
+        Task<ApiResponse> AddItemImage(int id, ItemFilesToUpload itemFilesToUpload);
+        Task<ApiResponse> DelItemImageAsync(int id, string fileName);
     }
 
     public class ItemApiDAL(IHttpClientFunctions httpClientFunctions, IHttpClientWithFileFunctions httpClientWithFileFunctions) : IItemApiDAL
@@ -31,8 +32,11 @@ namespace ApiDAL
         public async Task<ApiResponse> GetItemImageAsync(int id, string fileName) =>
             await httpClientWithFileFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item/" + id + "/image/" + fileName);
 
-        public async Task<ApiResponse> AddItemImage(int id, FileToUpload fileToUpload) =>
-            await httpClientWithFileFunctions.AuthRequestAsync(Models.RequestsTypes.Put, ApiKeys.ApiAddress + "/Inventory/item/" + id + "/image", fileToUpload);
+        public async Task<ApiResponse> AddItemImage(int id, ItemFilesToUpload itemFilesToUpload) =>
+            await httpClientWithFileFunctions.AuthRequestAsync(Models.RequestsTypes.Put, ApiKeys.ApiAddress + "/Inventory/item/" + id + "/image", itemFilesToUpload);
+        
+        public async Task<ApiResponse> DelItemImageAsync(int id, string fileName) =>
+           await httpClientFunctions.AuthRequestAsync(RequestsTypes.Delete, $"{ApiKeys.ApiAddress}/Inventory/item/{id}/image/{fileName}");
 
         public async Task<ApiResponse> AddItemAsync(Item item)
         {

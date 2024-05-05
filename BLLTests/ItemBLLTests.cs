@@ -64,7 +64,7 @@ namespace BLL.Tests
 
             var resp = itemBLL.AddItemAsync(item).Result;
 
-            if ((resp != null && resp.Success && resp.Content is null))
+            if ((resp != null && resp.Success && resp.Content is Item))
             {
                 Assert.IsTrue(true);
                 return;

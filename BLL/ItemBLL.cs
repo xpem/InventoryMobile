@@ -14,12 +14,15 @@ namespace BLL
         Task<BLLResponse> DelItemAsync(int id);
         Task<BLLResponse> GetItemByIdAsync(string id);
         Task<List<Item>> GetItemsAllAsync();
-        Task<ItemFiles> GetItemImages(int itemId, string itemImage1, string itemImage2);
-        Task AddItemImage(int id, Stream fileStream, string fileName, string fileContentType);
+        Task<ItemFilesToUpload> GetItemImages(int itemId, string itemImage1, string itemImage2);
+        Task<BLLResponse> AddItemImageAsync(int id, ItemFilesToUpload itemFilesToUpload);
+        Task<BLLResponse> DelItemImageAsync(int id, string filename);
     }
 
     public class ItemBLL(IItemApiDAL itemApiDAL) : IItemBLL
     {
+
+
         public async Task<List<Item>> GetItemsAllAsync()
         {
             ApiResponse totalsResp = await itemApiDAL.GetTotalItensAsync();
@@ -58,11 +61,8 @@ namespace BLL
 
             if (resp is not null && resp.Success && resp.Content is not null and string)
             {
-                JsonNode? jResp = JsonNode.Parse(json: resp.Content as string);
-
-                if (jResp is not null)
-                    return new BLLResponse() { Success = resp.Success, Content = null };
-                else return new BLLResponse() { Success = false, Content = resp.Content };
+                return ApiResponseHandler.Handler<Item>(resp);
+                //else return new BLLResponse() { Success = false, Content = resp.Content };
             }
 
             return new BLLResponse() { Success = false, Content = null };
@@ -94,66 +94,122 @@ namespace BLL
             return new BLLResponse() { Success = true, Content = null };
         }
 
-        public async Task<ItemFiles> GetItemImages(int itemId, string itemImage1, string itemImage2)
+        public async Task<BLLResponse> DelItemImageAsync(int id, string filename)
         {
-            ItemFiles imagePaths = new();
+            ApiResponse? resp = await itemApiDAL.DelItemImageAsync(id, filename);
+
+            if (resp is not null && !resp.Success && !string.IsNullOrEmpty(resp.Content as string))
+            {
+                return new BLLResponse() { Success = false, Content = resp.Content.ToString() };
+            }
+
+            //BLLResponse itemResp = ApiResponseHandler.Handler<Item>(resp);
+            return new BLLResponse() { Success = true, Content = null };
+        }
+
+        public async Task<ItemFilesToUpload> GetItemImages(int itemId, string itemImage1, string itemImage2)
+        {
+            ItemFilesToUpload itemFilesToUpload = new();
 
             if (itemImage1 != null)
             {
-                BLLResponse imageFilePathResp = await GetImageItemAsync(itemId, itemImage1);
+                var resItemImage = await GetImageItemAsync(itemId, itemImage1);
 
-                if (imageFilePathResp?.Content is not null and string)
-                    imagePaths.Image1 = (string)imageFilePathResp.Content;
+                if (resItemImage is not null)
+                    itemFilesToUpload.Image1 = resItemImage;
             }
 
             if (itemImage2 != null)
             {
-                BLLResponse imageFilePathResp = await GetImageItemAsync(itemId, itemImage2);
+                var resItemImage = await GetImageItemAsync(itemId, itemImage2);
 
-                if (imageFilePathResp?.Content is not null and string)
-                    imagePaths.Image2 = (string)imageFilePathResp.Content;
+                if (resItemImage is not null)
+                    itemFilesToUpload.Image2 = resItemImage;
             }
 
-            return imagePaths;
+            return itemFilesToUpload;
         }
 
-        public async Task AddItemImage(int id, Stream fileStream, string fileName, string fileContentType)
+        public async Task<BLLResponse> AddItemImageAsync(int id, ItemFilesToUpload itemFilesToUpload)
         {
-            FileToUpload filesToUpload = new() { FileContentType = fileContentType, FileName = fileName, FileStream = fileStream };
+            ApiResponse resp = await itemApiDAL.AddItemImage(id, itemFilesToUpload);
 
-            ApiResponse resp = await itemApiDAL.AddItemImage(id, filesToUpload);
-
-            if (resp != null)
+            if (resp != null && resp.Content is not null)
             {
+                var respBllResp = ApiResponseHandler.Handler<ItemFileNames>(resp);
 
+                if (respBllResp is not null && respBllResp.Success)
+                {
+                    var itemFileNames = respBllResp.Content as Models.ItemModels.ItemFileNames;
+                    if (itemFileNames is not null)
+                    {
+                        if (itemFileNames.Image1 is not null)
+                        {
+                            var newPath = Path.Combine(FilePaths.ImagesPath, itemFileNames.Image1);
+                            File.Delete(newPath);
+                            System.IO.File.Move(itemFilesToUpload.Image1.ImageFilePath, newPath);
+
+                            itemFilesToUpload.Image1.ImageFilePath = Path.Combine(FilePaths.ImagesPath, itemFileNames.Image1);
+                        }
+
+                        if (itemFileNames.Image2 is not null)
+                        {
+                            var newPath = Path.Combine(FilePaths.ImagesPath, itemFileNames.Image2);
+                            File.Delete(newPath);
+
+                            System.IO.File.Move(itemFilesToUpload.Image2.ImageFilePath, newPath);
+
+                            itemFilesToUpload.Image2.ImageFilePath = Path.Combine(FilePaths.ImagesPath, itemFileNames.Image2);
+                        }
+
+                        return new BLLResponse() { Success = true };
+                    }
+                }
             }
+
+            return new BLLResponse() { Success = false };
 
         }
 
-        private async Task<BLLResponse> GetImageItemAsync(int id, string fileName)
+
+
+        private async Task<ImageFile?> GetImageItemAsync(int id, string fileName)
         {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Images");
+            bool exists = System.IO.Directory.Exists(FilePaths.ImagesPath);
 
-            bool exists = System.IO.Directory.Exists(path);
             if (!exists)
-                System.IO.Directory.CreateDirectory(path);
+                System.IO.Directory.CreateDirectory(FilePaths.ImagesPath);
 
-            string filePath = Path.Combine(path, fileName);
+            string filePath = Path.Combine(FilePaths.ImagesPath, fileName);
+            ImageFile imageFile;
 
             if (File.Exists(filePath))
-                return new BLLResponse() { Success = true, Content = filePath };
+            {
+                using var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+
+                using MemoryStream memoryStream = new();
+                fs.CopyTo(memoryStream);
+                imageFile = new(fileName, filePath);
+
+                return imageFile;
+            }
 
             ApiResponse resp = await itemApiDAL.GetItemImageAsync(id, fileName);
 
             if (resp is not null && resp.Content is not null and Stream)
             {
                 using var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+
                 ((Stream)resp.Content).CopyTo(fs);
 
-                return new BLLResponse() { Success = resp.Success, Content = filePath };
+                imageFile = new(fs.Name, filePath);
 
+                await ((Stream)resp.Content).DisposeAsync();
+
+                return imageFile;
             }
-            return new BLLResponse() { Success = false, Content = null };
+
+            return null;
         }
     }
 }
