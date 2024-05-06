@@ -1,6 +1,6 @@
 ﻿namespace Models.ItemModels
 {
-    public class Item : ModelBase
+    public record Item : ModelBase
     {
         public string? Name { get; set; }
 
@@ -27,6 +27,10 @@
         public DateTime UpdatedAt { get; set; }
 
         public DateTime? WithdrawalDate { get; set; }
+
+        public string? Image1 { get; set; }
+
+        public string? Image2 { get; set; }
     }
 
 }

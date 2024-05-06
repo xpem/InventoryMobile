@@ -3,7 +3,7 @@
     /// <summary>
     /// Table Versions
     /// </summary>
-    public class VersionDbTables
+    public record VersionDbTables
     {
         public required int Id { get; set; }
 

@@ -117,6 +117,8 @@ public static class MauiProgram
     public static IServiceCollection AddApiDALServices(this IServiceCollection services)
     {
         services.AddScoped<IHttpClientFunctions, HttpClientFunctions>();
+        services.AddScoped<IHttpClientWithFileFunctions, HttpClientWithFileFunctions>();
+
         services.AddScoped<IUserApiDAL, UserApiDAL>();
         services.AddScoped<IItemApiDAL, ItemApiDAL>();
         services.AddScoped<IItemSituationApiDAL, ItemSituationApiDAL>();

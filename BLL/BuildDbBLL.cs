@@ -1,5 +1,4 @@
 ﻿using BLL.Interface;
-using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace BLL
@@ -8,6 +7,11 @@ namespace BLL
     {
         public void Init()
         {
+            bool exists = System.IO.Directory.Exists(FilePaths.DbPath);
+
+            if (!exists)
+                System.IO.Directory.CreateDirectory(FilePaths.DbPath);
+
             inventoryDbContextDAL.Database.EnsureCreated();
 
             VersionDbTables? actualVesionDbTables = inventoryDbContextDAL.VersionDbTables.FirstOrDefault();

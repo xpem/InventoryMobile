@@ -1,6 +1,6 @@
 ﻿namespace Models
 {
-    public class ModelBase
+    public record ModelBase
     {        
         public int Id { get; set; }
     }

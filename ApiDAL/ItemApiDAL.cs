@@ -14,17 +14,29 @@ namespace ApiDAL
         Task<ApiResponse> GetItemByIdAsync(string id);
         Task<ApiResponse> GetPaginatedItemsAsync(int page);
         Task<ApiResponse> GetTotalItensAsync();
+        Task<ApiResponse> GetItemImageAsync(int id, string fileName);
+        Task<ApiResponse> AddItemImage(int id, ItemFilesToUpload itemFilesToUpload);
+        Task<ApiResponse> DelItemImageAsync(int id, string fileName);
     }
 
-    public class ItemApiDAL(IHttpClientFunctions httpClientFunctions) : IItemApiDAL
+    public class ItemApiDAL(IHttpClientFunctions httpClientFunctions, IHttpClientWithFileFunctions httpClientWithFileFunctions) : IItemApiDAL
     {
         public async Task<ApiResponse> GetTotalItensAsync() => await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item/totals");
 
         public async Task<ApiResponse> GetPaginatedItemsAsync(int page) =>
-            await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item?page="+page);
+            await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item?page=" + page);
 
         public async Task<ApiResponse> GetItemByIdAsync(string id) =>
            await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item/" + id);
+
+        public async Task<ApiResponse> GetItemImageAsync(int id, string fileName) =>
+            await httpClientWithFileFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/item/" + id + "/image/" + fileName);
+
+        public async Task<ApiResponse> AddItemImage(int id, ItemFilesToUpload itemFilesToUpload) =>
+            await httpClientWithFileFunctions.AuthRequestAsync(Models.RequestsTypes.Put, ApiKeys.ApiAddress + "/Inventory/item/" + id + "/image", itemFilesToUpload);
+        
+        public async Task<ApiResponse> DelItemImageAsync(int id, string fileName) =>
+           await httpClientFunctions.AuthRequestAsync(RequestsTypes.Delete, $"{ApiKeys.ApiAddress}/Inventory/item/{id}/image/{fileName}");
 
         public async Task<ApiResponse> AddItemAsync(Item item)
         {

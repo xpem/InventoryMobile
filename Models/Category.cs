@@ -1,6 +1,6 @@
 ﻿namespace Models
 {
-    public class Category : ModelBase
+    public record Category : ModelBase
     {
         public string? Name { get; set; }
 
