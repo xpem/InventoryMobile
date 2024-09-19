@@ -219,35 +219,34 @@
                                 </Button.ImageSource>
                             </Button>
                         </HorizontalStackLayout>
-                        <VerticalStackLayout>
+                        <VerticalStackLayout
+                            HeightRequest="400"
+                            HorizontalOptions="FillAndExpand"
+                            IsVisible="{Binding CrvwIsVisible}">
                             <CarouselView
                                 x:Name="carouselView"
                                 Margin="5"
-                                HeightRequest="300"
+                                HeightRequest="350"
                                 HorizontalOptions="CenterAndExpand"
                                 IndicatorView="indicatorView"
                                 IsVisible="{Binding CrvwIsVisible}"
                                 ItemsSource="{Binding ImagePathsObsCol, Mode=TwoWay}"
                                 Loop="False"
-                                WidthRequest="350">
+                                WidthRequest="400">
                                 <CarouselView.ItemsLayout>
                                     <LinearItemsLayout Orientation="Horizontal" />
                                 </CarouselView.ItemsLayout>
                                 <CarouselView.ItemTemplate>
                                     <DataTemplate x:DataType="model:UIImagePath">
-                                        <Border HorizontalOptions="Center">
-                                            <Border.StrokeShape>
-                                                <RoundRectangle CornerRadius="10" />
-                                            </Border.StrokeShape>
-                                            <Grid RowDefinitions="*,40">
-                                                <Image Aspect="Fill" Source="{Binding ImageFilePath}" />
-                                                <!--<Grid
+                                        <Grid BackgroundColor="{StaticResource Gray100}" RowDefinitions="*,40">
+                                            <Image Aspect="AspectFit" Source="{Binding ImageFilePath}" />
+                                            <!--<Grid
                                                     Grid.Row="1"
                                                     Margin="0"
                                                     ColumnDefinitions="*,*"
                                                     ColumnSpacing="0"
                                                     HorizontalOptions="FillAndExpand">-->
-                                                <!--<Button
+                                            <!--<Button
                                                         Margin="0"
                                                         BackgroundColor="{StaticResource Warning}"
                                                         ContentLayout="Left,10"
@@ -262,29 +261,28 @@
                                                                 Color="#000" />
                                                         </Button.ImageSource>
                                                     </Button>-->
-                                                <!--  Grid.Column="1"  -->
-                                                <Button
-                                                    x:Name="BtnDelItemImage"
-                                                    Grid.Row="1"
-                                                    Margin="0"
-                                                    BackgroundColor="{StaticResource Danger}"
-                                                    Clicked="BtnDelItemImage_Clicked"
-                                                    CommandParameter="{Binding Id}"
-                                                    ContentLayout="Left,10"
-                                                    CornerRadius="0"
-                                                    FontSize="20"
-                                                    HorizontalOptions="FillAndExpand">
-                                                    <Button.ImageSource>
-                                                        <FontImageSource
-                                                            FontFamily="Icons"
-                                                            Glyph="{x:Static Icons:Icons.Trash}"
-                                                            Size="15"
-                                                            Color="#fff" />
-                                                    </Button.ImageSource>
-                                                </Button>
-                                            </Grid>
-                                            <!--</Grid>-->
-                                        </Border>
+                                            <!--  Grid.Column="1"  -->
+                                            <Button
+                                                x:Name="BtnDelItemImage"
+                                                Grid.Row="1"
+                                                Margin="0"
+                                                BackgroundColor="{StaticResource Danger}"
+                                                Clicked="BtnDelItemImage_Clicked"
+                                                CommandParameter="{Binding Id}"
+                                                ContentLayout="Left,10"
+                                                CornerRadius="0"
+                                                FontSize="20"
+                                                HorizontalOptions="FillAndExpand">
+                                                <Button.ImageSource>
+                                                    <FontImageSource
+                                                        FontFamily="Icons"
+                                                        Glyph="{x:Static Icons:Icons.Trash}"
+                                                        Size="15"
+                                                        Color="#fff" />
+                                                </Button.ImageSource>
+                                            </Button>
+                                        </Grid>
+                                        <!--</Grid>-->
                                     </DataTemplate>
                                 </CarouselView.ItemTemplate>
                             </CarouselView>
@@ -293,7 +291,6 @@
                                 HorizontalOptions="Center"
                                 IndicatorColor="LightGray"
                                 SelectedIndicatorColor="DarkGray" />
-
                         </VerticalStackLayout>
                         <StackLayout Orientation="Horizontal">
                             <Button

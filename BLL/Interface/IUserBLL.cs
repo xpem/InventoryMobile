@@ -7,7 +7,9 @@ namespace BLL.Interface
     {
         BLLResponse AddUser(string name, string email, string password);
         Task<BLLResponse> SignIn(string email, string password);
-        User? GetUserLocal();
+
+        Task<User?> GetUserLocalAsync();
+
         Task<(bool, string?)> GetUserTokenAsync(string email, string password);
         Task<string?> RecoverPasswordAsync(string email);
         void UpdateLocalUserLastUpdate(int uid);

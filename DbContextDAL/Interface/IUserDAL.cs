@@ -8,9 +8,9 @@ namespace DbContextDAL.Interface
 
         int ExecuteUpdateLastUpdateUser(DateTime lastUpdate, int uid);
 
-        int? GetUid();
+        Task<User?> GetUserLocalAsync();
 
-        User? GetUserLocal();
+        Task<int?> GetUidAsync();
 
         void RemoveUserLocal();
     }

@@ -289,7 +289,7 @@ namespace InventoryMobile.ViewModels.Item
 
                         ImagePathsObsCol = [];
 
-                        var responseItemImages = await itemBLL.GetItemImages(ItemId, item.Image1, item.Image2);
+                        var responseItemImages = await itemBLL.GetItemImages(ItemId, FileSystem.CacheDirectory, item.Image1, item.Image2);
 
                         if (responseItemImages != null)
                         {
@@ -432,7 +432,7 @@ namespace InventoryMobile.ViewModels.Item
                             if (ImagePaths.Image2 != null)
                                 itemFilesToUpload.Image2 = new(ImagePaths.Image2.FileName, imageFilePath: ImagePaths.Image2.ImageFilePath);
 
-                            var respAddItemImages = await itemBLL.AddItemImageAsync(ItemId, itemFilesToUpload);
+                            var respAddItemImages = await itemBLL.AddItemImageAsync(ItemId, itemFilesToUpload, FileSystem.CacheDirectory);
 
                             if (respAddItemImages is not null && respAddItemImages.Success)
                             {
@@ -540,7 +540,7 @@ namespace InventoryMobile.ViewModels.Item
 
                     fileName += Path.GetExtension(photo.FileName);
 
-                    string tempLocalFilePath = Path.Combine(FilePaths.ImagesPath, fileName);
+                    string tempLocalFilePath = Path.Combine(FileSystem.CacheDirectory, fileName);
 
                     using Stream sourceStream = await photo.OpenReadAsync();
 

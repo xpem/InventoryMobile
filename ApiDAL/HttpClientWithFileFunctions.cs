@@ -12,7 +12,7 @@ namespace ApiDAL
     public class HttpClientWithFileFunctions(InventoryDbContextDAL inventoryDbContextDAL) : HttpClientFunctions(inventoryDbContextDAL), IHttpClientFunctions, IHttpClientWithFileFunctions
     {
 
-        public override async Task<ApiResponse> RequestAsync(RequestsTypes requestsType, string url, string? userToken = null, Object? content = null)
+        public async Task<ApiResponse> RequestFileAsync(RequestsTypes requestsType, string url,string imagesFilePath, string? userToken = null, Object? content = null)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace ApiDAL
                             
                                 if (itemFilesToUpload.Image1 != null)
                                 {
-                                    string filePath = Path.Combine(FilePaths.ImagesPath, itemFilesToUpload.Image1.FileName);
+                                    string filePath = Path.Combine(imagesFilePath, itemFilesToUpload.Image1.FileName);
 
                                     using var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                                     using MemoryStream memoryStream = new();
@@ -61,7 +61,7 @@ namespace ApiDAL
 
                                 if (itemFilesToUpload.Image2 != null)
                                 {
-                                    string filePath = Path.Combine(FilePaths.ImagesPath, itemFilesToUpload.Image2.FileName);
+                                    string filePath = Path.Combine(imagesFilePath, itemFilesToUpload.Image2.FileName);
 
                                     using var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                                     using MemoryStream memoryStream = new();
