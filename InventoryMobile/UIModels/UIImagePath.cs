@@ -6,7 +6,7 @@
         public UIImagePath Image2 { get; set; }
     }
 
-    public class UIImagePath(string imageFilePath, string fileName, string? externalFileName = null) : BindableObject
+    public class UIImagePath(string imageFilePath, string fileName, string externalFileName = null) : BindableObject
     {
         public Guid Id { get; init; } = Guid.NewGuid();
 

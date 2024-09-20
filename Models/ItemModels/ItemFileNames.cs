@@ -14,10 +14,5 @@
         public ImageFile? Image2 { get; set; }
     }
 
-    public class ImageFile(string fileName, string? imageFilePath = null)
-    {
-        public string FileName { get; set; } = fileName;
-
-        public string? ImageFilePath { get; set; } = imageFilePath;
-    }
+    public record ImageFile(string FileName, int FileId, string? ImageFilePath = null);
 }

@@ -12,7 +12,7 @@ namespace ApiDAL
     public class HttpClientWithFileFunctions(InventoryDbContextDAL inventoryDbContextDAL) : HttpClientFunctions(inventoryDbContextDAL), IHttpClientFunctions, IHttpClientWithFileFunctions
     {
 
-        public async Task<ApiResponse> RequestFileAsync(RequestsTypes requestsType, string url,string imagesFilePath, string? userToken = null, Object? content = null)
+        public override async Task<ApiResponse> RequestAsync(RequestsTypes requestsType, string url, string? userToken = null, Object? content = null)
         {
             try
             {
@@ -44,12 +44,10 @@ namespace ApiDAL
                         {
                             if (content is not null and ItemFilesToUpload itemFilesToUpload)
                             {
-                            
+
                                 if (itemFilesToUpload.Image1 != null)
                                 {
-                                    string filePath = Path.Combine(imagesFilePath, itemFilesToUpload.Image1.FileName);
-
-                                    using var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                                    using var fs = new FileStream(itemFilesToUpload.Image1.ImageFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                                     using MemoryStream memoryStream = new();
                                     fs.CopyTo(memoryStream);
 
@@ -61,9 +59,7 @@ namespace ApiDAL
 
                                 if (itemFilesToUpload.Image2 != null)
                                 {
-                                    string filePath = Path.Combine(imagesFilePath, itemFilesToUpload.Image2.FileName);
-
-                                    using var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                                    using var fs = new FileStream(itemFilesToUpload.Image2.ImageFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                                     using MemoryStream memoryStream = new();
                                     fs.CopyTo(memoryStream);
 

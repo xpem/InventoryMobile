@@ -176,7 +176,7 @@ namespace InventoryMobile.ViewModels.Item
 
                     ImagePathsObsCol = [];
 
-                    ItemFilesToUpload listImagePaths = await itemBLL.GetItemImages(ItemId, FileSystem.CacheDirectory, item.Image1, item.Image2);
+                    ItemFilesToUpload listImagePaths = await itemBLL.GetItemImages(ItemId, item.Image1, item.Image2);
 
                     if (listImagePaths != null)
                     {
