@@ -21,8 +21,6 @@ namespace BLL
 
     public class ItemBLL(IItemApiDAL itemApiDAL) : IItemBLL
     {
-
-
         public async Task<List<Item>> GetItemsAllAsync()
         {
             ApiResponse totalsResp = await itemApiDAL.GetTotalItensAsync();
@@ -62,7 +60,6 @@ namespace BLL
             if (resp is not null && resp.Success && resp.Content is not null and string)
             {
                 return ApiResponseHandler.Handler<Item>(resp);
-                //else return new BLLResponse() { Success = false, Content = resp.Content };
             }
 
             return new BLLResponse() { Success = false, Content = null };
@@ -113,7 +110,7 @@ namespace BLL
 
             if (itemImage1 != null)
             {
-                var resItemImage = await GetImageItemAsync(itemId, itemImage1);
+                var resItemImage = await GetImageItemAsync(itemId, 1, itemImage1, FilePaths.ImagesPath);
 
                 if (resItemImage is not null)
                     itemFilesToUpload.Image1 = resItemImage;
@@ -121,7 +118,7 @@ namespace BLL
 
             if (itemImage2 != null)
             {
-                var resItemImage = await GetImageItemAsync(itemId, itemImage2);
+                var resItemImage = await GetImageItemAsync(itemId, 2, itemImage2, FilePaths.ImagesPath);
 
                 if (resItemImage is not null)
                     itemFilesToUpload.Image2 = resItemImage;
@@ -146,7 +143,6 @@ namespace BLL
                         if (itemFileNames.Image1 is not null)
                         {
                             var newPath = Path.Combine(FilePaths.ImagesPath, itemFileNames.Image1);
-                            File.Delete(newPath);
                             System.IO.File.Move(itemFilesToUpload.Image1.ImageFilePath, newPath);
 
                             itemFilesToUpload.Image1.ImageFilePath = Path.Combine(FilePaths.ImagesPath, itemFileNames.Image1);
@@ -155,8 +151,6 @@ namespace BLL
                         if (itemFileNames.Image2 is not null)
                         {
                             var newPath = Path.Combine(FilePaths.ImagesPath, itemFileNames.Image2);
-                            File.Delete(newPath);
-
                             System.IO.File.Move(itemFilesToUpload.Image2.ImageFilePath, newPath);
 
                             itemFilesToUpload.Image2.ImageFilePath = Path.Combine(FilePaths.ImagesPath, itemFileNames.Image2);
@@ -171,25 +165,23 @@ namespace BLL
 
         }
 
-
-
-        private async Task<ImageFile?> GetImageItemAsync(int id, string fileName)
+        private async Task<ImageFile?> GetImageItemAsync(int id, int idx, string fileName, string filePath)
         {
-            bool exists = System.IO.Directory.Exists(FilePaths.ImagesPath);
+            bool exists = System.IO.Directory.Exists(filePath);
 
             if (!exists)
-                System.IO.Directory.CreateDirectory(FilePaths.ImagesPath);
+                System.IO.Directory.CreateDirectory(filePath);
 
-            string filePath = Path.Combine(FilePaths.ImagesPath, fileName);
+            string filePathAndName = Path.Combine(filePath, fileName);
             ImageFile imageFile;
 
-            if (File.Exists(filePath))
+            if (File.Exists(filePathAndName))
             {
-                using var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                using var fs = new FileStream(filePathAndName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
 
                 using MemoryStream memoryStream = new();
                 fs.CopyTo(memoryStream);
-                imageFile = new(fileName, filePath);
+                imageFile = new() { FileName = fileName, FileId = idx, ImageFilePath = filePathAndName };
 
                 return imageFile;
             }
@@ -198,11 +190,11 @@ namespace BLL
 
             if (resp is not null && resp.Content is not null and Stream)
             {
-                using var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                using var fs = new FileStream(filePathAndName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
 
                 ((Stream)resp.Content).CopyTo(fs);
 
-                imageFile = new(fs.Name, filePath);
+                imageFile = new() { FileName = fs.Name, FileId = idx, ImageFilePath = filePathAndName };
 
                 await ((Stream)resp.Content).DisposeAsync();
 

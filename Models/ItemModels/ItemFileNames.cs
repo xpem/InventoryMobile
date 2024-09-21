@@ -14,10 +14,13 @@
         public ImageFile? Image2 { get; set; }
     }
 
-    public class ImageFile(string fileName, string? imageFilePath = null)
+    public class ImageFile()
     {
-        public string FileName { get; set; } = fileName;
+        public string? FileName { get; set; }
 
-        public string? ImageFilePath { get; set; } = imageFilePath;
+        public int FileId { get; set; }
+
+        public string? ImageFilePath { get; set; } = null;
     }
+
 }

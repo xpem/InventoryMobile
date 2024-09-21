@@ -60,11 +60,12 @@
                     ItemTapped="ItemsListView_ItemTapped"
                     ItemsSource="{Binding ItemsObsList}"
                     RowHeight="65"
+                    SelectionMode="None"
                     SeparatorVisibility="None"
                     VerticalOptions="FillAndExpand">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="model:UIItem">
-                            <ViewCell>
+                            <ViewCell Tapped="ViewCell_Tapped">
                                 <Frame
                                     Margin="5,0,0,5"
                                     Padding="0"

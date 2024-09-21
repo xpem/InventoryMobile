@@ -44,12 +44,10 @@ namespace ApiDAL
                         {
                             if (content is not null and ItemFilesToUpload itemFilesToUpload)
                             {
-                            
+
                                 if (itemFilesToUpload.Image1 != null)
                                 {
-                                    string filePath = Path.Combine(FilePaths.ImagesPath, itemFilesToUpload.Image1.FileName);
-
-                                    using var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                                    using var fs = new FileStream(itemFilesToUpload.Image1.ImageFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                                     using MemoryStream memoryStream = new();
                                     fs.CopyTo(memoryStream);
 
@@ -61,9 +59,7 @@ namespace ApiDAL
 
                                 if (itemFilesToUpload.Image2 != null)
                                 {
-                                    string filePath = Path.Combine(FilePaths.ImagesPath, itemFilesToUpload.Image2.FileName);
-
-                                    using var fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                                    using var fs = new FileStream(itemFilesToUpload.Image2.ImageFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                                     using MemoryStream memoryStream = new();
                                     fs.CopyTo(memoryStream);
 

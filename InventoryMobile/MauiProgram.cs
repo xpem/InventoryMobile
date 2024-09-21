@@ -16,6 +16,7 @@ using InventoryMobile.Views.Category.SubCategory;
 using InventoryMobile.Views.Item;
 using InventoryMobile.Views.Item.Selectors;
 using Microsoft.Extensions.Logging;
+using Models;
 
 namespace InventoryMobile;
 
@@ -47,6 +48,9 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
+
+        if (!System.IO.Directory.Exists(FilePaths.ImagesPath))
+            System.IO.Directory.CreateDirectory(FilePaths.ImagesPath);
 
         #region Dependency injections
 

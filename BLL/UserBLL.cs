@@ -54,7 +54,7 @@ namespace BLL
 
         public async Task<(bool, string?)> GetUserTokenAsync(string email, string password) => await userApiDAL.GetUserTokenAsync(email.ToLower(), password);
 
-        public User? GetUserLocal() => userDAL.GetUserLocal();
+        public async Task<User?> GetUserLocalAsync() => await userDAL.GetUserLocalAsync();
 
         public void RemoveUserLocal() => userDAL.RemoveUserLocal();
 
@@ -72,7 +72,7 @@ namespace BLL
 
                     if (resp.Success && resp.Content is not null and string)
                     {
-                        JsonNode? userResponse = JsonNode.Parse(resp.Content as string);
+                        JsonNode? userResponse = JsonNode.Parse((string)resp.Content);
 
                         if (userResponse is not null)
                         {
@@ -82,7 +82,7 @@ namespace BLL
                                 Name = userResponse["name"]?.GetValue<string>(),
                                 Email = userResponse["email"]?.GetValue<string>(),
                                 Token = userTokenRes,
-                                Password = PasswordHandler.Encrypt(password)
+                                Password = EncryptionService.Encrypt(password)
                             };
 
                             _ = userDAL.ExecuteAddUserAsync(user);

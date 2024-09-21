@@ -427,10 +427,10 @@ namespace InventoryMobile.ViewModels.Item
                         if (ImagePaths.Image1 != null || ImagePaths.Image2 != null)
                         {
                             if (ImagePaths.Image1 != null)
-                                itemFilesToUpload.Image1 = new(ImagePaths.Image1.FileName, imageFilePath: ImagePaths.Image1.ImageFilePath);
+                                itemFilesToUpload.Image1 = new() { FileName = ImagePaths.Image1.FileName, FileId = 1, ImageFilePath = ImagePaths.Image1.ImageFilePath };
 
                             if (ImagePaths.Image2 != null)
-                                itemFilesToUpload.Image2 = new(ImagePaths.Image2.FileName, imageFilePath: ImagePaths.Image2.ImageFilePath);
+                                itemFilesToUpload.Image2 = new() { FileName = ImagePaths.Image2.FileName, FileId = 2, ImageFilePath = ImagePaths.Image2.ImageFilePath };
 
                             var respAddItemImages = await itemBLL.AddItemImageAsync(ItemId, itemFilesToUpload);
 
@@ -526,21 +526,16 @@ namespace InventoryMobile.ViewModels.Item
                 else
                     photo = await MediaPicker.Default.CapturePhotoAsync();
 
-                bool temp2 = false;
-
                 if (photo != null)
                 {
-                    string fileName = "Temp1";
-
+                    string tempFileName = (new Guid()).ToString();
+                    int fileIdx = 1;
                     if (ImagePathsObsCol is not null && ImagePathsObsCol.Count == 1 && ImagePaths.Image1 is not null)
-                    {
-                        fileName = "Temp2";
-                        temp2 = true;
-                    }
+                    { fileIdx++; }
 
-                    fileName += Path.GetExtension(photo.FileName);
+                    tempFileName += Path.GetExtension(photo.FileName);
 
-                    string tempLocalFilePath = Path.Combine(FilePaths.ImagesPath, fileName);
+                    string tempLocalFilePath = Path.Combine(FilePaths.ImagesPath, photo.FileName);
 
                     using Stream sourceStream = await photo.OpenReadAsync();
 
@@ -550,10 +545,10 @@ namespace InventoryMobile.ViewModels.Item
 
                     ImagePaths ??= new();
 
-                    if (!temp2)
-                        ImagePaths.Image1 = new(tempLocalFilePath, fileName);
+                    if (fileIdx == 1)
+                        ImagePaths.Image1 = new(tempLocalFilePath, photo.FileName);
                     else
-                        ImagePaths.Image2 = new(tempLocalFilePath, fileName);
+                        ImagePaths.Image2 = new(tempLocalFilePath, photo.FileName);
 
                     BuildImagePathsObsColAsync();
                 }

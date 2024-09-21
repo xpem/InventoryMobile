@@ -6,11 +6,11 @@ namespace DbContextDAL
 {
     public class UserDAL(InventoryDbContextDAL inventoryDbContextDAL) : IUserDAL
     {
-        public User? GetUserLocal() => inventoryDbContextDAL.User.FirstOrDefault();
+        public async Task<User?> GetUserLocalAsync() => await inventoryDbContextDAL.User.FirstOrDefaultAsync();
 
         public void RemoveUserLocal() => _ = inventoryDbContextDAL.Set<User>().ExecuteDeleteAsync();
 
-        public int? GetUid() => inventoryDbContextDAL.User.Select(x => x.Id).FirstOrDefault();
+        public async Task<int?> GetUidAsync() => await inventoryDbContextDAL.User.Select(x => x.Id).FirstOrDefaultAsync();
 
         public async Task<int> ExecuteAddUserAsync(User user)
         {

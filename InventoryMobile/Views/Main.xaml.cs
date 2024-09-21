@@ -28,6 +28,14 @@ public partial class Main : ContentPage
         Shell.Current.GoToAsync($"{nameof(ItemDisplay)}?Id={TappedItem.Id}", true);
     }
 
+    private async void ViewCell_Tapped(object sender, EventArgs e)
+    {
+        var cell = sender as ViewCell;
+        cell.View.Opacity = 0.5;
+        await cell.View.FadeTo(0.5, 2000);
+        _ = cell.View.FadeTo(1, 1000).ConfigureAwait(false);
+    }
+
     //private void BtnCategorySelected_Clicked(object sender, EventArgs e)
     //{
     //    var view = sender as View;

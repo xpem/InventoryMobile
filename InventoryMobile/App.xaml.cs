@@ -16,7 +16,9 @@ public partial class App : Application
 
             InitializeComponent();
 
-            User user = userBLL.GetUserLocal();
+            User user = null;
+
+            Task.Run(async () => user = await userBLL.GetUserLocalAsync()).Wait();
 
             MainPage = new AppShell(new ViewModels.AppShellVM(userBLL, user));
 
