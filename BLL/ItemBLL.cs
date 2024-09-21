@@ -60,7 +60,6 @@ namespace BLL
             if (resp is not null && resp.Success && resp.Content is not null and string)
             {
                 return ApiResponseHandler.Handler<Item>(resp);
-                //else return new BLLResponse() { Success = false, Content = resp.Content };
             }
 
             return new BLLResponse() { Success = false, Content = null };
@@ -143,22 +142,18 @@ namespace BLL
                     {
                         if (itemFileNames.Image1 is not null)
                         {
-                            //deleta a imagem local recriandoa com o nome que ela tem no servidor, isso é mesmo necessário?
-                            //var newPath = Path.Combine(FilePaths.ImagesPath, itemFileNames.Image1);
-                            //File.Delete(newPath);
-                            //System.IO.File.Move(itemFilesToUpload.Image1.ImageFilePath, newPath);
+                            var newPath = Path.Combine(FilePaths.ImagesPath, itemFileNames.Image1);
+                            System.IO.File.Move(itemFilesToUpload.Image1.ImageFilePath, newPath);
 
-                            //itemFilesToUpload.Image1.ImageFilePath = Path.Combine(FilePaths.ImagesPath, itemFileNames.Image1);
+                            itemFilesToUpload.Image1.ImageFilePath = Path.Combine(FilePaths.ImagesPath, itemFileNames.Image1);
                         }
 
                         if (itemFileNames.Image2 is not null)
                         {
-                            //var newPath = Path.Combine(FilePaths.ImagesPath, itemFileNames.Image2);
-                            //File.Delete(newPath);
+                            var newPath = Path.Combine(FilePaths.ImagesPath, itemFileNames.Image2);
+                            System.IO.File.Move(itemFilesToUpload.Image2.ImageFilePath, newPath);
 
-                            //System.IO.File.Move(itemFilesToUpload.Image2.ImageFilePath, newPath);
-
-                            //itemFilesToUpload.Image2.ImageFilePath = Path.Combine(FilePaths.ImagesPath, itemFileNames.Image2);
+                            itemFilesToUpload.Image2.ImageFilePath = Path.Combine(FilePaths.ImagesPath, itemFileNames.Image2);
                         }
 
                         return new BLLResponse() { Success = true };
@@ -186,7 +181,7 @@ namespace BLL
 
                 using MemoryStream memoryStream = new();
                 fs.CopyTo(memoryStream);
-                imageFile = new(fileName, idx, filePathAndName);
+                imageFile = new() { FileName = fileName, FileId = idx, ImageFilePath = filePathAndName };
 
                 return imageFile;
             }
@@ -199,7 +194,7 @@ namespace BLL
 
                 ((Stream)resp.Content).CopyTo(fs);
 
-                imageFile = new(fs.Name, idx, filePathAndName);
+                imageFile = new() { FileName = fs.Name, FileId = idx, ImageFilePath = filePathAndName };
 
                 await ((Stream)resp.Content).DisposeAsync();
 

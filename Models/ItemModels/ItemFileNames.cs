@@ -14,5 +14,13 @@
         public ImageFile? Image2 { get; set; }
     }
 
-    public record ImageFile(string FileName, int FileId, string? ImageFilePath = null);
+    public class ImageFile()
+    {
+        public string? FileName { get; set; }
+
+        public int FileId { get; set; }
+
+        public string? ImageFilePath { get; set; } = null;
+    }
+
 }

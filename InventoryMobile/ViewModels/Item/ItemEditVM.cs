@@ -427,10 +427,10 @@ namespace InventoryMobile.ViewModels.Item
                         if (ImagePaths.Image1 != null || ImagePaths.Image2 != null)
                         {
                             if (ImagePaths.Image1 != null)
-                                itemFilesToUpload.Image1 = new(ImagePaths.Image1.FileName, 1, ImageFilePath: ImagePaths.Image1.ImageFilePath);
+                                itemFilesToUpload.Image1 = new() { FileName = ImagePaths.Image1.FileName, FileId = 1, ImageFilePath = ImagePaths.Image1.ImageFilePath };
 
                             if (ImagePaths.Image2 != null)
-                                itemFilesToUpload.Image2 = new(ImagePaths.Image2.FileName, 2, ImageFilePath: ImagePaths.Image2.ImageFilePath);
+                                itemFilesToUpload.Image2 = new() { FileName = ImagePaths.Image2.FileName, FileId = 2, ImageFilePath = ImagePaths.Image2.ImageFilePath };
 
                             var respAddItemImages = await itemBLL.AddItemImageAsync(ItemId, itemFilesToUpload);
 
