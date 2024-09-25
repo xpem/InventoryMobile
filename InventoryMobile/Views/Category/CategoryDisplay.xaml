@@ -93,7 +93,7 @@
                 VerticalOptions="FillAndExpand">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="model:UISubCategory">
-                        <ViewCell>
+                        <ViewCell Tapped="ViewCell_Tapped">
                             <Frame
                                 Margin="5,0,5,5"
                                 Padding="0"

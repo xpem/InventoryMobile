@@ -34,7 +34,10 @@
                 Text="Status"
                 TextColor="White" />
             <ScrollView Orientation="Horizontal">
-                <StackLayout BindableLayout.ItemsSource="{Binding ItemsSituationObsList, Mode=TwoWay}" Orientation="Horizontal">
+                <StackLayout
+                    Padding="0,0,0,15"
+                    BindableLayout.ItemsSource="{Binding ItemsSituationObsList, Mode=TwoWay}"
+                    Orientation="Horizontal">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="model:UIItemSituation">
                             <Button
@@ -48,9 +51,9 @@
                 </StackLayout>
             </ScrollView>
         </StackLayout>
-        <StackLayout Padding="10" VerticalOptions="FillAndExpand">
+        <StackLayout Padding="0,5,0,0" VerticalOptions="FillAndExpand">
             <Grid
-                Margin="10"
+                Margin="5,0,5,0"
                 RowDefinitions="*"
                 VerticalOptions="FillAndExpand">
                 <ListView
