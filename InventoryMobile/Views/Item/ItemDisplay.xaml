@@ -33,8 +33,8 @@
                                     <CarouselView.ItemTemplate>
                                         <DataTemplate x:DataType="model:UIImagePath">
                                             <Frame
-                                                BackgroundColor="{StaticResource Gray100}"
-                                                BorderColor="{StaticResource Gray500}"
+                                                BackgroundColor="Transparent"
+                                                BorderColor="{StaticResource Gray200}"
                                                 CornerRadius="8"
                                                 IsClippedToBounds="True">
                                                 <Image
@@ -52,41 +52,9 @@
                                     SelectedIndicatorColor="DarkGray" />
                             </VerticalStackLayout>
                             <components:BorderedLabel LabelText="Nome" Text="{Binding Name}" />
+                            <components:BorderedLabel LabelText="Situação" Text="{Binding Situation}" />
+                            <components:BorderedLabel LabelText="Categoria" Text="{Binding CategoryAndSubCategory}" />
                             <components:BorderedLabel LabelText="Descrição técnica" Text="{Binding Description}" />
-                            <Grid
-                                Margin="0"
-                                ColumnDefinitions="5*,5*"
-                                HorizontalOptions="FillAndExpand"
-                                RowDefinitions="*,*">
-                                <StackLayout Margin="0,5,0,0" Padding="2,0,0,0">
-                                    <Label
-                                        FontAttributes="Bold"
-                                        Style="{StaticResource LblHEntry}"
-                                        Text="Categoria" />
-                                    <Label
-                                        Margin="0"
-                                        FontAttributes="Bold"
-                                        FontSize="20"
-                                        Style="{StaticResource LabelDisplay}"
-                                        Text="{Binding CategoryAndSubCategory}" />
-                                </StackLayout>
-                                <StackLayout
-                                    Grid.Column="1"
-                                    Margin="0,5,0,0"
-                                    Padding="5,0,0,0"
-                                    HorizontalOptions="Start">
-                                    <Label
-                                        FontAttributes="Bold"
-                                        Style="{StaticResource LblHEntry}"
-                                        Text="Situação" />
-                                    <Label
-                                        Margin="0"
-                                        FontAttributes="Bold"
-                                        FontSize="20"
-                                        Style="{StaticResource LabelDisplay}"
-                                        Text="{Binding Situation}" />
-                                </StackLayout>
-                            </Grid>
                             <StackLayout IsVisible="{Binding ResaleSituation}">
                                 <Label
                                     Margin="0,10,0,0"
@@ -143,22 +111,13 @@
                                 ColumnDefinitions="5*,5*"
                                 HorizontalOptions="FillAndExpand"
                                 RowDefinitions="*,*">
-                                <StackLayout Margin="0,5,0,0" Padding="2,0,0,0">
-                                    <Label
-                                        FontAttributes="Bold"
-                                        Style="{StaticResource LblHEntry}"
-                                        Text="Tipo" />
-                                    <Label
-                                        Margin="0"
-                                        FontAttributes="Bold"
-                                        FontSize="20"
-                                        Style="{StaticResource LabelDisplay}"
-                                        Text="{Binding AcquisitionTypeName}" />
-                                </StackLayout>
+                                <components:BorderedLabel
+                                    Margin="0,5,0,0"
+                                    LabelText="Tipo"
+                                    Text="{Binding AcquisitionTypeName}" />
                                 <components:BorderedLabel
                                     Grid.Column="1"
                                     Margin="5,5,0,0"
-                                    HorizontalOptions="Start"
                                     LabelText="Data"
                                     Text="{Binding AcquisitionDate}" />
                                 <components:BorderedLabel

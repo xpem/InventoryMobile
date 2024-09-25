@@ -1,5 +1,6 @@
 ﻿using BLL;
 using BLL.Interface;
+using DbContextDAL;
 using InventoryMobile.Views;
 using Models.DTO;
 using Plugin.Connectivity;
@@ -22,17 +23,8 @@ public partial class App : Application
 
             MainPage = new AppShell(new ViewModels.AppShellVM(userBLL, user));
 
-            //bool isOn = false;
-
             if (CrossConnectivity.Current.IsConnected)
             {
-                //    Task.Run(async () => isOn = await checkServerBLL.CheckServer()).Wait();
-
-                //if (!isOn)
-                //    _ = Application.Current.MainPage.DisplayAlert("Aviso", "Não foi possivel se conectar a internet", null, "Ok");
-                //}
-                //else _ = Application.Current.MainPage.DisplayAlert("Aviso", "Não foi possivel se conectar a internet", null, "Ok");
-
                 if (user != null)
                     Shell.Current.GoToAsync($"//{nameof(Main)}");
             }

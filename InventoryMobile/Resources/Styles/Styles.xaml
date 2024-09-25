@@ -472,8 +472,8 @@
         </Setter>-->
     </Style>
 
-    <Style x:Key="LblHEntry" TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource White}" />
+    <!--<Style x:Key="LblHEntry" TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource Gray100}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="FontFamily" Value="OpenSansSemibold" />
         <Setter Property="FontSize" Value="14" />
@@ -490,7 +490,7 @@
                 </VisualStateGroup>
             </VisualStateGroupList>
         </Setter>
-    </Style>
+    </Style>-->
 
     <Style x:Key="LabelDisplay" TargetType="Label">
         <Setter Property="TextColor" Value="{StaticResource White}" />
