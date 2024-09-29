@@ -7,13 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryMobile", "Inventor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "..\Models\Models.csproj", "{C1B40CE8-8DD6-4636-94F1-15E92D12C118}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiDAL", "..\ApiDAL\ApiDAL.csproj", "{AD567F71-2A66-48D5-9C31-D4D11A590345}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiRepos", "..\ApiDAL\ApiRepos.csproj", "{AD567F71-2A66-48D5-9C31-D4D11A590345}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL", "..\BLL\BLL.csproj", "{BB9CDE43-F3B3-4663-95EE-CDA53E71AC34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "..\BLL\Services.csproj", "{BB9CDE43-F3B3-4663-95EE-CDA53E71AC34}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbContextDAL", "..\DbContextDAL\DbContextDAL.csproj", "{209860CC-2479-466A-9762-BB37EE2174C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLLTests", "..\BLLTests\BLLTests.csproj", "{553DF8FD-6148-4812-A8E2-EE0AEC65AFFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLLTests", "..\BLLTests\BLLTests.csproj", "{553DF8FD-6148-4812-A8E2-EE0AEC65AFFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

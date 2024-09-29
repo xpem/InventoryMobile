@@ -3,6 +3,7 @@ using BLL.Handlers;
 using Models;
 using Models.ItemModels;
 using Models.Responses;
+using Services.Handlers.Exceptions;
 using System.Text.Json.Nodes;
 
 namespace BLL
@@ -44,7 +45,11 @@ namespace BLL
 
                 return items;
             }
-            else throw new Exception("totalsResp success false, error:" + itemTotalsBLLResponse.Error);
+            else
+            {
+                throw new ServerOffException("totalsResp success false, error:" + itemTotalsBLLResponse.Error);
+            }
+               
         }
 
         public async Task<BLLResponse> GetItemByIdAsync(string id)

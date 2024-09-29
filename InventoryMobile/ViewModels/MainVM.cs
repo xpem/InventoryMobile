@@ -7,6 +7,7 @@ using InventoryMobile.Views;
 using InventoryMobile.Views.Item;
 using Models.Exceptions;
 using Models.ItemModels;
+using Services.Handlers.Exceptions;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -217,6 +218,10 @@ namespace InventoryMobile.ViewModels
 
                         IsBusy = false;
                     }
+                }
+                catch (ServerOffException)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Aviso", "Não foi possível se conectar com o servidor", null, "Ok");
                 }
                 catch (SignInFailException ex)
                 {
