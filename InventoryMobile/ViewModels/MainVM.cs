@@ -14,7 +14,6 @@ namespace InventoryMobile.ViewModels
 {
     public class MainVM(IItemBLL itemBLL, IItemSituationBLL itemSituationBLL, IUserBLL userBLL) : ViewModelBase
     {
-        //  public ObservableCollection<ItemGroup> Items { get; } = new();
         readonly Color BgButtonSelectedColor = Color.FromArgb("#29A0B1");
 
         List<UIItem> ListAllItems;
@@ -30,36 +29,7 @@ namespace InventoryMobile.ViewModels
             }
         }
 
-        //public ObservableCollection<UICategory> Categories { get; set; }
-
-
         public ObservableCollection<UIItemSituation> ItemsSituationObsList { get; set; }
-
-        //UIItem itemUI;
-
-        //public UIItem ItemUI
-        //{
-        //    get => itemUI;
-        //    set
-        //    {
-        //        if (itemUI != value)
-        //        {
-        //            itemUI = value;
-
-        //            if (itemUI is not null)
-        //            {
-        //                Shell.Current.GoToAsync($"{nameof(ItemEdit)}?Id={itemUI.Id}", true);
-        //            }
-        //            else
-        //            {
-        //                throw new Exception("Id de item nulo");
-        //            }
-        //            OnPropertyChanged();
-        //        }
-        //    }
-        //}
-
-        // List<UIItemSituation> SelectedUIItemsStatus { get; set; }
 
         UIItemSituation SelectedUIItemsStatus { get; set; }
 
@@ -86,21 +56,6 @@ namespace InventoryMobile.ViewModels
                 OnPropertyChanged(nameof(ItemsSituationObsList));
 
             });
-
-        //public ICommand CategorySelectedCommand => new Command((e) =>
-        //{
-        //    var category = e as UICategory;
-
-        //    var bgcolor = category.BackgoundColor;
-
-        //    if (bgcolor.Equals(BgButtonSelectedColor))
-        //        Categories.Where(x => x.Id == category.Id).First().BackgoundColor = Color.FromArgb("#919191");
-        //    else
-        //        Categories.Where(x => x.Id == category.Id).First().BackgoundColor = BgButtonSelectedColor;
-
-        //    OnPropertyChanged(nameof(Categories));
-
-        //});
 
         public ICommand ItemAddCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(ItemEdit)}"));
 

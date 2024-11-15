@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels.Item
 {
-    public class ItemDisplayVM(IItemBLL itemBLL) : ViewModelBase, IQueryAttributable
+    public partial class ItemDisplayVM(IItemBLL itemBLL) : ViewModelBase, IQueryAttributable
     {
         int ItemId { get; set; }
 
@@ -18,14 +18,7 @@ namespace InventoryMobile.ViewModels.Item
 
         ObservableCollection<UIImagePath> imagePathsObsCol;
 
-        public ObservableCollection<UIImagePath> ImagePathsObsCol
-        {
-            get => imagePathsObsCol; set
-            {
-                imagePathsObsCol = value;
-                OnPropertyChanged(nameof(ImagePathsObsCol));
-            }
-        }
+        public ObservableCollection<UIImagePath> ImagePathsObsCol { get; set; } = [];
 
         public bool WithdrawalDateIsVisible { get => withdrawalDateIsVisible; set { if (value != withdrawalDateIsVisible) { withdrawalDateIsVisible = value; OnPropertyChanged(nameof(WithdrawalDateIsVisible)); } } }
 
@@ -187,7 +180,11 @@ namespace InventoryMobile.ViewModels.Item
                             ImagePathsObsCol.Add(new UIImagePath(listImagePaths.Image2.ImageFilePath, listImagePaths.Image2.FileName, item.Image2));
                     }
 
-                    if (imagePathsObsCol.Count > 0) { CrvwIsVisible = true; }
+                    if (ImagePathsObsCol.Count > 0)
+                    {
+                        OnPropertyChanged(nameof(ImagePathsObsCol));
+                        CrvwIsVisible = true;
+                    }
                     else { CrvwIsVisible = false; }
                 }
             }
