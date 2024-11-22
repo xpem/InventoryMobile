@@ -1,6 +1,6 @@
 ﻿using ApiDAL.Handlers;
 using ApiRepos;
-using DbContextDAL;
+using LocalRepos;
 using Models;
 using Models.DTO;
 using Models.Exceptions;
@@ -17,7 +17,7 @@ namespace ApiDAL
         Task<ApiResponse> RequestAsync(RequestsTypes requestsType, string url, string? userToken = null, Object? content = null);
     }
 
-    public class HttpClientFunctions(InventoryDbContextDAL inventoryDbContextDAL) : HttpClient, IHttpClientFunctions
+    public class HttpClientFunctions(DbContextRepo inventoryDbContextRepo) : HttpClient, IHttpClientFunctions
     {
         public async Task<bool> CheckServerAsync()
         {
@@ -117,7 +117,7 @@ namespace ApiDAL
                 }
                 else
                 {
-                    userToken = inventoryDbContextDAL.User.FirstOrDefault()?.Token;
+                    userToken = inventoryDbContextRepo.User.FirstOrDefault()?.Token;
 
                     if (userToken is null) throw new ArgumentNullException(nameof(userToken));
                 }
@@ -132,7 +132,7 @@ namespace ApiDAL
 
         private async Task<(bool success, string? newToken)> RefreshToken()
         {
-            User? user = inventoryDbContextDAL.User.FirstOrDefault();
+            User? user = inventoryDbContextRepo.User.FirstOrDefault();
 
             if (user is not null && user.Email is not null && user.Password is not null)
             {
@@ -148,8 +148,8 @@ namespace ApiDAL
 
                         user.Token = newToken;
 
-                        inventoryDbContextDAL.Update(user);
-                        await inventoryDbContextDAL.SaveChangesAsync();
+                        inventoryDbContextRepo.Update(user);
+                        await inventoryDbContextRepo.SaveChangesAsync();
 
                         return (true, newToken);
                     }

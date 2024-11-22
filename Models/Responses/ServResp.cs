@@ -2,7 +2,7 @@
 
 namespace Models.Responses
 {
-    public class BLLResponse
+    public class ServResp
     {
         public bool Success { get; set; }
 

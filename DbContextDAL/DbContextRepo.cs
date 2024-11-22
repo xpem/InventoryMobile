@@ -2,13 +2,15 @@
 using Models;
 using Models.DTO;
 
-namespace DbContextDAL
+namespace LocalRepos
 {
-    public class InventoryDbContextDAL : DbContext
+    public class DbContextRepo : DbContext
     {
-        public virtual DbSet<Models.VersionDbTables> VersionDbTables { get; set; }
+        public virtual required DbSet<VersionDbTables> VersionDbTables { get; set; }
 
-        public virtual DbSet<User> User { get; set; }
+        public virtual required DbSet<User> User { get; set; }
+
+        public virtual required DbSet<SubCategory> SubCategory { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -6,7 +6,7 @@ namespace BLL.Handlers
 {
     public static class ApiResponseHandler
     {
-        public static BLLResponse Handler<TModel>(ApiResponse apiResponse)
+        public static ServResp Handler<TModel>(ApiResponse apiResponse)
         {
             try
             {
@@ -15,13 +15,13 @@ namespace BLL.Handlers
                     if (!apiResponse.Success)
                     {
                         if (apiResponse.Error != null)
-                            return new BLLResponse() { Success = false, TryRefreshToken = apiResponse.TryRefreshToken, Error = apiResponse.Error };
+                            return new ServResp() { Success = false, TryRefreshToken = apiResponse.TryRefreshToken, Error = apiResponse.Error };
                         else if (apiResponse.Content != null)
-                            return new BLLResponse() { Success = false, TryRefreshToken = apiResponse.TryRefreshToken, Content = apiResponse.Content };
+                            return new ServResp() { Success = false, TryRefreshToken = apiResponse.TryRefreshToken, Content = apiResponse.Content };
                     }
 
                     if (apiResponse.Content is not null and string)
-                        return new BLLResponse()
+                        return new ServResp()
                         {
                             Success = true,
                             Content = string.IsNullOrEmpty(apiResponse.Content as string) ? null : JsonDeserialize<TModel>(apiResponse.Content as string)

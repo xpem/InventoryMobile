@@ -5,9 +5,9 @@ using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels
 {
-    public class AppShellVM : BindableObject//: ViewModelBase
+    public class AppShellVM : BindableObject
     {
-        IUserBLL UserBLL { get; set; }
+        IUserService UserBLL { get; set; }
 
         string email;
 
@@ -21,7 +21,7 @@ namespace InventoryMobile.ViewModels
             await Shell.Current.GoToAsync($"//{nameof(SignIn)}");
         });
 
-        public AppShellVM(IUserBLL userBLL,User user)
+        public AppShellVM(IUserService userBLL,User user)
         {
             UserBLL = userBLL;
 

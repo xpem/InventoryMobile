@@ -9,14 +9,14 @@ namespace BLL
 {
     public interface IItemBLL
     {
-        Task<BLLResponse> AddItemAsync(Item item);
-        Task<BLLResponse> AltItemAsync(Item item);
-        Task<BLLResponse> DelItemAsync(int id);
-        Task<BLLResponse> GetItemByIdAsync(string id);
+        Task<ServResp> AddItemAsync(Item item);
+        Task<ServResp> AltItemAsync(Item item);
+        Task<ServResp> DelItemAsync(int id);
+        Task<ServResp> GetItemByIdAsync(string id);
         Task<List<Item>> GetItemsAllAsync();
         Task<ItemFilesToUpload> GetItemImages(int itemId, string itemImage1, string itemImage2);
-        Task<BLLResponse> AddItemImageAsync(int id, ItemFilesToUpload itemFilesToUpload);
-        Task<BLLResponse> DelItemImageAsync(int id, string filename);
+        Task<ServResp> AddItemImageAsync(int id, ItemFilesToUpload itemFilesToUpload);
+        Task<ServResp> DelItemImageAsync(int id, string filename);
     }
 
     public class ItemBLL(IItemApiDAL itemApiDAL) : IItemBLL
@@ -47,13 +47,13 @@ namespace BLL
             else throw new Exception("totalsResp success false, error:" + itemTotalsBLLResponse.Error);
         }
 
-        public async Task<BLLResponse> GetItemByIdAsync(string id)
+        public async Task<ServResp> GetItemByIdAsync(string id)
         {
             ApiResponse resp = await itemApiDAL.GetItemByIdAsync(id);
             return ApiResponseHandler.Handler<Item>(resp);
         }
 
-        public async Task<BLLResponse> AddItemAsync(Item item)
+        public async Task<ServResp> AddItemAsync(Item item)
         {
             ApiResponse? resp = await itemApiDAL.AddItemAsync(item);
 
@@ -62,10 +62,10 @@ namespace BLL
                 return ApiResponseHandler.Handler<Item>(resp);
             }
 
-            return new BLLResponse() { Success = false, Content = null };
+            return new ServResp() { Success = false, Content = null };
         }
 
-        public async Task<BLLResponse> AltItemAsync(Item item)
+        public async Task<ServResp> AltItemAsync(Item item)
         {
             ApiResponse? resp = await itemApiDAL.AltItemAsync(item);
 
@@ -74,34 +74,34 @@ namespace BLL
                 JsonNode? jResp = JsonNode.Parse(resp.Content as string);
 
                 if (jResp is not null)
-                    return new BLLResponse() { Success = resp.Success, Content = null };
-                else return new BLLResponse() { Success = false, Content = resp.Content };
+                    return new ServResp() { Success = resp.Success, Content = null };
+                else return new ServResp() { Success = false, Content = resp.Content };
             }
 
-            return new BLLResponse() { Success = false, Content = null };
+            return new ServResp() { Success = false, Content = null };
         }
 
-        public async Task<BLLResponse> DelItemAsync(int id)
+        public async Task<ServResp> DelItemAsync(int id)
         {
             ApiResponse? resp = await itemApiDAL.DelItemAsync(id);
 
             if (resp is not null && !resp.Success && !string.IsNullOrEmpty(resp.Content as string))
-                return new BLLResponse() { Success = false, Content = resp.Content.ToString() };
+                return new ServResp() { Success = false, Content = resp.Content.ToString() };
 
-            return new BLLResponse() { Success = true, Content = null };
+            return new ServResp() { Success = true, Content = null };
         }
 
-        public async Task<BLLResponse> DelItemImageAsync(int id, string filename)
+        public async Task<ServResp> DelItemImageAsync(int id, string filename)
         {
             ApiResponse? resp = await itemApiDAL.DelItemImageAsync(id, filename);
 
             if (resp is not null && !resp.Success && !string.IsNullOrEmpty(resp.Content as string))
             {
-                return new BLLResponse() { Success = false, Content = resp.Content.ToString() };
+                return new ServResp() { Success = false, Content = resp.Content.ToString() };
             }
 
             //BLLResponse itemResp = ApiResponseHandler.Handler<Item>(resp);
-            return new BLLResponse() { Success = true, Content = null };
+            return new ServResp() { Success = true, Content = null };
         }
 
         public async Task<ItemFilesToUpload> GetItemImages(int itemId, string itemImage1, string itemImage2)
@@ -127,7 +127,7 @@ namespace BLL
             return itemFilesToUpload;
         }
 
-        public async Task<BLLResponse> AddItemImageAsync(int id, ItemFilesToUpload itemFilesToUpload)
+        public async Task<ServResp> AddItemImageAsync(int id, ItemFilesToUpload itemFilesToUpload)
         {
             ApiResponse resp = await itemApiDAL.AddItemImage(id, itemFilesToUpload);
 
@@ -156,12 +156,12 @@ namespace BLL
                             itemFilesToUpload.Image2.ImageFilePath = Path.Combine(FilePaths.ImagesPath, itemFileNames.Image2);
                         }
 
-                        return new BLLResponse() { Success = true };
+                        return new ServResp() { Success = true };
                     }
                 }
             }
 
-            return new BLLResponse() { Success = false };
+            return new ServResp() { Success = false };
 
         }
 

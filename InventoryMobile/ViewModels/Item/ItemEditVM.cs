@@ -205,12 +205,12 @@ namespace InventoryMobile.ViewModels.Item
             if (query.ContainsKey("SelectedCategory") && query.TryGetValue("SelectedCategory", out object selectedCategory))
             {
                 Models.Category modelSelectedCategory = selectedCategory as Models.Category;
-                CategoryId = modelSelectedCategory.Id;
+                CategoryId = modelSelectedCategory.Id.Value;
 
                 if (modelSelectedCategory?.SubCategories?.Count > 0)
                 {
                     CategoryName = modelSelectedCategory.Name + "/" + modelSelectedCategory.SubCategories[0].Name;
-                    SubCategoryId = modelSelectedCategory.SubCategories[0].Id;
+                    SubCategoryId = modelSelectedCategory.SubCategories[0].Id.Value;
                 }
                 else
                 {
@@ -233,7 +233,7 @@ namespace InventoryMobile.ViewModels.Item
                 ItemsSituationObsList.Add(new UIItemSituation() { Id = -1, Name = "Selecione" });
 
                 foreach (ItemSituation itemSituation in itemSituationList)
-                    ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituation.Id, Name = itemSituation.Name });
+                    ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituation.Id.Value, Name = itemSituation.Name });
 
                 OnPropertyChanged(nameof(ItemsSituationObsList));
 
@@ -249,7 +249,7 @@ namespace InventoryMobile.ViewModels.Item
                 AcquisitionTypeObsList.Add(new UIAcquisitionType() { Id = -1, Name = "Selecione" });
 
                 foreach (AcquisitionType acquisitionType in acquisitionTypeList)
-                    AcquisitionTypeObsList.Add(new UIAcquisitionType() { Id = acquisitionType.Id, Name = acquisitionType.Name });
+                    AcquisitionTypeObsList.Add(new UIAcquisitionType() { Id = acquisitionType.Id.Value, Name = acquisitionType.Name });
 
                 OnPropertyChanged(nameof(AcquisitionTypeObsList));
 
@@ -258,7 +258,7 @@ namespace InventoryMobile.ViewModels.Item
                     ItemId = Convert.ToInt32(itemId);
                     Models.ItemModels.Item item;
 
-                    BLLResponse resp = await itemBLL.GetItemByIdAsync(ItemId.ToString());
+                    ServResp resp = await itemBLL.GetItemByIdAsync(ItemId.ToString());
 
                     if (resp is not null && resp.Success)
                     {
@@ -269,12 +269,12 @@ namespace InventoryMobile.ViewModels.Item
                         AcquisitionValue = item.PurchaseValue.ToString();
 
                         string categoryAndSubCategory = item.Category.Name;
-                        CategoryId = item.Category.Id;
+                        CategoryId = item.Category.Id.Value;
 
                         if (item.Category.SubCategory is not null)
                         {
                             categoryAndSubCategory += "/" + item.Category.SubCategory.Name;
-                            SubCategoryId = item.Category.SubCategory.Id;
+                            SubCategoryId = item.Category.SubCategory.Id.Value;
                         }
 
                         CategoryName = categoryAndSubCategory;
@@ -394,7 +394,7 @@ namespace InventoryMobile.ViewModels.Item
                     };
 
                     string message = "";
-                    BLLResponse resp;
+                    ServResp resp;
 
                     if (ItemId > 0)
                     {
@@ -416,7 +416,7 @@ namespace InventoryMobile.ViewModels.Item
                             if (resp.Content is Models.ItemModels.Item)
                             {
                                 Models.ItemModels.Item AddedItem = resp.Content as Models.ItemModels.Item;
-                                ItemId = AddedItem.Id;
+                                ItemId = AddedItem.Id.Value;
                             }
 
                             if (ItemId == 0) throw new Exception("Id do item zerado após criação de item");

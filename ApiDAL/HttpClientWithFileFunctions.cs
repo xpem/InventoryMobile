@@ -1,4 +1,4 @@
-﻿using DbContextDAL;
+﻿using LocalRepos;
 using Models;
 using Models.ItemModels;
 using Models.Responses;
@@ -9,7 +9,7 @@ namespace ApiDAL
 {
     public interface IHttpClientWithFileFunctions : IHttpClientFunctions;
 
-    public class HttpClientWithFileFunctions(InventoryDbContextDAL inventoryDbContextDAL) : HttpClientFunctions(inventoryDbContextDAL), IHttpClientFunctions, IHttpClientWithFileFunctions
+    public class HttpClientWithFileFunctions(DbContextRepo inventoryDbContextRepo) : HttpClientFunctions(inventoryDbContextRepo), IHttpClientFunctions, IHttpClientWithFileFunctions
     {
 
         public override async Task<ApiResponse> RequestAsync(RequestsTypes requestsType, string url, string? userToken = null, Object? content = null)

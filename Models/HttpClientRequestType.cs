@@ -1,4 +1,4 @@
-﻿namespace BLL
+﻿namespace Models
 {
     public class HttpClientRequestType
     {

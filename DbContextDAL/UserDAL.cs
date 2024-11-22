@@ -1,31 +1,31 @@
-﻿using DbContextDAL.Interface;
+﻿using LocalRepos.Interface;
 using Microsoft.EntityFrameworkCore;
 using Models.DTO;
 
-namespace DbContextDAL
+namespace LocalRepos
 {
-    public class UserDAL(InventoryDbContextDAL inventoryDbContextDAL) : IUserDAL
+    public class UserDAL(DbContextRepo inventoryDbContextRepo) : IUserDAL
     {
-        public async Task<User?> GetUserLocalAsync() => await inventoryDbContextDAL.User.FirstOrDefaultAsync();
+        public async Task<User?> GetUserLocalAsync() => await inventoryDbContextRepo.User.FirstOrDefaultAsync();
 
-        public void RemoveUserLocal() => _ = inventoryDbContextDAL.Set<User>().ExecuteDeleteAsync();
+        public void RemoveUserLocal() => _ = inventoryDbContextRepo.Set<User>().ExecuteDeleteAsync();
 
-        public async Task<int?> GetUidAsync() => await inventoryDbContextDAL.User.Select(x => x.Id).FirstOrDefaultAsync();
+        public async Task<int?> GetUidAsync() => await inventoryDbContextRepo.User.Select(x => x.Id).FirstOrDefaultAsync();
 
         public async Task<int> ExecuteAddUserAsync(User user)
         {
-            inventoryDbContextDAL.ChangeTracker.Clear();
+            inventoryDbContextRepo.ChangeTracker.Clear();
 
-            inventoryDbContextDAL.User.Add(user);
+            inventoryDbContextRepo.User.Add(user);
 
-            return await inventoryDbContextDAL.SaveChangesAsync();
+            return await inventoryDbContextRepo.SaveChangesAsync();
         }
 
         public int ExecuteUpdateLastUpdateUser(DateTime lastUpdate, int uid)
         {
-            inventoryDbContextDAL.ChangeTracker.Clear();
+            inventoryDbContextRepo.ChangeTracker.Clear();
 
-            return inventoryDbContextDAL.User.Where(x => x.Id == uid).ExecuteUpdate(y => y.SetProperty(z => z.LastUpdate, lastUpdate));
+            return inventoryDbContextRepo.User.Where(x => x.Id == uid).ExecuteUpdate(y => y.SetProperty(z => z.LastUpdate, lastUpdate));
         }
 
     }

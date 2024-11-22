@@ -32,6 +32,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(CategorySelector), typeof(CategorySelector));
 
         Routing.RegisterRoute(nameof(SubCategorySelector), typeof(SubCategorySelector));
+       
         Routing.RegisterRoute(nameof(ItemDisplay), typeof(ItemDisplay));
 
         BindingContext = appShellVM;

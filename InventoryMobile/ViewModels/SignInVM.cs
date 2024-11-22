@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels
 {
-    public class SignInVM(IUserBLL userBLL) : ViewModelBase
+    public class SignInVM(IUserService userBLL) : ViewModelBase
     {
 
         string email = "", password = "", btnSignInText = "Acessar";
@@ -31,7 +31,7 @@ namespace InventoryMobile.ViewModels
             {
                 if (!string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(Password))
                 {
-                    if (isOn)
+                    if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                     {
                         if (Password.Length > 3)
                         {
@@ -68,7 +68,7 @@ namespace InventoryMobile.ViewModels
                             await Application.Current.MainPage.DisplayAlert("Aviso", "Digite uma senha com mais de 3 dígitos", null, "Continuar");
                     }
                     else
-                        await Application.Current.MainPage.DisplayAlert("Aviso", "É necessário ter acesso a internet para efetuar o primeiro acesso.", null, "Ok");
+                        await Application.Current.MainPage.DisplayAlert("Aviso", "É necessário ter acesso a internet para efetuar o acesso.", null, "Ok");
                 }
                 else
                     await Application.Current.MainPage.DisplayAlert("Aviso", "Insira seu email e senha.", null, "Continuar");

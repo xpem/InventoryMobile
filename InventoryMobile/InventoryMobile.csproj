@@ -56,13 +56,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
-		<PackageReference Include="Xam.Plugin.Connectivity" Version="3.2.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.1" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\BLL\BLL.csproj" />
+	  <ProjectReference Include="..\BLL\Services.csproj" />
 	  <ProjectReference Include="..\Models\Models.csproj" />
 	</ItemGroup>
 
@@ -132,11 +131,11 @@
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionInventoryMobileHideInfoBar="True" /></VisualStudio></ProjectExtensions>
 
 	<ItemGroup>
-	  <PackageReference Update="Microsoft.Maui.Controls" Version="8.0.92" />
+	  <PackageReference Update="Microsoft.Maui.Controls" Version="8.0.100" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.92" />
+	  <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.100" />
 	</ItemGroup>
 
 </Project>

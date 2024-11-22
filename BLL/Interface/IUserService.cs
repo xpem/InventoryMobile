@@ -3,12 +3,12 @@ using Models.Responses;
 
 namespace BLL.Interface
 {
-    public interface IUserBLL
+    public interface IUserService
     {
-        BLLResponse AddUser(string name, string email, string password);
-        Task<BLLResponse> SignIn(string email, string password);
+        ServResp AddUser(string name, string email, string password);
+        Task<ServResp> SignIn(string email, string password);
 
-        Task<User?> GetUserLocalAsync();
+        Task<User?> GetLocalAsync();
 
         Task<(bool, string?)> GetUserTokenAsync(string email, string password);
         Task<string?> RecoverPasswordAsync(string email);

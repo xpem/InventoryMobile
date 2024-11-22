@@ -1,6 +1,6 @@
 ﻿using Models.DTO;
 
-namespace DbContextDAL.Interface
+namespace LocalRepos.Interface
 {
     public interface IUserDAL
     {

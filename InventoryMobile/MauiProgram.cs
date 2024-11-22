@@ -3,8 +3,7 @@ using ApiDAL.Interfaces;
 using BLL;
 using BLL.Interface;
 using CommunityToolkit.Maui;
-using DbContextDAL;
-using DbContextDAL.Interface;
+using LocalRepos;
 using InventoryMobile.ViewModels;
 using InventoryMobile.ViewModels.Category;
 using InventoryMobile.ViewModels.Category.SubCategory;
@@ -15,8 +14,10 @@ using InventoryMobile.Views.Category;
 using InventoryMobile.Views.Category.SubCategory;
 using InventoryMobile.Views.Item;
 using InventoryMobile.Views.Item.Selectors;
+using LocalRepos.Interface;
 using Microsoft.Extensions.Logging;
 using Models;
+using Services.Interface;
 
 namespace InventoryMobile;
 
@@ -24,16 +25,6 @@ public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
-        //todo
-        //
-        //efetuar build de distribuição local do app para testes
-        //cadastro de items com dependencia
-        //implementar um dark theme padrão
-        //implementar auto complete no campo "loja"
-        //implementar mecanismo para funcionamento offline.
-        //opção de cadastro de categoria e subcategoria nas telas de seleção
-        //tela com filtros?
-
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
@@ -49,6 +40,15 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
+        //if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+        //{
+        //    FilePaths.ImagesPath = Path.Combine(FileSystem.CacheDirectory, "Inventory");
+        //}
+        //else
+        //{
+        //    FilePaths.ImagesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Inventory");
+        //}
+
         if (!System.IO.Directory.Exists(FilePaths.ImagesPath))
             System.IO.Directory.CreateDirectory(FilePaths.ImagesPath);
 
@@ -56,7 +56,7 @@ public static class MauiProgram
 
         builder.Services.AddFrontServices();
 
-        builder.Services.AddDbContext<InventoryDbContextDAL>();
+        builder.Services.AddDbContext<DbContextRepo>();
 
         builder.Services.AddBLLServices();
 
@@ -123,11 +123,11 @@ public static class MauiProgram
         services.AddScoped<IHttpClientFunctions, HttpClientFunctions>();
         services.AddScoped<IHttpClientWithFileFunctions, HttpClientWithFileFunctions>();
 
-        services.AddScoped<IUserApiDAL, UserApiDAL>();
+        services.AddScoped<IUserApiDAL, UserApiRepo>();
         services.AddScoped<IItemApiDAL, ItemApiDAL>();
         services.AddScoped<IItemSituationApiDAL, ItemSituationApiDAL>();
         services.AddScoped<ICategoryApiDAL, CategoryApiDAL>();
-        services.AddScoped<ISubCategoryApiDAL, SubCategoryApiDAL>();
+        services.AddScoped<ISubCategoryApiRepo, ApiDAL.SubCategoryApiRepo>();
         services.AddScoped<IAcquisitionTypeApiDAL, AcquisitionTypeApiDAL>();
 
         return services;
@@ -136,12 +136,12 @@ public static class MauiProgram
     public static IServiceCollection AddBLLServices(this IServiceCollection services)
     {
         services.AddScoped<IBuildDbBLL, BuildDbBLL>();
-        services.AddScoped<IUserBLL, UserBLL>();
+        services.AddScoped<IUserService, UserService>();
         services.AddScoped<ICheckServerBLL, CheckServerBLL>();
         services.AddScoped<IItemBLL, ItemBLL>();
         services.AddScoped<IItemSituationBLL, ItemSituationBLL>();
         services.AddScoped<ICategoryBLL, CategoryBLL>();
-        services.AddScoped<ISubCategoryBLL, SubCategoryBLL>();
+        services.AddScoped<ISubCategoryBLL, SubCategoryServices>();
         services.AddScoped<IAcquisitionTypeBLL, AcquisitionTypeBLL>();
 
         return services;

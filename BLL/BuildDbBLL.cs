@@ -3,7 +3,7 @@ using Models;
 
 namespace BLL
 {
-    public class BuildDbBLL(DbContextDAL.InventoryDbContextDAL inventoryDbContextDAL) : IBuildDbBLL
+    public class BuildDbBLL(LocalRepos.DbContextRepo inventoryDbContextRepo) : IBuildDbBLL
     {
         public void Init()
         {
@@ -12,9 +12,9 @@ namespace BLL
             if (!exists)
                 System.IO.Directory.CreateDirectory(FilePaths.DbPath);
 
-            inventoryDbContextDAL.Database.EnsureCreated();
+            inventoryDbContextRepo.Database.EnsureCreated();
 
-            VersionDbTables? actualVesionDbTables = inventoryDbContextDAL.VersionDbTables.FirstOrDefault();
+            VersionDbTables? actualVesionDbTables = inventoryDbContextRepo.VersionDbTables.FirstOrDefault();
 
             VersionDbTables newVersionDbTables = new() { Id = 0, VERSION = 1 };
 
@@ -22,25 +22,25 @@ namespace BLL
             {
                 if (actualVesionDbTables.VERSION != newVersionDbTables.VERSION)
                 {
-                    inventoryDbContextDAL.Database.EnsureDeleted();
-                    inventoryDbContextDAL.Database.EnsureCreated();
+                    inventoryDbContextRepo.Database.EnsureDeleted();
+                    inventoryDbContextRepo.Database.EnsureCreated();
 
-                    inventoryDbContextDAL.VersionDbTables.Update(newVersionDbTables);
-                    inventoryDbContextDAL.SaveChanges();
+                    inventoryDbContextRepo.VersionDbTables.Update(newVersionDbTables);
+                    inventoryDbContextRepo.SaveChanges();
                 }
             }
             else
             {
-                inventoryDbContextDAL.VersionDbTables.Add(newVersionDbTables);
-                inventoryDbContextDAL.SaveChanges();
+                inventoryDbContextRepo.VersionDbTables.Add(newVersionDbTables);
+                inventoryDbContextRepo.SaveChanges();
             }           
         }
 
         public async Task CleanLocalDatabase()
         {
-            inventoryDbContextDAL.User.RemoveRange(inventoryDbContextDAL.User);
+            inventoryDbContextRepo.User.RemoveRange(inventoryDbContextRepo.User);
 
-            await inventoryDbContextDAL.SaveChangesAsync();
+            await inventoryDbContextRepo.SaveChangesAsync();
         }
     }
 }

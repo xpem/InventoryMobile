@@ -1,6 +1,6 @@
-﻿using BLL;
-using InventoryMobile.Resources.Fonts.Icons;
+﻿using InventoryMobile.Resources.Fonts.Icons;
 using InventoryMobile.Utils;
+using Services.Interface;
 using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels.Category.SubCategory
@@ -211,7 +211,7 @@ namespace InventoryMobile.ViewModels.Category.SubCategory
             {
                 var category = value as Models.Category;
                 CategoryName = category.Name;
-                CategoryId = category.Id;
+                CategoryId = category.Id.Value;
             }
 
             if (Id != 0)

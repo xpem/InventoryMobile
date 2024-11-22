@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels
 {
-    public class MainVM(IItemBLL itemBLL, IItemSituationBLL itemSituationBLL, IUserBLL userBLL) : ViewModelBase
+    public class MainVM(IItemBLL itemBLL, IItemSituationBLL itemSituationBLL, IUserService userBLL) : ViewModelBase
     {
         readonly Color BgButtonSelectedColor = Color.FromArgb("#29A0B1");
 
@@ -75,7 +75,7 @@ namespace InventoryMobile.ViewModels
 
         public ICommand OnAppearingCommand => new Command(async (e) =>
         {
-            if (isOn)
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
                 IsBusy = true;
                 try
@@ -112,7 +112,7 @@ namespace InventoryMobile.ViewModels
 
                             textSituationItem = $"{itemSituationList[i].Name} ({itemList.Where(x => x.Situation.Id == itemSituationList[i].Id).Count()})";
 
-                            ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituationList[i].Id, Name = textSituationItem, BackgoundColor = backgoundColor });
+                            ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituationList[i].Id.Value, Name = textSituationItem, BackgoundColor = backgoundColor });
                         }
 
                         if (SelectedUIItemsStatus is null)
@@ -153,11 +153,11 @@ namespace InventoryMobile.ViewModels
 
                                 UIItem uIItem = new()
                                 {
-                                    Id = item.Id,
+                                    Id = item.Id.Value,
                                     Name = item.Name,
                                     CategoryAndSubCategory = categoryAndSubCategory,
                                     CategoryColor = Color.FromArgb(item.Category.Color),
-                                    SituationId = item.Situation.Id,
+                                    SituationId = item.Situation.Id.Value,
                                     SubCategoryIcon = IconUniCode,
                                 };
 

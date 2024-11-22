@@ -1,8 +1,8 @@
-﻿using BLL;
-using InventoryMobile.Utils;
+﻿using InventoryMobile.Utils;
 using InventoryMobile.Views.Category;
 using InventoryMobile.Views.Category.SubCategory;
 using Models.Responses;
+using Services.Interface;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -76,7 +76,7 @@ namespace InventoryMobile.ViewModels.Category
                 {
                     bool success = false;
                     string message = null;
-                    BLLResponse resp = await categoryBLL.DelCategoryAsync(Id);
+                    ServResp resp = await categoryBLL.DelCategoryAsync(Id);
 
                     if (resp.Success)
                     {
@@ -143,7 +143,7 @@ namespace InventoryMobile.ViewModels.Category
         {
             Models.Category category = null;
 
-            BLLResponse resp = await categoryBLL.GetCategoryByIdAsync(Id.ToString());
+            ServResp resp = await categoryBLL.GetCategoryByIdAsync(Id.ToString());
 
             if (resp.Success)
                 category = resp.Content as Models.Category;
