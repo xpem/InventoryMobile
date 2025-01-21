@@ -1,5 +1,6 @@
 ﻿using BLL;
 using BLL.Interface;
+using InventoryMobile.Infra.Services;
 using InventoryMobile.Views;
 using Models.DTO;
 
@@ -7,11 +8,13 @@ namespace InventoryMobile;
 
 public partial class App : Application
 {
-    public App(IBuildDbBLL buildDbBLL, IUserService userBLL, ICheckServerBLL checkServerBLL)
+    public int Uid { get; set; }
+
+    public App(IBuildDbService buildDbService, IUserService userBLL, ISyncService syncService)
     {
         try
         {
-            buildDbBLL.Init();
+            buildDbService.Init();
 
             InitializeComponent();
 
@@ -19,7 +22,7 @@ public partial class App : Application
 
             Task.Run(async () => user = await userBLL.GetLocalAsync()).Wait();
 
-            MainPage = new AppShell(new ViewModels.AppShellVM(userBLL, user));
+            MainPage = new AppShell(new ViewModels.AppShellVM(userBLL, user, buildDbService, syncService));
 
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {

@@ -1,4 +1,4 @@
-﻿namespace Models
+﻿namespace Models.DTO
 {
     public record Category : ModelBase
     {

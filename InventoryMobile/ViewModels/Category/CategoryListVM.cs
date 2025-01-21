@@ -17,12 +17,12 @@ namespace InventoryMobile.ViewModels.Category
         {
             Categories = [];
 
-            List<Models.Category> list = [];
+            List<Models.DTO.Category> list = [];
                         
             ServResp resp = await categoryBLL.GetCategoriesAsync();
 
             if (resp is not null && resp.Success)
-                list = resp.Content as List<Models.Category>;
+                list = resp.Content as List<Models.DTO.Category>;
 
             if (list != null && list.Count > 0)
                 foreach (var i in list)

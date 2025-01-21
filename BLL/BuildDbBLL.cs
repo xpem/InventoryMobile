@@ -1,16 +1,16 @@
 ﻿using BLL.Interface;
 using Models;
 
-namespace BLL
+namespace Services
 {
-    public class BuildDbBLL(LocalRepos.DbContextRepo inventoryDbContextRepo) : IBuildDbBLL
+    public class BuildDbBLL(LocalRepos.InventoryDbContext inventoryDbContextRepo) : IBuildDbService
     {
         public void Init()
         {
-            bool exists = System.IO.Directory.Exists(FilePaths.DbPath);
+            bool exists = Directory.Exists(FilePaths.DbPath);
 
             if (!exists)
-                System.IO.Directory.CreateDirectory(FilePaths.DbPath);
+                Directory.CreateDirectory(FilePaths.DbPath);
 
             inventoryDbContextRepo.Database.EnsureCreated();
 
@@ -33,7 +33,7 @@ namespace BLL
             {
                 inventoryDbContextRepo.VersionDbTables.Add(newVersionDbTables);
                 inventoryDbContextRepo.SaveChanges();
-            }           
+            }
         }
 
         public async Task CleanLocalDatabase()

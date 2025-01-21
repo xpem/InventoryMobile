@@ -1,13 +1,13 @@
-﻿using Models;
+﻿using Models.DTO;
 using Models.Responses;
 
-namespace ApiDAL.Interfaces
+namespace ApiRepos.Interfaces
 {
     public interface ISubCategoryApiRepo
     {
-        Task<ApiResponse> AddSubCategory(Models.SubCategory subCategory);
+        Task<ApiResponse> AddSubCategory(SubCategory subCategory);
 
-        Task<ApiResponse> AltSubCategory(Models.SubCategory subCategory);
+        Task<ApiResponse> AltSubCategory(SubCategory subCategory);
 
         Task<ApiResponse> DelSubCategory(int id);
 

@@ -1,10 +1,11 @@
-﻿using ApiDAL.Interfaces;
-using ApiRepos;
+﻿using ApiDAL;
+using ApiRepos.Interfaces;
 using Models;
+using Models.DTO;
 using Models.Responses;
 using System.Text.Json;
 
-namespace ApiDAL
+namespace ApiRepos
 {
     public class CategoryApiDAL(IHttpClientFunctions httpClientFunctions) : ICategoryApiDAL
     {

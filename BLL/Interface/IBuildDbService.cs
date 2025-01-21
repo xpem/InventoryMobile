@@ -1,6 +1,6 @@
 ﻿namespace BLL.Interface
 {
-    public interface IBuildDbBLL
+    public interface IBuildDbService
     {
         Task CleanLocalDatabase();
         void Init();

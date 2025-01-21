@@ -1,4 +1,4 @@
-﻿using Models;
+﻿using Models.DTO;
 
 namespace InventoryMobile.UIModels
 {

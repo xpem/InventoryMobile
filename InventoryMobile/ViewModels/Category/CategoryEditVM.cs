@@ -100,12 +100,12 @@ namespace InventoryMobile.ViewModels.Category
             if (query.Count > 0)
             {
                 Id = Convert.ToInt32(query["Id"]);
-                Models.Category category = null;
+                Models.DTO.Category category = null;
 
                 ServResp resp = await categoryBLL.GetCategoryByIdAsync(Id.ToString());
 
                 if (resp.Success)
-                    category = resp.Content as Models.Category;
+                    category = resp.Content as Models.DTO.Category;
 
                 CategoryColor = Color.FromArgb(category.Color);
 
@@ -137,7 +137,7 @@ namespace InventoryMobile.ViewModels.Category
                 {
                     BtnInsertIsEnabled = false;
 
-                    Models.Category category = new()
+                    Models.DTO.Category category = new()
                     {
                         Name = Name,
                         Color = CategoryColor.ToArgbHex(),

@@ -9,6 +9,8 @@ namespace InventoryMobile;
 
 public partial class AppShell : Shell
 {
+    private readonly AppShellVM AppShellVM;
+
     public AppShell(AppShellVM appShellVM)
     {
         InitializeComponent();
@@ -32,9 +34,25 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(CategorySelector), typeof(CategorySelector));
 
         Routing.RegisterRoute(nameof(SubCategorySelector), typeof(SubCategorySelector));
-       
+
         Routing.RegisterRoute(nameof(ItemDisplay), typeof(ItemDisplay));
 
-        BindingContext = appShellVM;
+        Routing.RegisterRoute(nameof(FirstSync), typeof(FirstSync));
+
+        BindingContext = AppShellVM = appShellVM;
+    }
+
+    protected override void OnNavigated(ShellNavigatedEventArgs args)
+    {
+        var previousRouteString = args?.Previous?.Location?.OriginalString;
+        var currentRouteString = args?.Current?.Location?.OriginalString;
+
+        if (previousRouteString != null && previousRouteString.Equals("//SignIn/FirstSyncProcess") &&
+            currentRouteString.Equals("//Main"))
+        {
+            AppShellVM.AtualizaUser();
+        }
+
+        base.OnNavigated(args);
     }
 }

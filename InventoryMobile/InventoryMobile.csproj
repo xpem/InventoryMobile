@@ -72,6 +72,9 @@
 	  <Compile Update="Views\Item\ItemEdit.xaml.cs">
 	    <DependentUpon>ItemEdit.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\FirstSync.xaml.cs">
+	    <DependentUpon>FirstSync.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\SignIn.xaml.cs">
 	    <DependentUpon>SignIn.xaml</DependentUpon>
 	  </Compile>
@@ -115,6 +118,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Main.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\FirstSync.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\SignIn.xaml">

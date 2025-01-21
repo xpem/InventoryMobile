@@ -1,7 +1,7 @@
-﻿using Models;
+﻿using Models.DTO;
 using Models.Responses;
 
-namespace ApiDAL.Interfaces
+namespace ApiRepos.Interfaces
 {
     public interface ICategoryApiDAL
     {

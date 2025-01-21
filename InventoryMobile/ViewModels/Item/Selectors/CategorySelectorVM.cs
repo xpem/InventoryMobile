@@ -13,12 +13,12 @@ namespace InventoryMobile.ViewModels.Item.Selectors
         public ICommand OnAppearingCommand => new Command(async (e) =>
         {
             CategoriesObsList = [];
-            List<Models.Category> Categorylist = [];
+            List<Models.DTO.Category> Categorylist = [];
 
             ServResp resp = await categoryBLL.GetCategoriesWithSubCategoriesAsync();
 
             if (resp is not null && resp.Success)
-                Categorylist = resp.Content as List<Models.Category>;
+                Categorylist = resp.Content as List<Models.DTO.Category>;
 
             CategoriesObsList.Add(new UICategory() { Id = -1, Name = "[Sem Categoria]", Color = Color.FromArgb("#2F9300"), HaveSubcategories = false });
 

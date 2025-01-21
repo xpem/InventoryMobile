@@ -1,4 +1,6 @@
-﻿namespace Models.ItemModels
+﻿using Models.DTO;
+
+namespace Models.ItemModels
 {
     public record Item : ModelBase
     {

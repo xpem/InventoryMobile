@@ -1,10 +1,11 @@
-﻿using ApiDAL.Interfaces;
-using ApiRepos;
+﻿using ApiDAL;
+using ApiRepos.Interfaces;
 using Models;
+using Models.DTO;
 using Models.Responses;
 using System.Text.Json;
 
-namespace ApiDAL
+namespace ApiRepos
 {
     public class SubCategoryApiRepo(IHttpClientFunctions httpClientFunctions) : ISubCategoryApiRepo
     {
@@ -14,7 +15,7 @@ namespace ApiDAL
         public async Task<ApiResponse> GetSubCategoryById(string id) =>
             await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/subcategory/" + id);
 
-        public async Task<ApiResponse> AltSubCategory(Models.SubCategory subCategory)
+        public async Task<ApiResponse> AltSubCategory(SubCategory subCategory)
         {
             try
             {
@@ -25,7 +26,7 @@ namespace ApiDAL
             catch (Exception ex) { throw ex; }
         }
 
-        public async Task<ApiResponse> AddSubCategory(Models.SubCategory subCategory)
+        public async Task<ApiResponse> AddSubCategory(SubCategory subCategory)
         {
             try
             {

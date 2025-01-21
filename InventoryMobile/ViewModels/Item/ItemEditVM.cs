@@ -204,7 +204,7 @@ namespace InventoryMobile.ViewModels.Item
             //backing of Category Selection Function
             if (query.ContainsKey("SelectedCategory") && query.TryGetValue("SelectedCategory", out object selectedCategory))
             {
-                Models.Category modelSelectedCategory = selectedCategory as Models.Category;
+                Models.DTO.Category modelSelectedCategory = selectedCategory as Models.DTO.Category;
                 CategoryId = modelSelectedCategory.Id.Value;
 
                 if (modelSelectedCategory?.SubCategories?.Count > 0)
@@ -389,7 +389,7 @@ namespace InventoryMobile.ViewModels.Item
                         Situation = new ItemSituation() { Id = ItemsSituationObsList[pkrItemSituationSelectedIndex].Id },
                         ResaleValue = StlResaleValueIsVisible ? decResaleValue : null,
                         TechnicalDescription = Description.Trim(),
-                        Category = new Models.Category() { Id = CategoryId, SubCategory = SubCategoryId is not null ? new SubCategory() { Id = SubCategoryId.Value } : null },
+                        Category = new Models.DTO.Category() { Id = CategoryId, SubCategory = SubCategoryId is not null ? new SubCategory() { Id = SubCategoryId.Value } : null },
                         WithdrawalDate = StlWithdrawalDateIsVisible ? WithdrawalDate : null
                     };
 

@@ -18,6 +18,10 @@ using LocalRepos.Interface;
 using Microsoft.Extensions.Logging;
 using Models;
 using Services.Interface;
+using Services;
+using InventoryMobile.Infra.Services;
+using ApiRepos.Interfaces;
+using ApiRepos;
 
 namespace InventoryMobile;
 
@@ -54,15 +58,17 @@ public static class MauiProgram
 
         #region Dependency injections
 
-        builder.Services.AddFrontServices();
+        builder.Services.AddFront();
 
-        builder.Services.AddDbContext<DbContextRepo>();
+        builder.Services.AddDbContextFactory<InventoryDbContext>();
 
-        builder.Services.AddBLLServices();
+        builder.Services.AddServices();
+
+        builder.Services.AddRepo();
 
         #region DAL
 
-        builder.Services.AddScoped<IUserDAL, UserDAL>();
+        builder.Services.AddScoped<IUserDAL, UserRepo>();
 
         #endregion
 
@@ -74,7 +80,7 @@ public static class MauiProgram
         return builder.Build();
     }
 
-    public static IServiceCollection AddFrontServices(this IServiceCollection services)
+    public static IServiceCollection AddFront(this IServiceCollection services)
     {
         services.AddTransient<AppShell>();
         services.AddTransient<AppShellVM>();
@@ -114,6 +120,15 @@ public static class MauiProgram
 
         services.AddTransient<ItemDisplay>();
         services.AddTransient<ItemDisplayVM>();
+        
+        services.AddTransient<FirstSync>();
+        services.AddTransient<FirstSyncVM>();
+
+        #region infra services
+
+        services.AddScoped<ISyncService, SyncService>();
+
+        #endregion
 
         return services;
     }
@@ -127,21 +142,28 @@ public static class MauiProgram
         services.AddScoped<IItemApiDAL, ItemApiDAL>();
         services.AddScoped<IItemSituationApiDAL, ItemSituationApiDAL>();
         services.AddScoped<ICategoryApiDAL, CategoryApiDAL>();
-        services.AddScoped<ISubCategoryApiRepo, ApiDAL.SubCategoryApiRepo>();
+        services.AddScoped<ISubCategoryApiRepo, SubCategoryApiRepo>();
         services.AddScoped<IAcquisitionTypeApiDAL, AcquisitionTypeApiDAL>();
 
         return services;
     }
 
-    public static IServiceCollection AddBLLServices(this IServiceCollection services)
+    public static IServiceCollection AddRepo(this IServiceCollection services)
     {
-        services.AddScoped<IBuildDbBLL, BuildDbBLL>();
+        services.AddScoped<ISubCategoryRepo, SubCategoryRepo>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        services.AddScoped<IBuildDbService, BuildDbBLL>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ICheckServerBLL, CheckServerBLL>();
         services.AddScoped<IItemBLL, ItemBLL>();
         services.AddScoped<IItemSituationBLL, ItemSituationBLL>();
         services.AddScoped<ICategoryBLL, CategoryBLL>();
-        services.AddScoped<ISubCategoryBLL, SubCategoryServices>();
+        services.AddScoped<ISubCategoryService, SubCategoryService>();
         services.AddScoped<IAcquisitionTypeBLL, AcquisitionTypeBLL>();
 
         return services;

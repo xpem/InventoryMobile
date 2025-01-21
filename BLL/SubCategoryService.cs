@@ -1,39 +1,41 @@
 ﻿using ApiDAL;
-using ApiDAL.Interfaces;
+using ApiRepos.Interfaces;
 using BLL.Handlers;
-using Models;
+using LocalRepos;
+using LocalRepos.Interface;
+using Models.DTO;
 using Models.Responses;
 using Services.Interface;
 using System.Text.Json.Nodes;
 
-namespace BLL
+namespace Services
 {
-    public class SubCategoryServices(ISubCategoryApiRepo subCategoryApiRepo) : ISubCategoryBLL, ISyncServiceBase
+    public class SubCategoryService(ISubCategoryApiRepo subCategoryApiRepo, ISubCategoryRepo subCategoryRepo) : ISubCategoryService, ISyncServiceBase
     {
         public async Task<ServResp> GetSubCategoriesByCategoryId(int categoryId)
         {
             var resp = await subCategoryApiRepo.GetSubCategoriesByCategoryId(categoryId.ToString());
 
-            return ApiResponseHandler.Handler<List<Models.SubCategory>>(resp);
+            return ApiResponseHandler.Handler<List<SubCategory>>(resp);
         }
 
         public async Task<ServResp> GetSubCategoryById(string id)
         {
             var resp = await subCategoryApiRepo.GetSubCategoryById(id);
 
-            return ApiResponseHandler.Handler<Models.SubCategory>(resp);
+            return ApiResponseHandler.Handler<SubCategory>(resp);
         }
 
-        public async Task<ServResp> InsertSubCategory(Models.SubCategory subCategory)
+        public async Task<ServResp> InsertSubCategory(SubCategory subCategory)
         {
             var resp = await subCategoryApiRepo.AddSubCategory(subCategory);
 
             if (resp is not null && resp.Success && resp.Content is not null and string)
             {
-                var jResp = JsonNode.Parse(resp.Content as string);
+                var jResp = JsonNode.Parse((string)resp.Content);
                 if (jResp is not null)
                 {
-                    Models.SubCategory subCategoryResp = new()
+                    SubCategory subCategoryResp = new()
                     {
                         Id = jResp["Id"]?.GetValue<int>() ?? 0,
                         Name = jResp["Name"]?.GetValue<string>(),
@@ -49,14 +51,7 @@ namespace BLL
             return new ServResp() { Success = false, Content = null };
         }
 
-        public async Task<ServResp> GetByLastUpdateAsync(DateTime lastUpdate, int page)
-        {
-            ApiResponse resp = await subCategoryApiRepo.GetByLastUpdateAsync(lastUpdate, page);
-
-            return ApiResponseHandler.Handler<List<SubCategory>>(resp);
-        }
-
-        public async Task<ServResp> AltSubCategory(Models.SubCategory subCategory)
+        public async Task<ServResp> AltSubCategory(SubCategory subCategory)
         {
             var resp = await subCategoryApiRepo.AltSubCategory(subCategory);
 
@@ -67,7 +62,7 @@ namespace BLL
                     var jResp = JsonNode.Parse(resp.Content as string);
                     if (jResp is not null)
                     {
-                        Models.SubCategory subCategoryResp = new()
+                        SubCategory subCategoryResp = new()
                         {
                             Id = jResp["Id"]?.GetValue<int>() ?? 0,
                             Name = jResp["Name"]?.GetValue<string>(),
@@ -101,36 +96,33 @@ namespace BLL
 
         public async Task ApiToLocalSync(int uid, DateTime lastUpdate)
         {
-            int page = 1;
-            DateTime? localLastUpdate;
+            await new SyncServiceBase<SubCategoryService>(this).ApiToLocalSync(uid, lastUpdate);
+        }
 
-            while (true)
-            {
-                ServResp respByLastUpdate = await GetByLastUpdateAsync(lastUpdate, page);
-                if ((respByLastUpdate is not null) && respByLastUpdate.Success && respByLastUpdate.Content is not null)
-                {
-                    List<SubCategory>? subCategories = respByLastUpdate.Content as List<SubCategory>;
+        public Task<SubCategory?> GetByIdAsync(int id)
+        {
+            return subCategoryRepo.GetByIdAsync(id);
+        }
 
-                    if (subCategories is not null)
-                    {
-                        foreach (SubCategory subCategory in subCategories)
-                        {
-                            if(subCategory is null) throw new ArgumentNullException(nameof(subCategory));
+        public Task<int> CreateAsync(DTOModelBase entity)
+        {
+            return subCategoryRepo.CreateAsync(entity as SubCategory);
+        }
 
-                            subCategory.UserId = uid;
-                            localLastUpdate = null;
+        public Task<int> UpdateAsync(DTOModelBase entity)
+        {
+            return subCategoryRepo.UpdateAsync(entity as SubCategory);
+        }
 
-                            //if (subCategory.Id is not null)
-                            //    localLastUpdate = await bookDAL.GetUpdatedAtByIdAsync(subCategory.Id.Value);
-                            //else
-                            //    throw new ArgumentNullException(nameof(subCategory.Id));
 
-                            //continuar
+        public Task<List<DTOModelBase>?> GetByLastUpdateAsync(DateTime lastUpdate, int page)
+        {
+            throw new NotImplementedException();
+        }
 
-                        }
-                    }
-                }
-            }
+        Task<DTOModelBase?> ISyncServiceBase.GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

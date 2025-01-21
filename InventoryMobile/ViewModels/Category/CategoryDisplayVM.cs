@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels.Category
 {
-    public class CategoryDisplayVM(ICategoryBLL categoryBLL, ISubCategoryBLL subCategoryBLL) : ViewModelBase, IQueryAttributable
+    public class CategoryDisplayVM(ICategoryBLL categoryBLL, ISubCategoryService subCategoryBLL) : ViewModelBase, IQueryAttributable
     {
         int Id;
 
@@ -61,8 +61,8 @@ namespace InventoryMobile.ViewModels.Category
 
         public ICommand CategoryEditCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(CategoryEdit)}?Id={Id}", true));
 
-        public ICommand AddSubCategoryCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(SubCategoryEdit)}", true, new Dictionary<string, object> { { "Category", (new Models.Category() { Id = Id, Name = Name }) } }));
-        public ICommand SubCategoryEditCommand => new Command(async (e) => await Shell.Current.GoToAsync($"{nameof(SubCategoryEdit)}?Id={e}", true, new Dictionary<string, object> { { "Category", (new Models.Category() { Id = Id, Name = Name }) } }));
+        public ICommand AddSubCategoryCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(SubCategoryEdit)}", true, new Dictionary<string, object> { { "Category", (new Models.DTO.Category() { Id = Id, Name = Name }) } }));
+        public ICommand SubCategoryEditCommand => new Command(async (e) => await Shell.Current.GoToAsync($"{nameof(SubCategoryEdit)}?Id={e}", true, new Dictionary<string, object> { { "Category", (new Models.DTO.Category() { Id = Id, Name = Name }) } }));
 
         public ICommand DeleteCategoryCommand => new Command(async () =>
         {
@@ -141,12 +141,12 @@ namespace InventoryMobile.ViewModels.Category
 
         public ICommand OnAppearingCommand => new Command(async (e) =>
         {
-            Models.Category category = null;
+            Models.DTO.Category category = null;
 
             ServResp resp = await categoryBLL.GetCategoryByIdAsync(Id.ToString());
 
             if (resp.Success)
-                category = resp.Content as Models.Category;
+                category = resp.Content as Models.DTO.Category;
 
             //Category no longer exists in the db
             if (category == null) await Shell.Current.GoToAsync("..");
@@ -156,13 +156,13 @@ namespace InventoryMobile.ViewModels.Category
             SystemDefault = category.SystemDefault.Value;
             SubCategoryObsCol = [];
 
-            List<Models.SubCategory> subCategoryList =[];
+            List<Models.DTO.SubCategory> subCategoryList =[];
 
             var respSubCategoryBLL = await subCategoryBLL.GetSubCategoriesByCategoryId(Id);
 
             if (respSubCategoryBLL is not null && respSubCategoryBLL.Success && respSubCategoryBLL.Content is not null)
             {
-                subCategoryList = respSubCategoryBLL.Content as List<Models.SubCategory>;
+                subCategoryList = respSubCategoryBLL.Content as List<Models.DTO.SubCategory>;
 
                 //System.Text.RegularExpressions.Regex.Unescape(@"\" + subCategory.Icon)
                 if (subCategoryList != null && subCategoryList.Count > 0)

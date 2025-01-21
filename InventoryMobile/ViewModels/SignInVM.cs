@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels
 {
-    public class SignInVM(IUserService userBLL) : ViewModelBase
+    public partial class SignInVM(IUserService userBLL) : ViewModelBase
     {
 
         string email = "", password = "", btnSignInText = "Acessar";
@@ -42,10 +42,13 @@ namespace InventoryMobile.ViewModels
 
                             if (resp.Success)
                             {
-                                await Shell.Current.GoToAsync($"//{nameof(Main)}");
+                                if (resp.Content is not null and int)
+                                    ((App)App.Current).Uid = (int)resp.Content;
 
-                                //Application.Current.MainPage = new NavigationPage();
-                                //_ = (Application.Current.MainPage.Navigation).PushAsync(navigation.ResolvePage<Main>(), true);
+                                await Shell.Current.GoToAsync($"{nameof(FirstSync)}", false);
+
+                                //await Shell.Current.GoToAsync($"//{nameof(Main)}");
+
                             }
                             else
                             {
@@ -75,7 +78,7 @@ namespace InventoryMobile.ViewModels
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
 
             IsBusy = false;

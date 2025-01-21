@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels.Category.SubCategory
 {
-    public class SubCategoryEditVM(ISubCategoryBLL subCategoryBLL) : ViewModelBase, IQueryAttributable
+    public class SubCategoryEditVM(ISubCategoryService subCategoryBLL) : ViewModelBase, IQueryAttributable
     {
         int CategoryId, Id;
 
@@ -133,7 +133,7 @@ namespace InventoryMobile.ViewModels.Category.SubCategory
                 {
                     BtnInsertIsEnabled = false;
 
-                    Models.SubCategory subCategory = new()
+                    Models.DTO.SubCategory subCategory = new()
                     {
                         Name = Name,
                         IconName = SubCategoryIconsList.GetIconName(icon),
@@ -209,20 +209,20 @@ namespace InventoryMobile.ViewModels.Category.SubCategory
 
             if (query.TryGetValue("Category", out object value))
             {
-                var category = value as Models.Category;
+                var category = value as Models.DTO.Category;
                 CategoryName = category.Name;
                 CategoryId = category.Id.Value;
             }
 
             if (Id != 0)
             {
-                Models.SubCategory subCategory;
+                Models.DTO.SubCategory subCategory;
 
                 var resp = await subCategoryBLL.GetSubCategoryById(Id.ToString());
 
                 if (resp.Success)
                 {
-                    subCategory = resp.Content as Models.SubCategory;
+                    subCategory = resp.Content as Models.DTO.SubCategory;
 
                     Name = subCategory.Name;
                     CategoryId = subCategory.CategoryId;

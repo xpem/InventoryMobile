@@ -17,7 +17,7 @@ namespace ApiDAL
         Task<ApiResponse> RequestAsync(RequestsTypes requestsType, string url, string? userToken = null, Object? content = null);
     }
 
-    public class HttpClientFunctions(DbContextRepo inventoryDbContextRepo) : HttpClient, IHttpClientFunctions
+    public class HttpClientFunctions(InventoryDbContext inventoryDbContextRepo) : HttpClient, IHttpClientFunctions
     {
         public async Task<bool> CheckServerAsync()
         {

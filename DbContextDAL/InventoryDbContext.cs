@@ -4,7 +4,7 @@ using Models.DTO;
 
 namespace LocalRepos
 {
-    public class DbContextRepo : DbContext
+    public class InventoryDbContext(DbContextOptions<InventoryDbContext> options) : DbContext(options)
     {
         public virtual required DbSet<VersionDbTables> VersionDbTables { get; set; }
 

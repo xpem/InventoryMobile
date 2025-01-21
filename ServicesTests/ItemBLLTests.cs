@@ -8,7 +8,7 @@ using Models;
 using Models.ItemModels;
 using Models.DTO;
 
-namespace BLL.Tests
+namespace ServicesTests
 {
     [TestClass()]
     public class ItemBLLTests
@@ -24,7 +24,7 @@ namespace BLL.Tests
                 PurchaseValue = 529.99M,
                 PurchaseStore = "Kabum",
                 ResaleValue = 0,
-                Situation = new Models.ItemModels.ItemSituation() { Id = 1 },
+                Situation = new ItemSituation() { Id = 1 },
                 Comment = "Teste comment",
                 AcquisitionType = new AcquisitionType() { Id = 1, Name = "Compra" },
                 Category = new Category()
@@ -57,7 +57,7 @@ namespace BLL.Tests
 
             Mock<IHttpClientFunctions> mockHttpClientFunctions = new();
             Mock<IHttpClientWithFileFunctions> mockHttpClientWithFileFunctions = new();
-            mockHttpClientFunctions.Setup(x => x.AuthRequestAsync(Models.RequestsTypes.Post, ApiKeys.ApiAddress + "/Inventory/item", mockJsonItem)).ReturnsAsync(mockResp);
+            mockHttpClientFunctions.Setup(x => x.AuthRequestAsync(RequestsTypes.Post, ApiKeys.ApiAddress + "/Inventory/item", mockJsonItem)).ReturnsAsync(mockResp);
 
             ItemApiDAL itemApiDAL = new(mockHttpClientFunctions.Object, mockHttpClientWithFileFunctions.Object);
 
@@ -65,7 +65,7 @@ namespace BLL.Tests
 
             var resp = itemBLL.AddItemAsync(item).Result;
 
-            if ((resp != null && resp.Success && resp.Content is Models.ItemModels.Item))
+            if (resp != null && resp.Success && resp.Content is Models.ItemModels.Item)
             {
                 Assert.IsTrue(true);
                 return;
@@ -86,7 +86,7 @@ namespace BLL.Tests
                 PurchaseValue = 529.99M,
                 PurchaseStore = "Kabum",
                 ResaleValue = 0,
-                Situation = new Models.ItemModels.ItemSituation() { Id = 2 },
+                Situation = new ItemSituation() { Id = 2 },
                 Comment = "Teste comment",
                 AcquisitionType = new AcquisitionType() { Id = 1 },
                 Category = new Category()
@@ -131,7 +131,7 @@ namespace BLL.Tests
 
             Mock<IHttpClientFunctions> mockHttpClientFunctions = new();
             Mock<IHttpClientWithFileFunctions> mockHttpClientWithFileFunctions = new();
-            mockHttpClientFunctions.Setup(x => x.AuthRequestAsync(Models.RequestsTypes.Put, ApiKeys.ApiAddress + "/Inventory/item/" + 1, mockJsonItem)).ReturnsAsync(mockResp);
+            mockHttpClientFunctions.Setup(x => x.AuthRequestAsync(RequestsTypes.Put, ApiKeys.ApiAddress + "/Inventory/item/" + 1, mockJsonItem)).ReturnsAsync(mockResp);
 
             ItemApiDAL itemApiDAL = new(mockHttpClientFunctions.Object, mockHttpClientWithFileFunctions.Object);
 
@@ -139,7 +139,7 @@ namespace BLL.Tests
 
             var resp = itemBLL.AltItemAsync(item).Result;
 
-            if ((resp != null && resp.Success && resp.Content is null))
+            if (resp != null && resp.Success && resp.Content is null)
             {
                 Assert.IsTrue(true);
                 return;
@@ -237,9 +237,9 @@ namespace BLL.Tests
 
             var resp = itemBLL.GetItemByIdAsync("1").Result;
 
-            if ((resp != null && resp.Success && resp.Content is Item))
+            if (resp != null && resp.Success && resp.Content is Models.ItemModels.Item)
             {
-                if (resp.Content is Models.DTO.Item item && item.Id == 1)
+                if (resp.Content is Models.ItemModels.Item item && item.Id == 1)
                 {
                     Assert.IsTrue(true);
                     return;

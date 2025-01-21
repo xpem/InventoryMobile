@@ -57,7 +57,7 @@ namespace InventoryMobile.ViewModels.Item.Selectors
 
         public ICommand SelectCategoryCommand => new Command(async () =>
         {
-            await Shell.Current.GoToAsync($"../..", true, new Dictionary<string, object> { { "SelectedCategory", new Models.Category() { Id = CategoryId, Name = categoryName } } });
+            await Shell.Current.GoToAsync($"../..", true, new Dictionary<string, object> { { "SelectedCategory", new Models.DTO.Category() { Id = CategoryId, Name = categoryName } } });
         });
 
         //Shell.Current.GoToAsync($"{nameof(SubCategorySelector)}", true, new Dictionary<string, object> { { "Category", categoryObj

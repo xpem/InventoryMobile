@@ -4,7 +4,7 @@ namespace LocalRepos.Interface
 {
     public interface IUserDAL
     {
-        Task<int> ExecuteAddUserAsync(User user);
+        Task<int> AddUserAsync(User user);
 
         int ExecuteUpdateLastUpdateUser(DateTime lastUpdate, int uid);
 

@@ -1,9 +1,9 @@
-﻿using Models;
+﻿using Models.DTO;
 using Models.Responses;
 
 namespace Services.Interface
 {
-    public interface ISubCategoryBLL
+    public interface ISubCategoryService
     {
         Task<ServResp> InsertSubCategory(SubCategory subCategory);
         Task<ServResp> AltSubCategory(SubCategory subCategory);

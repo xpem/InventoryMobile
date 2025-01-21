@@ -1,6 +1,6 @@
-﻿namespace Models
+﻿namespace Models.DTO
 {
-    public record SubCategory : ModelBase
+    public class SubCategory : DTOModelBase
     {
         public string? Name { get; set; }
 
@@ -10,6 +10,5 @@
 
         public int CategoryId { get; set; }
 
-        public int UserId { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using Models.DTO;
 using Models.Responses;
 using System.Text.Json.Nodes;
 
-namespace BLL
+namespace Services
 {
 
     public class UserService(IUserDAL userDAL, IUserApiDAL userApiDAL) : IUserService
@@ -85,7 +85,7 @@ namespace BLL
                                 Password = EncryptionService.Encrypt(password)
                             };
 
-                            _ = userDAL.ExecuteAddUserAsync(user);
+                            _ = userDAL.AddUserAsync(user);
 
                             return new ServResp() { Success = true };
                         }
