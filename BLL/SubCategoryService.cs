@@ -99,30 +99,35 @@ namespace Services
             await new SyncServiceBase<SubCategoryService>(this).ApiToLocalSync(uid, lastUpdate);
         }
 
-        public Task<SubCategory?> GetByIdAsync(int id)
-        {
-            return subCategoryRepo.GetByIdAsync(id);
-        }
-
-        public Task<int> CreateAsync(DTOModelBase entity)
+        public Task<int> CreateAsync(DTOBase entity)
         {
             return subCategoryRepo.CreateAsync(entity as SubCategory);
         }
 
-        public Task<int> UpdateAsync(DTOModelBase entity)
+        public Task<int> UpdateAsync(DTOBase entity)
         {
             return subCategoryRepo.UpdateAsync(entity as SubCategory);
         }
 
 
-        public Task<List<DTOModelBase>?> GetByLastUpdateAsync(DateTime lastUpdate, int page)
+        public async Task<List<DTOBase>?> GetByLastUpdateAsync(DateTime lastUpdate, int page)
         {
-            throw new NotImplementedException();
+            var apiResp = await subCategoryApiRepo.GetByLastUpdateAsync(lastUpdate, page);
+
+            var resp = ApiResponseHandler.Handler<List<SubCategory>>(apiResp);
+
+            if (resp is not null && resp.Success && resp.Content is not null)
+            {
+                var listResp = resp.Content as List<Models.DTO.SubCategory>;
+
+                return listResp?.Select(x => x as DTOBase).ToList();
+            }
+            else throw new Exception("Error getting SubCategories from API");
         }
 
-        Task<DTOModelBase?> ISyncServiceBase.GetByIdAsync(int id)
+        public async Task<DTOBase?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return (await subCategoryRepo.GetByIdAsync(id)) as DTOBase;
         }
     }
 }

@@ -12,43 +12,51 @@ namespace Services
             int page = 1;
             DateTime? localLastUpdate;
 
-            while (true)
+            try
             {
-                var apiRespList = await classBase.GetByLastUpdateAsync(lastUpdate, page);
-
-                if (apiRespList is not null)
+                while (true)
                 {
-                    foreach (var apiRespObj in apiRespList)
+                    var apiRespList = await classBase.GetByLastUpdateAsync(lastUpdate, page);
+
+                    if (apiRespList is not null)
                     {
-                        if (apiRespObj is null) throw new ArgumentNullException(nameof(apiRespObj));
-
-                        apiRespObj.UserId = uid;
-
-                        localLastUpdate = null;
-
-                        if (apiRespObj.Id is not null)
+                        foreach (var apiRespObj in apiRespList)
                         {
-                            var localObj = await classBase.GetByIdAsync(apiRespObj.Id.Value);
+                            if (apiRespObj is null) throw new ArgumentNullException(nameof(apiRespObj));
 
-                            apiRespObj.LocalId = (localObj as DTOModelBase)?.LocalId ?? 0;
+                            apiRespObj.UserId = uid;
+
+                            localLastUpdate = null;
+
+                            if (apiRespObj.Id is not null)
+                            {
+                                var localObj = await classBase.GetByIdAsync(apiRespObj.Id.Value);
+
+                                apiRespObj.LocalId = localObj?.LocalId ?? 0;
+                            }
+                            else
+                                throw new ArgumentNullException(nameof(apiRespObj.Id));
+
+                            if (localLastUpdate == null && !apiRespObj.Inactive)
+                                await classBase.CreateAsync(apiRespObj);
+                            else if (apiRespObj.UpdatedAt > localLastUpdate)
+                                await classBase.UpdateAsync(apiRespObj);
                         }
-                        else
-                            throw new ArgumentNullException(nameof(apiRespObj.Id));
 
-                        if (localLastUpdate == null && !apiRespObj.Inactive)
-                            await classBase.CreateAsync(apiRespObj);
-                        else if (apiRespObj.UpdatedAt > localLastUpdate)
-                            await classBase.UpdateAsync(apiRespObj);
+                        if (apiRespList.Count < PAGEMAX)
+                            break;
                     }
+                    else break;
 
-                    if (apiRespList.Count < PAGEMAX)
-                        break;
+                    page++;
+
                 }
-                else break;
-
-                page++;
-
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
     }
 }

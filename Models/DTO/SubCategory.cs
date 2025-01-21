@@ -1,6 +1,6 @@
 ﻿namespace Models.DTO
 {
-    public class SubCategory : DTOModelBase
+    public class SubCategory : DTOBase
     {
         public string? Name { get; set; }
 

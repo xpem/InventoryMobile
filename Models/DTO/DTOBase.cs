@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Models.DTO
+﻿namespace Models.DTO
 {
-    public abstract class DTOModelBase
+    public class DTOBase
     {
         public int? Id { get; set; }
 

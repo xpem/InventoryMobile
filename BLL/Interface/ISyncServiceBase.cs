@@ -6,16 +6,18 @@ namespace Services.Interface
     {
         public const int PAGEMAX = 50;
 
-        //Task LocalToApiSync(int uid, DateTime lastUpdate);
+        Task LocalToApiSync(int uid, DateTime lastUpdate);
 
         //Task ApiToLocalSync(int uid, DateTime lastUpdate);
 
-        Task<DTOModelBase?> GetByIdAsync(int id);
+        Task<DTOBase?> GetByIdAsync(int id);
 
-        Task<int> CreateAsync(DTOModelBase entity);
+        Task<int> CreateAsync(DTOBase entity);
 
-        Task<int> UpdateAsync(DTOModelBase entity);
+        Task<int> UpdateAsync(DTOBase entity);
 
-        Task<List<DTOModelBase>?> GetByLastUpdateAsync(DateTime lastUpdate, int page);
+        Task<List<DTOBase>?> GetByLastUpdateAsync(DateTime lastUpdate, int page);
+
+
     }
 }

@@ -10,5 +10,6 @@ namespace Services.Interface
         Task<ServResp> DelSubCategory(int id);
         Task<ServResp> GetSubCategoriesByCategoryId(int categoryId);
         Task<ServResp> GetSubCategoryById(string id);
+        Task ApiToLocalSync(int id, DateTime lastUpdate);
     }
 }
