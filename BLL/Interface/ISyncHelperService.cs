@@ -2,7 +2,7 @@
 
 namespace Services.Interface
 {
-    public interface ISyncServiceBase
+    public interface ISyncHelperService
     {
         public const int PAGEMAX = 50;
 

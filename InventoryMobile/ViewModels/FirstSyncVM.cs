@@ -45,7 +45,6 @@ namespace InventoryMobile.ViewModels
                     if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                     {
 
-
                         await SubCategoryService.ApiToLocalSync(user.Id, user.LastUpdate);
 
                         Progress = 0.25M;

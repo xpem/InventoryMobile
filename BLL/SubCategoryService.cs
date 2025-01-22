@@ -6,11 +6,12 @@ using LocalRepos.Interface;
 using Models.DTO;
 using Models.Responses;
 using Services.Interface;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Nodes;
 
 namespace Services
 {
-    public class SubCategoryService(ISubCategoryApiRepo subCategoryApiRepo, ISubCategoryRepo subCategoryRepo) : ISubCategoryService, ISyncServiceBase
+    public class SubCategoryService(ISubCategoryApiRepo subCategoryApiRepo, ISubCategoryRepo subCategoryRepo) : ISubCategoryService, ISyncHelperService
     {
         public async Task<ServResp> GetSubCategoriesByCategoryId(int categoryId)
         {
@@ -96,7 +97,7 @@ namespace Services
 
         public async Task ApiToLocalSync(int uid, DateTime lastUpdate)
         {
-            await new SyncServiceBase<SubCategoryService>(this).ApiToLocalSync(uid, lastUpdate);
+            await SyncHelperServiceV2.ApiToLocalSync(this, uid, lastUpdate);
         }
 
         public Task<int> CreateAsync(DTOBase entity)

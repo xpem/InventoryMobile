@@ -46,6 +46,7 @@ namespace Services
         {
             using var context = DbCtx.CreateDbContext();
             context.User.RemoveRange(context.User);
+            context.SubCategory.RemoveRange(context.SubCategory);
 
             await context.SaveChangesAsync();
         }
