@@ -1,5 +1,4 @@
 ﻿using BLL;
-using BLL.Interface;
 using InventoryMobile.Resources.Fonts.Icons;
 using InventoryMobile.UIModels;
 using InventoryMobile.Utils;
@@ -7,6 +6,7 @@ using InventoryMobile.Views;
 using InventoryMobile.Views.Item;
 using Models.Exceptions;
 using Models.ItemModels;
+using Services.Interface;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -84,7 +84,7 @@ namespace InventoryMobile.ViewModels
 
                     List<ItemSituation> itemSituationList = [];
 
-                    var respItemSituation = await itemSituationBLL.GetItemSituation();
+                    Models.Responses.ServResp respItemSituation = await itemSituationBLL.GetItemSituation();
 
                     if (respItemSituation is not null && respItemSituation.Success)
                         itemSituationList = respItemSituation.Content as List<ItemSituation>;

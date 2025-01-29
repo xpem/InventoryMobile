@@ -10,7 +10,9 @@ namespace LocalRepos
 
         public virtual required DbSet<User> User { get; set; }
 
-        public virtual required DbSet<SubCategory> SubCategory { get; set; }
+        public virtual required DbSet<SubCategoryDTO> SubCategory { get; set; }
+
+        public virtual DbSet<ApiOperationDTO> ApiOperationQueue { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

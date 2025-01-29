@@ -15,7 +15,7 @@ namespace ApiRepos
         public async Task<ApiResponse> GetSubCategoryById(string id) =>
             await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/subcategory/" + id);
 
-        public async Task<ApiResponse> AltSubCategory(SubCategory subCategory)
+        public async Task<ApiResponse> UpdateApiAsync(SubCategoryDTO subCategory)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace ApiRepos
             catch (Exception ex) { throw ex; }
         }
 
-        public async Task<ApiResponse> AddSubCategory(SubCategory subCategory)
+        public async Task<ApiResponse> CreateAsync(SubCategoryDTO subCategory)
         {
             try
             {

@@ -3,6 +3,7 @@ using BLL.Interface;
 using InventoryMobile.Infra.Services;
 using InventoryMobile.Views;
 using Models.DTO;
+using Services.Interface;
 
 namespace InventoryMobile;
 
@@ -18,9 +19,13 @@ public partial class App : Application
 
             InitializeComponent();
 
-            User user = null;
+            User user = userBLL.GetAsync().Result;
 
-            Task.Run(async () => user = await userBLL.GetLocalAsync()).Wait();
+            if (user != null)
+            {
+                Uid = user.Id;
+                syncService.StartThread();
+            }
 
             MainPage = new AppShell(new ViewModels.AppShellVM(userBLL, user, buildDbService, syncService));
 

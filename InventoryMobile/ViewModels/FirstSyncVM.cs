@@ -2,13 +2,7 @@
 using InventoryMobile.Infra.Services;
 using InventoryMobile.Views;
 using Models.DTO;
-using Services;
 using Services.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InventoryMobile.ViewModels
 {
@@ -16,6 +10,7 @@ namespace InventoryMobile.ViewModels
     {
 
         private decimal progress;
+
         private readonly ISyncService SyncService;
 
         public decimal Progress { get => progress; set { if (progress != value) { progress = value; OnPropertyChanged(nameof(Progress)); } } }
@@ -38,18 +33,18 @@ namespace InventoryMobile.ViewModels
         {
             try
             {
-                User user = await UserBLL.GetLocalAsync();
+                User user = await UserBLL.GetAsync();
 
                 if (user != null)
                 {
                     if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                     {
 
-                        await SubCategoryService.ApiToLocalSync(user.Id, user.LastUpdate);
+                        await SubCategoryService.ApiToLocalAsync(user.Id, user.LastUpdate);
 
                         Progress = 0.25M;
 
-                        //await BooksSyncBLL.LocalToApiSync(user.Id, user.LastUpdate);
+                        await SubCategoryService.LocalToApiAsync();
 
                         Progress = 0.5M;
 
@@ -57,11 +52,14 @@ namespace InventoryMobile.ViewModels
 
                         Progress = 0.75M;
 
-                        UserBLL.UpdateLocalUserLastUpdate(user.Id);
+                        UserBLL.UpdateLastUpdate(user.Id);
 
                         Progress = 1;
 
-                        //_ = Task.Run(() => { Task.Delay(5000); SyncServices.StartThread(); });
+                        _ = Task.Run(() => { Task.Delay(5000); SyncService.StartThread(); });
+
+                        //_ = AppShellVM.AtualizaUserShowData();
+
 
                         _ = Shell.Current.GoToAsync($"//{nameof(Main)}");
 

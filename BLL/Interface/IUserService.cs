@@ -1,18 +1,20 @@
 ﻿using Models.DTO;
 using Models.Responses;
 
-namespace BLL.Interface
+namespace Services.Interface
 {
     public interface IUserService
     {
         ServResp AddUser(string name, string email, string password);
         Task<ServResp> SignIn(string email, string password);
 
-        Task<User?> GetLocalAsync();
+        Task<User?> GetAsync();
 
         Task<(bool, string?)> GetUserTokenAsync(string email, string password);
+
         Task<string?> RecoverPasswordAsync(string email);
-        void UpdateLocalUserLastUpdate(int uid);
+
+        void UpdateLastUpdate(int uid);
 
         void RemoveUserLocal();
     }

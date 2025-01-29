@@ -30,7 +30,7 @@ namespace ServicesTests
                 Category = new Category()
                 {
                     Id = 1,
-                    SubCategory = new SubCategory()
+                    SubCategory = new SubCategoryDTO()
                     {
                         Id = 3
                     }
@@ -92,7 +92,7 @@ namespace ServicesTests
                 Category = new Category()
                 {
                     Id = 1,
-                    SubCategory = new SubCategory()
+                    SubCategory = new SubCategoryDTO()
                     {
                         Id = 3
                     }

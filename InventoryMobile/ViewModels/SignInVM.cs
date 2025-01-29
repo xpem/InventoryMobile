@@ -1,5 +1,5 @@
-﻿using BLL.Interface;
-using InventoryMobile.Views;
+﻿using InventoryMobile.Views;
+using Services.Interface;
 using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels

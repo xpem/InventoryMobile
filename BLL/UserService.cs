@@ -1,15 +1,15 @@
 ﻿using ApiDAL.Handlers;
 using ApiDAL.Interfaces;
-using BLL.Interface;
 using LocalRepos.Interface;
 using Models.DTO;
 using Models.Responses;
+using Services.Interface;
 using System.Text.Json.Nodes;
 
 namespace Services
 {
 
-    public class UserService(IUserDAL userDAL, IUserApiDAL userApiDAL) : IUserService
+    public class UserService(IUserDAL userDAL, IUserApiRepo userApiDAL) : IUserService
     {
         public ServResp AddUser(string name, string email, string password)
         {
@@ -54,7 +54,7 @@ namespace Services
 
         public async Task<(bool, string?)> GetUserTokenAsync(string email, string password) => await userApiDAL.GetUserTokenAsync(email.ToLower(), password);
 
-        public async Task<User?> GetLocalAsync() => await userDAL.GetUserLocalAsync();
+        public async Task<User?> GetAsync() => await userDAL.GetUserLocalAsync();
 
         public void RemoveUserLocal() => userDAL.RemoveUserLocal();
 
@@ -101,7 +101,7 @@ namespace Services
             catch { throw; }
         }
 
-        public void UpdateLocalUserLastUpdate(int uid) => userDAL.ExecuteUpdateLastUpdateUser(DateTime.Now, uid);
+        public void UpdateLastUpdate(int uid) => userDAL.ExecuteUpdateLastUpdateUser(DateTime.Now, uid);
 
     }
 }

@@ -5,9 +5,9 @@ namespace ApiRepos.Interfaces
 {
     public interface ISubCategoryApiRepo
     {
-        Task<ApiResponse> AddSubCategory(SubCategory subCategory);
+        Task<ApiResponse> CreateAsync(SubCategoryDTO subCategory);
 
-        Task<ApiResponse> AltSubCategory(SubCategory subCategory);
+        Task<ApiResponse> UpdateApiAsync(SubCategoryDTO subCategory);
 
         Task<ApiResponse> DelSubCategory(int id);
 

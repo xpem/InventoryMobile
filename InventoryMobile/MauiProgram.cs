@@ -120,7 +120,7 @@ public static class MauiProgram
 
         services.AddTransient<ItemDisplay>();
         services.AddTransient<ItemDisplayVM>();
-        
+
         services.AddTransient<FirstSync>();
         services.AddTransient<FirstSyncVM>();
 
@@ -138,7 +138,8 @@ public static class MauiProgram
         services.AddScoped<IHttpClientFunctions, HttpClientFunctions>();
         services.AddScoped<IHttpClientWithFileFunctions, HttpClientWithFileFunctions>();
 
-        services.AddScoped<IUserApiDAL, UserApiRepo>();
+        services.AddScoped<IOperationQueueRepo, OperationQueueRepo>();
+        services.AddScoped<IUserApiRepo, UserApiRepo>();
         services.AddScoped<IItemApiDAL, ItemApiDAL>();
         services.AddScoped<IItemSituationApiDAL, ItemSituationApiDAL>();
         services.AddScoped<ICategoryApiDAL, CategoryApiDAL>();
@@ -157,6 +158,7 @@ public static class MauiProgram
 
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
+        services.AddScoped<IOperationService, OperationService>();
         services.AddScoped<IBuildDbService, BuildDbBLL>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ICheckServerBLL, CheckServerBLL>();

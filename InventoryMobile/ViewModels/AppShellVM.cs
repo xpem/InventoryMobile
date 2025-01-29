@@ -4,6 +4,7 @@ using InventoryMobile.Infra.Services;
 using InventoryMobile.Views;
 using Models.DTO;
 using Services;
+using Services.Interface;
 using System.Windows.Input;
 using System.Xml.Linq;
 
@@ -54,7 +55,7 @@ namespace InventoryMobile.ViewModels
 
         public async void AtualizaUser()
         {
-            User user = await UserService.GetLocalAsync();
+            User user = await UserService.GetAsync();
 
             if (user is not null)
             {

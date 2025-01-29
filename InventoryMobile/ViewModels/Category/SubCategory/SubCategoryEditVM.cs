@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels.Category.SubCategory
 {
-    public class SubCategoryEditVM(ISubCategoryService subCategoryBLL) : ViewModelBase, IQueryAttributable
+    public class SubCategoryEditVM(ISubCategoryService subCategoryService) : ViewModelBase, IQueryAttributable
     {
         int CategoryId, Id;
 
@@ -133,7 +133,7 @@ namespace InventoryMobile.ViewModels.Category.SubCategory
                 {
                     BtnInsertIsEnabled = false;
 
-                    Models.DTO.SubCategory subCategory = new()
+                    Models.DTO.SubCategoryDTO subCategory = new()
                     {
                         Name = Name,
                         IconName = SubCategoryIconsList.GetIconName(icon),
@@ -146,14 +146,14 @@ namespace InventoryMobile.ViewModels.Category.SubCategory
                     {
                         subCategory.Id = Id;
 
-                        var resp = await subCategoryBLL.AltSubCategory(subCategory);
+                        var resp = await subCategoryService.UpdateAsync(((App)Application.Current).Uid, IsOn, subCategory);
 
                         if (resp.Success)
                             message = "Sub Categoria Adicionada!";
                     }
                     else
                     {
-                        var resp = await subCategoryBLL.InsertSubCategory(subCategory);
+                        var resp = await subCategoryService.CreateAsync(((App)Application.Current).Uid, IsOn, subCategory);
 
                         if (resp.Success)
                             message = "Sub Categoria Adicionada!";
@@ -216,18 +216,16 @@ namespace InventoryMobile.ViewModels.Category.SubCategory
 
             if (Id != 0)
             {
-                Models.DTO.SubCategory subCategory;
+                Models.DTO.SubCategoryDTO subCategory;
 
-                var resp = await subCategoryBLL.GetSubCategoryById(Id.ToString());
+                var resp = await subCategoryService.GetByIdAsync(Id);
 
-                if (resp.Success)
-                {
-                    subCategory = resp.Content as Models.DTO.SubCategory;
+                subCategory = resp as Models.DTO.SubCategoryDTO;
 
-                    Name = subCategory.Name;
-                    CategoryId = subCategory.CategoryId;
-                    Icon = subCategory.IconName;
-                }
+                Name = subCategory.Name;
+                CategoryId = subCategory.CategoryId;
+                Icon = subCategory.IconName;
+
                 BtnConfirmationText = "Alterar";
                 BtnConfirmationIcon = Icons.Pen;
             }

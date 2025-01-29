@@ -3,13 +3,17 @@ using Models.Responses;
 
 namespace Services.Interface
 {
-    public interface ISubCategoryService
+    public interface ISubCategoryService: ISyncHelperService    
     {
-        Task<ServResp> InsertSubCategory(SubCategory subCategory);
-        Task<ServResp> AltSubCategory(SubCategory subCategory);
+        Task<ServResp> CreateApiAsync(SubCategoryDTO subCategory);
         Task<ServResp> DelSubCategory(int id);
         Task<ServResp> GetSubCategoriesByCategoryId(int categoryId);
-        Task<ServResp> GetSubCategoryById(string id);
-        Task ApiToLocalSync(int id, DateTime lastUpdate);
+
+        Task<List<SubCategoryDTO>> GetByCategoryIdAsync(int uid, int page, int categoryId);
+
+        Task<ServResp> CreateAsync(int uid, bool isON, SubCategoryDTO subCategoryDTO);
+
+        Task<ServResp> UpdateAsync(int uid, bool isOn, SubCategoryDTO subCategoryDTO);
+
     }
 }

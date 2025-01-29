@@ -1,9 +1,8 @@
 ﻿using Models;
 using Models.DTO;
-using Services;
 using Services.Interface;
 
-namespace InventoryMobile.Infra.Services
+namespace InventoryMobile.ThreadServices
 {
     public interface ISyncService
     {
@@ -19,12 +18,11 @@ namespace InventoryMobile.Infra.Services
     {
         public static SyncStatus Synchronizing { get; set; }
 
-        public bool ThreadIsRunning { get; set; } = false;
-
         public Timer Timer { get; set; }
 
-        //40 secs
         readonly int Interval = 30000;
+
+        public bool ThreadIsRunning { get; set; } = false;
 
         public void StartThread()
         {
@@ -63,16 +61,10 @@ namespace InventoryMobile.Infra.Services
                     if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                     {
                         await subCategoryService.ApiToLocalAsync(user.Id, user.LastUpdate);
-
                         await subCategoryService.LocalToApiAsync();
 
-                        //await booksSyncBLL.LocalToApiSync(user.Id, user.LastUpdate);
-
-                        //await booksSyncBLL.ApiToLocalSync(user.Id, user.LastUpdate);
-
-                        //await bookHistoricSyncBLL.ApiToLocalSync(user.Id, user.LastUpdate);
-
                         userService.UpdateLastUpdate(user.Id);
+
                     }
 
                     Synchronizing = SyncStatus.Sleeping;
