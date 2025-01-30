@@ -179,7 +179,7 @@ namespace InventoryMobile.ViewModels.Category
 
             if (subCategoryList != null && subCategoryList.Count > 0)
                 foreach (var subCategory in subCategoryList)
-                    SubCategoryObsCol.Add(new UIModels.UISubCategory() { Id = subCategory.Id, Icon = SubCategoryIconsList.GetIconCode(subCategory.IconName), Name = subCategory.Name, SystemDefault = subCategory.SystemDefault.Value });
+                    SubCategoryObsCol.Add(new UIModels.UISubCategory() { Id = subCategory.Id, Icon = SubCategoryIconsList.GetIconCode(subCategory.IconName), Name = subCategory.Name, SystemDefault = !subCategory.SystemDefault.Value });
 
             IsBusy = false;
         }

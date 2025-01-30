@@ -224,7 +224,7 @@ namespace InventoryMobile.ViewModels.Category.SubCategory
 
                 Name = subCategory.Name;
                 CategoryId = subCategory.CategoryId;
-                Icon = subCategory.IconName;
+                Icon = SubCategoryIconsList.GetIconCode(subCategory.IconName);
 
                 BtnConfirmationText = "Alterar";
                 BtnConfirmationIcon = Icons.Pen;
