@@ -16,10 +16,9 @@
             <StackLayout Style="{StaticResource VerticalStackLayoutPrimary}">
                 <Frame Style="{StaticResource FramePrimary}">
                     <VerticalStackLayout>
-                        <VerticalStackLayout Margin="5,0,5,0">
+                        <VerticalStackLayout>
                             <VerticalStackLayout>
                                 <CarouselView
-                                    Margin="5"
                                     HeightRequest="300"
                                     HorizontalOptions="CenterAndExpand"
                                     IndicatorView="indicatorView"
