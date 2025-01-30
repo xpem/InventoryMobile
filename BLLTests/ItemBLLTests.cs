@@ -6,6 +6,7 @@ using Models.Responses;
 using Moq;
 using Models;
 using Models.ItemModels;
+using Models.DTO;
 
 namespace BLL.Tests
 {
@@ -15,7 +16,7 @@ namespace BLL.Tests
         [TestMethod()]
         public void AddItemTest()
         {
-            Item item = new()
+            Models.ItemModels.Item item = new()
             {
                 Name = "Water Cooler Corsair H100 RGB",
                 TechnicalDescription = "240mm, intel/Amd, preto - cw - 9060053- WW",
@@ -26,10 +27,10 @@ namespace BLL.Tests
                 Situation = new Models.ItemModels.ItemSituation() { Id = 1 },
                 Comment = "Teste comment",
                 AcquisitionType = new AcquisitionType() { Id = 1, Name = "Compra" },
-                Category = new Models.Category()
+                Category = new Category()
                 {
                     Id = 1,
-                    SubCategory = new Models.SubCategory()
+                    SubCategory = new SubCategory()
                     {
                         Id = 3
                     }
@@ -64,7 +65,7 @@ namespace BLL.Tests
 
             var resp = itemBLL.AddItemAsync(item).Result;
 
-            if ((resp != null && resp.Success && resp.Content is Item))
+            if ((resp != null && resp.Success && resp.Content is Models.ItemModels.Item))
             {
                 Assert.IsTrue(true);
                 return;
@@ -76,7 +77,7 @@ namespace BLL.Tests
         [TestMethod()]
         public void AltItemAsyncTest()
         {
-            Item item = new()
+            Models.ItemModels.Item item = new()
             {
                 Id = 1,
                 Name = "Water Cooler Corsair H100 RGB",
@@ -88,10 +89,10 @@ namespace BLL.Tests
                 Situation = new Models.ItemModels.ItemSituation() { Id = 2 },
                 Comment = "Teste comment",
                 AcquisitionType = new AcquisitionType() { Id = 1 },
-                Category = new Models.Category()
+                Category = new Category()
                 {
                     Id = 1,
-                    SubCategory = new Models.SubCategory()
+                    SubCategory = new SubCategory()
                     {
                         Id = 3
                     }
@@ -207,7 +208,7 @@ namespace BLL.Tests
 
             if (resp != null)
             {
-                if (resp is List<Item> items && items.Count == 3)
+                if (resp is List<Models.ItemModels.Item> items && items.Count == 3)
                 {
                     Assert.IsTrue(true);
                     return;
@@ -238,7 +239,7 @@ namespace BLL.Tests
 
             if ((resp != null && resp.Success && resp.Content is Item))
             {
-                if (resp.Content is Item item && item.Id == 1)
+                if (resp.Content is Models.DTO.Item item && item.Id == 1)
                 {
                     Assert.IsTrue(true);
                     return;

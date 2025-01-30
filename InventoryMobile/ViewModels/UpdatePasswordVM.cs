@@ -1,10 +1,10 @@
-﻿using BLL.Interface;
-using InventoryMobile.Utils;
+﻿using InventoryMobile.Utils;
+using Services.Interface;
 using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels
 {
-    public class UpdatePasswordVM(IUserBLL userBLL) : ViewModelBase
+    public class UpdatePasswordVM(IUserService userBLL) : ViewModelBase
     {
         string email;
         string btnSendEmailText = "Enviar Email";

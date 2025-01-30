@@ -1,14 +1,8 @@
-﻿using BLL;
-using Plugin.Connectivity;
-
-namespace InventoryMobile.ViewModels
+﻿namespace InventoryMobile.ViewModels
 {
-    public class ViewModelBase : BindableObject
+    public partial class ViewModelBase : BindableObject
     {
-
         bool isBusy;
-
-        public bool isOn = true;
 
         public bool IsNotBusy => !isBusy;
 
@@ -25,7 +19,6 @@ namespace InventoryMobile.ViewModels
             }
         }
 
-
-
+        protected static bool IsOn => Connectivity.NetworkAccess == NetworkAccess.Internet;
     }
 }

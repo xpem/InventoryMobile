@@ -4,7 +4,7 @@ using Models.Responses;
 
 namespace ApiDAL
 {
-    public class UserApiDAL : IUserApiDAL
+    public class UserApiRepo : IUserApiRepo
     {
         private readonly UsersManagement.UserService userService = new(ApiKeys.ApiAddress);
 

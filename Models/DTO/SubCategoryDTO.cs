@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Models
+﻿namespace Models.DTO
 {
-    public record SubCategory : ModelBase
+    public class SubCategoryDTO : DTOBase
     {
         public string? Name { get; set; }
 

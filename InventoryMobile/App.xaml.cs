@@ -1,29 +1,35 @@
 ﻿using BLL;
 using BLL.Interface;
-using DbContextDAL;
+using InventoryMobile.Infra.Services;
 using InventoryMobile.Views;
 using Models.DTO;
-using Plugin.Connectivity;
+using Services.Interface;
 
 namespace InventoryMobile;
 
 public partial class App : Application
 {
-    public App(IBuildDbBLL buildDbBLL, IUserBLL userBLL, ICheckServerBLL checkServerBLL)
+    public int Uid { get; set; }
+
+    public App(IBuildDbService buildDbService, IUserService userBLL, ISyncService syncService)
     {
         try
         {
-            buildDbBLL.Init();
+            buildDbService.Init();
 
             InitializeComponent();
 
-            User user = null;
+            User user = userBLL.GetAsync().Result;
 
-            Task.Run(async () => user = await userBLL.GetUserLocalAsync()).Wait();
+            if (user != null)
+            {
+                Uid = user.Id;
+                syncService.StartThread();
+            }
 
-            MainPage = new AppShell(new ViewModels.AppShellVM(userBLL, user));
+            MainPage = new AppShell(new ViewModels.AppShellVM(userBLL, user, buildDbService, syncService));
 
-            if (CrossConnectivity.Current.IsConnected)
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
                 if (user != null)
                     Shell.Current.GoToAsync($"//{nameof(Main)}");

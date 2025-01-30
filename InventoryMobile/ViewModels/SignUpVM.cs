@@ -1,11 +1,10 @@
-﻿using BLL.Interface;
-using InventoryMobile.Utils;
-using Plugin.Connectivity;
+﻿using InventoryMobile.Utils;
+using Services.Interface;
 using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels
 {
-    public class SignUpVM(IUserBLL userBLL) : ViewModelBase
+    public class SignUpVM(IUserService userBLL) : ViewModelBase
     {
         string name, email, password, confirmPassword;
         bool btnIsEnabled = true;
@@ -22,7 +21,7 @@ namespace InventoryMobile.ViewModels
 
         public ICommand SignUpCommand => new Command(async () =>
         {
-            if (!CrossConnectivity.Current.IsConnected)
+            if (!(Connectivity.NetworkAccess == NetworkAccess.Internet))
             {
                 _ = await Application.Current.MainPage.DisplayAlert("Aviso", "Sem conexão com a internet", null, "Ok");
                 return;
@@ -33,7 +32,7 @@ namespace InventoryMobile.ViewModels
                 btnIsEnabled = false;
 
                 //
-                Models.Responses.BLLResponse resp = userBLL.AddUser(name, email, password);
+                Models.Responses.ServResp resp = userBLL.AddUser(name, email, password);
 
                 if (!resp.Success)
                     await Application.Current.MainPage.DisplayAlert("Erro", "Não foi possível cadastrar o usuário!", null, "Ok");

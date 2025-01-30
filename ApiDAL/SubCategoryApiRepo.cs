@@ -1,12 +1,13 @@
-﻿using ApiDAL.Interfaces;
-using ApiRepos;
+﻿using ApiDAL;
+using ApiRepos.Interfaces;
 using Models;
+using Models.DTO;
 using Models.Responses;
 using System.Text.Json;
 
-namespace ApiDAL
+namespace ApiRepos
 {
-    public class SubCategoryApiDAL(IHttpClientFunctions httpClientFunctions) : ISubCategoryApiDAL
+    public class SubCategoryApiRepo(IHttpClientFunctions httpClientFunctions) : ISubCategoryApiRepo
     {
         public async Task<ApiResponse> GetSubCategoriesByCategoryId(string subCategoryId) =>
             await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/subcategory/category/" + subCategoryId);
@@ -14,7 +15,7 @@ namespace ApiDAL
         public async Task<ApiResponse> GetSubCategoryById(string id) =>
             await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, ApiKeys.ApiAddress + "/Inventory/subcategory/" + id);
 
-        public async Task<ApiResponse> AltSubCategory(SubCategory subCategory)
+        public async Task<ApiResponse> UpdateApiAsync(SubCategoryDTO subCategory)
         {
             try
             {
@@ -25,7 +26,7 @@ namespace ApiDAL
             catch (Exception ex) { throw ex; }
         }
 
-        public async Task<ApiResponse> AddSubCategory(SubCategory subCategory)
+        public async Task<ApiResponse> CreateAsync(SubCategoryDTO subCategory)
         {
             try
             {
@@ -36,6 +37,12 @@ namespace ApiDAL
             catch (Exception ex) { throw ex; }
         }
 
-        public async Task<ApiResponse> DelSubCategory(int id) => await httpClientFunctions.AuthRequestAsync(RequestsTypes.Delete, ApiKeys.ApiAddress + "/Inventory/subCategory/" + id);
+        public async Task<ApiResponse> DelSubCategory(int id) =>
+            await httpClientFunctions.AuthRequestAsync(RequestsTypes.Delete, ApiKeys.ApiAddress + "/Inventory/subCategory/" + id);
+
+        public async Task<ApiResponse> GetByLastUpdateAsync(DateTime lastUpdate, int page) =>
+            await httpClientFunctions.AuthRequestAsync(RequestsTypes.Get, $"{ApiKeys.ApiAddress}/Inventory/subCategory/byAfterUpdatedAt/{lastUpdate:yyyy-MM-ddThh:mm:ss.fff}/{page}");
+
+
     }
 }

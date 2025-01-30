@@ -2,7 +2,7 @@
 
 namespace ApiDAL.Interfaces
 {
-    public interface IUserApiDAL
+    public interface IUserApiRepo
     {
         Task<ApiResponse> AddUserAsync(string name, string email, string password);
         Task<ApiResponse> GetUserAsync(string token);

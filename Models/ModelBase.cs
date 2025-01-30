@@ -2,6 +2,6 @@
 {
     public record ModelBase
     {        
-        public int Id { get; set; }
+        public int? Id { get; set; }
     }
 }

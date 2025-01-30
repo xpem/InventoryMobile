@@ -1,5 +1,6 @@
 using InventoryMobile.UIModels;
 using InventoryMobile.ViewModels.Item.Selectors;
+using Models.DTO;
 
 namespace InventoryMobile.Views.Item.Selectors;
 
@@ -22,9 +23,9 @@ public partial class SubCategorySelector : ContentPage
         {
             var subCategoryObj = subCategorySelectorVM.Category.SubCategories.FirstOrDefault(c => c.Id == TappedItem.Id);
 
-            List<Models.SubCategory> subCategories = [subCategoryObj];
+            List<SubCategoryDTO> subCategories = [subCategoryObj];
 
-            Models.Category category = new()
+            Models.DTO.Category category = new()
             {
                 Id = subCategorySelectorVM.Category.Id,
                 Name = subCategorySelectorVM.Category.Name,

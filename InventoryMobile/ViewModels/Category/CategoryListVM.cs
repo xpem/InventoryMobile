@@ -1,7 +1,7 @@
-﻿using BLL;
-using InventoryMobile.UIModels;
+﻿using InventoryMobile.UIModels;
 using InventoryMobile.Views.Category;
 using Models.Responses;
+using Services.Interface;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -17,17 +17,17 @@ namespace InventoryMobile.ViewModels.Category
         {
             Categories = [];
 
-            List<Models.Category> list = [];
+            List<Models.DTO.Category> list = [];
                         
-            BLLResponse resp = await categoryBLL.GetCategoriesAsync();
+            ServResp resp = await categoryBLL.GetCategoriesAsync();
 
             if (resp is not null && resp.Success)
-                list = resp.Content as List<Models.Category>;
+                list = resp.Content as List<Models.DTO.Category>;
 
             if (list != null && list.Count > 0)
                 foreach (var i in list)
                 {
-                    Categories.Add(new UICategory() { Id = i.Id, Name = i.Name, Color = Color.FromArgb(i.Color) });
+                    Categories.Add(new UICategory() { Id = i.Id.Value, Name = i.Name, Color = Color.FromArgb(i.Color) });
                 }
 
             OnPropertyChanged(nameof(Categories));

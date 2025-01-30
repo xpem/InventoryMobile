@@ -1,4 +1,4 @@
-﻿namespace Models
+﻿namespace Models.DTO
 {
     public record Category : ModelBase
     {
@@ -8,11 +8,11 @@
 
         public bool? SystemDefault { get; set; }
 
-        public List<SubCategory>? SubCategories { get; set; }
+        public List<SubCategoryDTO>? SubCategories { get; set; }
 
         /// <summary>
         /// used in get item
         /// </summary>
-        public SubCategory? SubCategory { get; set; }
+        public SubCategoryDTO? SubCategory { get; set; }
     }
 }

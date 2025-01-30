@@ -1,17 +1,17 @@
 ﻿using ApiDAL.Handlers;
 using ApiDAL.Interfaces;
-using BLL.Interface;
-using DbContextDAL.Interface;
+using LocalRepos.Interface;
 using Models.DTO;
 using Models.Responses;
+using Services.Interface;
 using System.Text.Json.Nodes;
 
-namespace BLL
+namespace Services
 {
 
-    public class UserBLL(IUserDAL userDAL, IUserApiDAL userApiDAL) : IUserBLL
+    public class UserService(IUserDAL userDAL, IUserApiRepo userApiDAL) : IUserService
     {
-        public BLLResponse AddUser(string name, string email, string password)
+        public ServResp AddUser(string name, string email, string password)
         {
             email = email.ToLower();
             ApiResponse? resp = userApiDAL.AddUserAsync(name, email, password).Result;
@@ -30,11 +30,11 @@ namespace BLL
                     };
 
                     if (user.Id is not 0)
-                        return new BLLResponse() { Success = resp.Success };
+                        return new ServResp() { Success = resp.Success };
                 }
             }
 
-            return new BLLResponse() { Success = false, Content = null };
+            return new ServResp() { Success = false, Content = null };
         }
 
         public async Task<string?> RecoverPasswordAsync(string email)
@@ -54,11 +54,11 @@ namespace BLL
 
         public async Task<(bool, string?)> GetUserTokenAsync(string email, string password) => await userApiDAL.GetUserTokenAsync(email.ToLower(), password);
 
-        public async Task<User?> GetUserLocalAsync() => await userDAL.GetUserLocalAsync();
+        public async Task<User?> GetAsync() => await userDAL.GetUserLocalAsync();
 
         public void RemoveUserLocal() => userDAL.RemoveUserLocal();
 
-        public async Task<BLLResponse> SignIn(string email, string password)
+        public async Task<ServResp> SignIn(string email, string password)
         {
             try
             {
@@ -85,23 +85,23 @@ namespace BLL
                                 Password = EncryptionService.Encrypt(password)
                             };
 
-                            _ = userDAL.ExecuteAddUserAsync(user);
+                            _ = userDAL.AddUserAsync(user);
 
-                            return new BLLResponse() { Success = true };
+                            return new ServResp() { Success = true };
                         }
                     }
                 }
                 //maybe use a errorcodes instead a message?
                 else if (!success && userTokenRes is not null && userTokenRes == "User/Password incorrect")
-                    return new BLLResponse() { Success = false, Error = ErrorTypes.WrongEmailOrPassword };
+                    return new ServResp() { Success = false, Error = ErrorTypes.WrongEmailOrPassword };
                 else throw new Exception("Erro não mapeado");
 
-                return new BLLResponse() { Success = false, Error = ErrorTypes.Unknown };
+                return new ServResp() { Success = false, Error = ErrorTypes.Unknown };
             }
             catch { throw; }
         }
 
-        public void UpdateLocalUserLastUpdate(int uid) => userDAL.ExecuteUpdateLastUpdateUser(DateTime.Now, uid);
+        public void UpdateLastUpdate(int uid) => userDAL.ExecuteUpdateLastUpdateUser(DateTime.Now, uid);
 
     }
 }

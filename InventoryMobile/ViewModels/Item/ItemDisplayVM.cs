@@ -10,6 +10,7 @@ namespace InventoryMobile.ViewModels.Item
 {
     public class ItemDisplayVM(IItemBLL itemBLL) : ViewModelBase, IQueryAttributable
     {
+        #region fields
         int ItemId { get; set; }
 
         string name, description, categoryAndSubCategory, acquisitionStore, acquisitionTypeName, commentary, situation, resaleValue, acquisitionDate, withdrawalDate, acquisitionValue;
@@ -18,14 +19,7 @@ namespace InventoryMobile.ViewModels.Item
 
         ObservableCollection<UIImagePath> imagePathsObsCol;
 
-        public ObservableCollection<UIImagePath> ImagePathsObsCol
-        {
-            get => imagePathsObsCol; set
-            {
-                imagePathsObsCol = value;
-                OnPropertyChanged(nameof(ImagePathsObsCol));
-            }
-        }
+        public ObservableCollection<UIImagePath> ImagePathsObsCol { get; set; } = [];
 
         public bool WithdrawalDateIsVisible { get => withdrawalDateIsVisible; set { if (value != withdrawalDateIsVisible) { withdrawalDateIsVisible = value; OnPropertyChanged(nameof(WithdrawalDateIsVisible)); } } }
 
@@ -117,6 +111,8 @@ namespace InventoryMobile.ViewModels.Item
             get => categoryAndSubCategory; set { if (categoryAndSubCategory != value) { categoryAndSubCategory = value; OnPropertyChanged(nameof(CategoryAndSubCategory)); } }
         }
 
+        #endregion
+
         public ICommand EditCommand => new Command(() => Shell.Current.GoToAsync($"{nameof(ItemEdit)}?Id={ItemId}", true));
 
         public ICommand DelItemCommand => new Command(async () => await DeleteItem());
@@ -129,7 +125,7 @@ namespace InventoryMobile.ViewModels.Item
                 ItemId = Convert.ToInt32(itemId);
                 Models.ItemModels.Item item;
 
-                BLLResponse resp = await itemBLL.GetItemByIdAsync(ItemId.ToString());
+                ServResp resp = await itemBLL.GetItemByIdAsync(ItemId.ToString());
 
                 //binding do Imagesource no front p ver se funciona
 
@@ -161,7 +157,7 @@ namespace InventoryMobile.ViewModels.Item
                         ResaleValue = item.ResaleValue.ToString();
                     }
 
-                    if (OutSituationsIds.OutSituations.Contains(item.Situation.Id))
+                    if (OutSituationsIds.OutSituations.Contains(item.Situation.Id.Value))
                     {
                         WithdrawalDateIsVisible = true;
                         WithdrawalDate = item.WithdrawalDate.Value.ToString("d");
@@ -187,7 +183,11 @@ namespace InventoryMobile.ViewModels.Item
                             ImagePathsObsCol.Add(new UIImagePath(listImagePaths.Image2.ImageFilePath, listImagePaths.Image2.FileName, item.Image2));
                     }
 
-                    if (imagePathsObsCol.Count > 0) { CrvwIsVisible = true; }
+                    if (ImagePathsObsCol.Count > 0)
+                    {
+                        OnPropertyChanged(nameof(ImagePathsObsCol));
+                        CrvwIsVisible = true;
+                    }
                     else { CrvwIsVisible = false; }
                 }
             }

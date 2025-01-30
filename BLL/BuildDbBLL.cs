@@ -1,46 +1,54 @@
 ﻿using BLL.Interface;
+using LocalRepos;
+using Microsoft.EntityFrameworkCore;
 using Models;
 
-namespace BLL
+namespace Services
 {
-    public class BuildDbBLL(DbContextDAL.InventoryDbContextDAL inventoryDbContextDAL) : IBuildDbBLL
+    public class BuildDbBLL(IDbContextFactory<InventoryDbContext> DbCtx) : IBuildDbService
     {
         public void Init()
         {
-            bool exists = System.IO.Directory.Exists(FilePaths.DbPath);
+            using var context = DbCtx.CreateDbContext();
+            bool exists = Directory.Exists(FilePaths.DbPath);
 
             if (!exists)
-                System.IO.Directory.CreateDirectory(FilePaths.DbPath);
+                Directory.CreateDirectory(FilePaths.DbPath);
 
-            inventoryDbContextDAL.Database.EnsureCreated();
+            context.Database.EnsureCreated();
 
-            VersionDbTables? actualVesionDbTables = inventoryDbContextDAL.VersionDbTables.FirstOrDefault();
+            VersionDbTables? actualVesionDbTables = context.VersionDbTables.FirstOrDefault();
 
-            VersionDbTables newVersionDbTables = new() { Id = 0, VERSION = 1 };
+            VersionDbTables newVersionDbTables = new() { Id = 0, VERSION = 12 };
 
             if (actualVesionDbTables != null)
             {
                 if (actualVesionDbTables.VERSION != newVersionDbTables.VERSION)
                 {
-                    inventoryDbContextDAL.Database.EnsureDeleted();
-                    inventoryDbContextDAL.Database.EnsureCreated();
+                    context.Database.EnsureDeleted();
+                    context.Database.EnsureCreated();
 
-                    inventoryDbContextDAL.VersionDbTables.Update(newVersionDbTables);
-                    inventoryDbContextDAL.SaveChanges();
+                    actualVesionDbTables.VERSION = newVersionDbTables.VERSION;
+
+                    context.VersionDbTables.Add(actualVesionDbTables);
+
+                    context.SaveChanges();
                 }
             }
             else
             {
-                inventoryDbContextDAL.VersionDbTables.Add(newVersionDbTables);
-                inventoryDbContextDAL.SaveChanges();
-            }           
+                context.VersionDbTables.Add(newVersionDbTables);
+                context.SaveChanges();
+            }
         }
 
         public async Task CleanLocalDatabase()
         {
-            inventoryDbContextDAL.User.RemoveRange(inventoryDbContextDAL.User);
+            using var context = DbCtx.CreateDbContext();
+            context.User.RemoveRange(context.User);
+            context.SubCategory.RemoveRange(context.SubCategory);
 
-            await inventoryDbContextDAL.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
     }
 }

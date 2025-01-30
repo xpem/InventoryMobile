@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Services.Handlers.Exceptions
 {
     [Serializable]
-    public class ServerOffException:Exception
+    public class ServerOffException : Exception
     {
         public ServerOffException() { }
 

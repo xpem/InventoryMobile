@@ -1,6 +1,6 @@
-﻿using BLL;
-using InventoryMobile.UIModels;
+﻿using InventoryMobile.UIModels;
 using Models.Responses;
+using Services.Interface;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -13,18 +13,18 @@ namespace InventoryMobile.ViewModels.Item.Selectors
         public ICommand OnAppearingCommand => new Command(async (e) =>
         {
             CategoriesObsList = [];
-            List<Models.Category> Categorylist = [];
+            List<Models.DTO.Category> Categorylist = [];
 
-            BLLResponse resp = await categoryBLL.GetCategoriesWithSubCategoriesAsync();
+            ServResp resp = await categoryBLL.GetCategoriesWithSubCategoriesAsync();
 
             if (resp is not null && resp.Success)
-                Categorylist = resp.Content as List<Models.Category>;
+                Categorylist = resp.Content as List<Models.DTO.Category>;
 
             CategoriesObsList.Add(new UICategory() { Id = -1, Name = "[Sem Categoria]", Color = Color.FromArgb("#2F9300"), HaveSubcategories = false });
 
             if (Categorylist != null && Categorylist.Count > 0)
                 foreach (var i in Categorylist)
-                    CategoriesObsList.Add(new UICategory() { Id = i.Id, Name = i.Name, Color = Color.FromArgb(i.Color), HaveSubcategories = i.SubCategories.Count > 0, SubCategories = i.SubCategories });
+                    CategoriesObsList.Add(new UICategory() { Id = i.Id.Value, Name = i.Name, Color = Color.FromArgb(i.Color), HaveSubcategories = i.SubCategories.Count > 0, SubCategories = i.SubCategories });
 
             OnPropertyChanged(nameof(CategoriesObsList));
         });

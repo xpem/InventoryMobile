@@ -1,4 +1,4 @@
-﻿using Models;
+﻿using Models.DTO;
 
 namespace InventoryMobile.UIModels
 {
@@ -53,6 +53,6 @@ namespace InventoryMobile.UIModels
 
         public bool HaveSubcategories { get; set; }
 
-        public List<SubCategory> SubCategories { get; set; }
+        public List<SubCategoryDTO> SubCategories { get; set; }
     }
 }

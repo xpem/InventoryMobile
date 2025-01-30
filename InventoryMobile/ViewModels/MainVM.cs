@@ -1,5 +1,4 @@
 ﻿using BLL;
-using BLL.Interface;
 using InventoryMobile.Resources.Fonts.Icons;
 using InventoryMobile.UIModels;
 using InventoryMobile.Utils;
@@ -7,15 +6,15 @@ using InventoryMobile.Views;
 using InventoryMobile.Views.Item;
 using Models.Exceptions;
 using Models.ItemModels;
+using Services.Interface;
 using Services.Handlers.Exceptions;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels
 {
-    public class MainVM(IItemBLL itemBLL, IItemSituationBLL itemSituationBLL, IUserBLL userBLL) : ViewModelBase
+    public class MainVM(IItemBLL itemBLL, IItemSituationBLL itemSituationBLL, IUserService userBLL) : ViewModelBase
     {
-        //  public ObservableCollection<ItemGroup> Items { get; } = new();
         readonly Color BgButtonSelectedColor = Color.FromArgb("#29A0B1");
 
         List<UIItem> ListAllItems;
@@ -31,36 +30,7 @@ namespace InventoryMobile.ViewModels
             }
         }
 
-        //public ObservableCollection<UICategory> Categories { get; set; }
-
-
         public ObservableCollection<UIItemSituation> ItemsSituationObsList { get; set; }
-
-        //UIItem itemUI;
-
-        //public UIItem ItemUI
-        //{
-        //    get => itemUI;
-        //    set
-        //    {
-        //        if (itemUI != value)
-        //        {
-        //            itemUI = value;
-
-        //            if (itemUI is not null)
-        //            {
-        //                Shell.Current.GoToAsync($"{nameof(ItemEdit)}?Id={itemUI.Id}", true);
-        //            }
-        //            else
-        //            {
-        //                throw new Exception("Id de item nulo");
-        //            }
-        //            OnPropertyChanged();
-        //        }
-        //    }
-        //}
-
-        // List<UIItemSituation> SelectedUIItemsStatus { get; set; }
 
         UIItemSituation SelectedUIItemsStatus { get; set; }
 
@@ -88,21 +58,6 @@ namespace InventoryMobile.ViewModels
 
             });
 
-        //public ICommand CategorySelectedCommand => new Command((e) =>
-        //{
-        //    var category = e as UICategory;
-
-        //    var bgcolor = category.BackgoundColor;
-
-        //    if (bgcolor.Equals(BgButtonSelectedColor))
-        //        Categories.Where(x => x.Id == category.Id).First().BackgoundColor = Color.FromArgb("#919191");
-        //    else
-        //        Categories.Where(x => x.Id == category.Id).First().BackgoundColor = BgButtonSelectedColor;
-
-        //    OnPropertyChanged(nameof(Categories));
-
-        //});
-
         public ICommand ItemAddCommand => new Command(async () => await Shell.Current.GoToAsync($"{nameof(ItemEdit)}"));
 
         private void FilterItemsList()
@@ -121,7 +76,7 @@ namespace InventoryMobile.ViewModels
 
         public ICommand OnAppearingCommand => new Command(async (e) =>
         {
-            if (isOn)
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
                 IsBusy = true;
                 try
@@ -130,7 +85,7 @@ namespace InventoryMobile.ViewModels
 
                     List<ItemSituation> itemSituationList = [];
 
-                    var respItemSituation = await itemSituationBLL.GetItemSituation();
+                    Models.Responses.ServResp respItemSituation = await itemSituationBLL.GetItemSituation();
 
                     if (respItemSituation is not null && respItemSituation.Success)
                         itemSituationList = respItemSituation.Content as List<ItemSituation>;
@@ -158,7 +113,7 @@ namespace InventoryMobile.ViewModels
 
                             textSituationItem = $"{itemSituationList[i].Name} ({itemList.Where(x => x.Situation.Id == itemSituationList[i].Id).Count()})";
 
-                            ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituationList[i].Id, Name = textSituationItem, BackgoundColor = backgoundColor });
+                            ItemsSituationObsList.Add(new UIItemSituation() { Id = itemSituationList[i].Id.Value, Name = textSituationItem, BackgoundColor = backgoundColor });
                         }
 
                         if (SelectedUIItemsStatus is null)
@@ -199,11 +154,11 @@ namespace InventoryMobile.ViewModels
 
                                 UIItem uIItem = new()
                                 {
-                                    Id = item.Id,
+                                    Id = item.Id.Value,
                                     Name = item.Name,
                                     CategoryAndSubCategory = categoryAndSubCategory,
                                     CategoryColor = Color.FromArgb(item.Category.Color),
-                                    SituationId = item.Situation.Id,
+                                    SituationId = item.Situation.Id.Value,
                                     SubCategoryIcon = IconUniCode,
                                 };
 

@@ -1,6 +1,6 @@
-﻿using BLL;
-using InventoryMobile.Resources.Fonts.Icons;
+﻿using InventoryMobile.Resources.Fonts.Icons;
 using Models.Responses;
+using Services.Interface;
 using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels.Category
@@ -100,12 +100,12 @@ namespace InventoryMobile.ViewModels.Category
             if (query.Count > 0)
             {
                 Id = Convert.ToInt32(query["Id"]);
-                Models.Category category = null;
+                Models.DTO.Category category = null;
 
-                BLLResponse resp = await categoryBLL.GetCategoryByIdAsync(Id.ToString());
+                ServResp resp = await categoryBLL.GetCategoryByIdAsync(Id.ToString());
 
                 if (resp.Success)
-                    category = resp.Content as Models.Category;
+                    category = resp.Content as Models.DTO.Category;
 
                 CategoryColor = Color.FromArgb(category.Color);
 
@@ -137,7 +137,7 @@ namespace InventoryMobile.ViewModels.Category
                 {
                     BtnInsertIsEnabled = false;
 
-                    Models.Category category = new()
+                    Models.DTO.Category category = new()
                     {
                         Name = Name,
                         Color = CategoryColor.ToArgbHex(),
@@ -149,14 +149,14 @@ namespace InventoryMobile.ViewModels.Category
                     {
                         category.Id = Id;
 
-                        BLLResponse resp = await categoryBLL.AltCategoryAsync(category);
+                        ServResp resp = await categoryBLL.AltCategoryAsync(category);
 
                         if (resp.Success)
                             message = "Categoria Atualizada!";
                     }
                     else
                     {
-                        BLLResponse resp = await categoryBLL.AddCategoryAsync(category);
+                        ServResp resp = await categoryBLL.AddCategoryAsync(category);
 
                         if (resp.Success)
                             message = "Categoria Adicionada!";

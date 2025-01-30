@@ -3,8 +3,7 @@ using ApiDAL.Interfaces;
 using BLL;
 using BLL.Interface;
 using CommunityToolkit.Maui;
-using DbContextDAL;
-using DbContextDAL.Interface;
+using LocalRepos;
 using InventoryMobile.ViewModels;
 using InventoryMobile.ViewModels.Category;
 using InventoryMobile.ViewModels.Category.SubCategory;
@@ -15,8 +14,14 @@ using InventoryMobile.Views.Category;
 using InventoryMobile.Views.Category.SubCategory;
 using InventoryMobile.Views.Item;
 using InventoryMobile.Views.Item.Selectors;
+using LocalRepos.Interface;
 using Microsoft.Extensions.Logging;
 using Models;
+using Services.Interface;
+using Services;
+using InventoryMobile.Infra.Services;
+using ApiRepos.Interfaces;
+using ApiRepos;
 
 namespace InventoryMobile;
 
@@ -24,16 +29,6 @@ public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
-        //todo
-        //
-        //efetuar build de distribuição local do app para testes
-        //cadastro de items com dependencia
-        //implementar um dark theme padrão
-        //implementar auto complete no campo "loja"
-        //implementar mecanismo para funcionamento offline.
-        //opção de cadastro de categoria e subcategoria nas telas de seleção
-        //tela com filtros?
-
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
@@ -49,20 +44,31 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
+        //if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+        //{
+        //    FilePaths.ImagesPath = Path.Combine(FileSystem.CacheDirectory, "Inventory");
+        //}
+        //else
+        //{
+        //    FilePaths.ImagesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Inventory");
+        //}
+
         if (!System.IO.Directory.Exists(FilePaths.ImagesPath))
             System.IO.Directory.CreateDirectory(FilePaths.ImagesPath);
 
         #region Dependency injections
 
-        builder.Services.AddFrontServices();
+        builder.Services.AddFront();
 
-        builder.Services.AddDbContext<InventoryDbContextDAL>();
+        builder.Services.AddDbContextFactory<InventoryDbContext>();
 
-        builder.Services.AddBLLServices();
+        builder.Services.AddServices();
+
+        builder.Services.AddRepo();
 
         #region DAL
 
-        builder.Services.AddScoped<IUserDAL, UserDAL>();
+        builder.Services.AddScoped<IUserDAL, UserRepo>();
 
         #endregion
 
@@ -74,7 +80,7 @@ public static class MauiProgram
         return builder.Build();
     }
 
-    public static IServiceCollection AddFrontServices(this IServiceCollection services)
+    public static IServiceCollection AddFront(this IServiceCollection services)
     {
         services.AddTransient<AppShell>();
         services.AddTransient<AppShellVM>();
@@ -115,6 +121,15 @@ public static class MauiProgram
         services.AddTransient<ItemDisplay>();
         services.AddTransient<ItemDisplayVM>();
 
+        services.AddTransient<FirstSync>();
+        services.AddTransient<FirstSyncVM>();
+
+        #region infra services
+
+        services.AddScoped<ISyncService, SyncService>();
+
+        #endregion
+
         return services;
     }
 
@@ -123,25 +138,34 @@ public static class MauiProgram
         services.AddScoped<IHttpClientFunctions, HttpClientFunctions>();
         services.AddScoped<IHttpClientWithFileFunctions, HttpClientWithFileFunctions>();
 
-        services.AddScoped<IUserApiDAL, UserApiDAL>();
+        services.AddScoped<IOperationQueueRepo, OperationQueueRepo>();
+        services.AddScoped<IUserApiRepo, UserApiRepo>();
         services.AddScoped<IItemApiDAL, ItemApiDAL>();
         services.AddScoped<IItemSituationApiDAL, ItemSituationApiDAL>();
         services.AddScoped<ICategoryApiDAL, CategoryApiDAL>();
-        services.AddScoped<ISubCategoryApiDAL, SubCategoryApiDAL>();
+        services.AddScoped<ISubCategoryApiRepo, SubCategoryApiRepo>();
         services.AddScoped<IAcquisitionTypeApiDAL, AcquisitionTypeApiDAL>();
 
         return services;
     }
 
-    public static IServiceCollection AddBLLServices(this IServiceCollection services)
+    public static IServiceCollection AddRepo(this IServiceCollection services)
     {
-        services.AddScoped<IBuildDbBLL, BuildDbBLL>();
-        services.AddScoped<IUserBLL, UserBLL>();
+        services.AddScoped<ISubCategoryRepo, SubCategoryRepo>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        services.AddScoped<IOperationService, OperationService>();
+        services.AddScoped<IBuildDbService, BuildDbBLL>();
+        services.AddScoped<IUserService, UserService>();
         services.AddScoped<ICheckServerBLL, CheckServerBLL>();
         services.AddScoped<IItemBLL, ItemBLL>();
         services.AddScoped<IItemSituationBLL, ItemSituationBLL>();
         services.AddScoped<ICategoryBLL, CategoryBLL>();
-        services.AddScoped<ISubCategoryBLL, SubCategoryBLL>();
+        services.AddScoped<ISubCategoryService, SubCategoryService>();
         services.AddScoped<IAcquisitionTypeBLL, AcquisitionTypeBLL>();
 
         return services;

@@ -7,12 +7,12 @@ namespace BLL
 {
     public interface IItemSituationBLL
     {
-        Task<BLLResponse> GetItemSituation();
+        Task<ServResp> GetItemSituation();
     }
 
     public class ItemSituationBLL(IItemSituationApiDAL itemSituationDAL) : IItemSituationBLL
     {
-        public async Task<BLLResponse> GetItemSituation()
+        public async Task<ServResp> GetItemSituation()
         {
             ApiResponse resp = await itemSituationDAL.GetItemSituation();
 

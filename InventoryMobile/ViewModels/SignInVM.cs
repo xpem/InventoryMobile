@@ -1,10 +1,10 @@
-﻿using BLL.Interface;
-using InventoryMobile.Views;
+﻿using InventoryMobile.Views;
+using Services.Interface;
 using System.Windows.Input;
 
 namespace InventoryMobile.ViewModels
 {
-    public class SignInVM(IUserBLL userBLL) : ViewModelBase
+    public partial class SignInVM(IUserService userBLL) : ViewModelBase
     {
 
         string email = "", password = "", btnSignInText = "Acessar";
@@ -31,7 +31,7 @@ namespace InventoryMobile.ViewModels
             {
                 if (!string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(Password))
                 {
-                    if (isOn)
+                    if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                     {
                         if (Password.Length > 3)
                         {
@@ -42,10 +42,13 @@ namespace InventoryMobile.ViewModels
 
                             if (resp.Success)
                             {
-                                await Shell.Current.GoToAsync($"//{nameof(Main)}");
+                                if (resp.Content is not null and int)
+                                    ((App)App.Current).Uid = (int)resp.Content;
 
-                                //Application.Current.MainPage = new NavigationPage();
-                                //_ = (Application.Current.MainPage.Navigation).PushAsync(navigation.ResolvePage<Main>(), true);
+                                await Shell.Current.GoToAsync($"{nameof(FirstSync)}", false);
+
+                                //await Shell.Current.GoToAsync($"//{nameof(Main)}");
+
                             }
                             else
                             {
@@ -68,14 +71,14 @@ namespace InventoryMobile.ViewModels
                             await Application.Current.MainPage.DisplayAlert("Aviso", "Digite uma senha com mais de 3 dígitos", null, "Continuar");
                     }
                     else
-                        await Application.Current.MainPage.DisplayAlert("Aviso", "É necessário ter acesso a internet para efetuar o primeiro acesso.", null, "Ok");
+                        await Application.Current.MainPage.DisplayAlert("Aviso", "É necessário ter acesso a internet para efetuar o acesso.", null, "Ok");
                 }
                 else
                     await Application.Current.MainPage.DisplayAlert("Aviso", "Insira seu email e senha.", null, "Continuar");
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
 
             IsBusy = false;
